@@ -35,6 +35,8 @@ jobs:
       #              run sphinx build
       #----------------------------------------------
       - name: Sphinx build
+        env:
+          BEARER_TOKEN: test
         run: |
           sphinx-build docs/source _build
       - name: Deploy
