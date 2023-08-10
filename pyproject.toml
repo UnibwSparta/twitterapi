@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sparta-twitterapi"
-version = "0.1.49"
+version = "0.1.50"
 description = ""
 authors = ["Andreas Neumeier <andreas.neumeier@unibw.de>", "Jasmin Riedl <jasmin.riedl@unibw.de>", "Lukas Metzner <lukas.metzner@unibw.de>", "Benedikt Radtke <benedikt.radtke@unibw.de>"]
 readme = "README.md"
@@ -14,7 +14,7 @@ asyncio = "^3.4.3" # PSF
 aiohttp = "^3.8.5" # Apache 2
 
 [tool.poetry.group.dev.dependencies]
-mypy = "^1.4.1" # MIT
+mypy = "^1.5.0" # MIT
 black = "^23.7.0" # MIT
 isort = "^5.12.0" # MIT
 flake8 = "^6.1.0" # MIT
