@@ -23,7 +23,13 @@ We recommend using [Poetry](https://python-poetry.org/docs/) for managing the pr
 To install the SPARTA Twitter API via Poetry:
 
 ```bash
-poetry add sparta-twitter-api
+poetry add sparta-twitterapi
+```
+
+or to install it via pip:
+
+```bash
+pip3 install sparta-twitterapi
 ```
 
 ## 📝 Quick Start
@@ -31,7 +37,12 @@ poetry add sparta-twitter-api
 Here's a simple example to get you started:
 
 ```python
+import os
+os.environ["BEARER_TOKEN"] = "XXXXXXXXXXXXXX"
+from sparta.twitterapi.tweets.tweets import get_tweets_by_id
 
+async for tweet_response in get_tweets_by_id(['1511275800758300675', '1546866845180887040']):
+    print(tweet_response.tweet)
 ```
 
 For in-depth methods and examples, consult our [official documentation](https://unibwsparta.github.io/PyTwitterAPI/index.html).
