@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Neumeier"
+  given-names: "Andreas"
+- family-names: "Riedl"
+  given-names: "Jasmin"
+  orcid: "https://orcid.org/0000-0002-4888-7689"
+title: "PyTwitterAPI"
+version: 0.1.0
+date-released: 2023-08-10
+url: "https://github.com/UnibwSparta/PyTwitterAPI"
