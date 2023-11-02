@@ -1,8 +1,8 @@
 # SPARTA Twitter API
 
-![Linting Status](https://github.com/UnibwSparta/PyTwitterAPI/actions/workflows/linting.yaml/badge.svg)
-![Test Status](https://github.com/UnibwSparta/PyTwitterAPI/actions/workflows/test.yaml/badge.svg)
-![Build Status](https://github.com/UnibwSparta/PyTwitterAPI/actions/workflows/build.yaml/badge.svg)
+![Linting Status](https://github.com/UnibwSparta/twitterapi/actions/workflows/linting.yaml/badge.svg)
+![Test Status](https://github.com/UnibwSparta/twitterapi/actions/workflows/test.yaml/badge.svg)
+![Build Status](https://github.com/UnibwSparta/twitterapi/actions/workflows/build.yaml/badge.svg)
 ![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 [![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
@@ -45,14 +45,14 @@ async for tweet_response in get_tweets_by_id(['1511275800758300675', '1546866845
     print(tweet_response.tweet)
 ```
 
-For in-depth methods and examples, consult our [official documentation](https://unibwsparta.github.io/PyTwitterAPI/index.html).
+For in-depth methods and examples, consult our [official documentation](https://unibwsparta.github.io/twitterapi/index.html).
 
 ## 🛠 Development & Contribution
 Clone the Repo:
 
 ```bash
-git clone https://github.com/UnibwSparta/PyTwitterAPI.git
-cd PyTwitterAPI
+git clone https://github.com/UnibwSparta/twitterapi.git
+cd twitterapi
 ```
 
 Install Dependencies:
@@ -70,10 +70,10 @@ poetry run pytest tests/
 ```
 
 ## ❓ Support & Feedback
-Issues? Feedback? Use the [GitHub issue tracker](https://github.com/UnibwSparta/PyTwitterAPI/issues).
+Issues? Feedback? Use the [GitHub issue tracker](https://github.com/UnibwSparta/twitterapi/issues).
 
 ## 📜 License
-MIT License. View [LICENSE](https://github.com/UnibwSparta/PyTwitterAPI/blob/main/LICENSE) for details.
+MIT License. View [LICENSE](https://github.com/UnibwSparta/twitterapi/blob/main/LICENSE) for details.
 
 ## Create twitter spec
 ```bash

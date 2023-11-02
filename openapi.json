@@ -2,7 +2,7 @@
   "openapi" : "3.0.0",
   "info" : {
     "description" : "Twitter API v2 available endpoints",
-    "version" : "2.65",
+    "version" : "2.75",
     "title" : "Twitter API v2",
     "termsOfService" : "https://developer.twitter.com/en/developer-terms/agreement-and-policy.html",
     "contact" : {
@@ -3566,6 +3566,16 @@
               "type" : "boolean"
             },
             "style" : "form"
+          },
+          {
+            "name" : "delete_all",
+            "in" : "query",
+            "description" : "Delete All can be used to delete all of the rules associated this client app, it should be specified with no other parameters. Once deleted, rules cannot be recovered.",
+            "required" : false,
+            "schema" : {
+              "type" : "boolean"
+            },
+            "style" : "form"
           }
         ],
         "requestBody" : {
@@ -3585,6 +3595,56 @@
               "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/AddOrDeleteRulesResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/2/tweets/search/stream/rules/counts" : {
+      "get" : {
+        "security" : [
+          {
+            "BearerToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "General"
+        ],
+        "summary" : "Rules Count",
+        "description" : "Returns the counts of rules from a User's active rule set, to reflect usage by project and application.",
+        "externalDocs" : {
+          "url" : "https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/api-reference/get-tweets-search-stream-rules-counts"
+        },
+        "operationId" : "getRuleCount",
+        "parameters" : [
+          {
+            "$ref" : "#/components/parameters/RulesCountFieldsParameter"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Get2TweetsSearchStreamRulesCountsResponse"
                 }
               }
             }
@@ -4062,6 +4122,114 @@
               "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/Get2TweetsIdRetweetedByResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/2/tweets/{id}/retweets" : {
+      "get" : {
+        "security" : [
+          {
+            "BearerToken" : [ ]
+          },
+          {
+            "OAuth2UserToken" : [
+              "tweet.read",
+              "users.read"
+            ]
+          },
+          {
+            "UserToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "Tweets"
+        ],
+        "summary" : "Retrieve Tweets that retweet a Tweet.",
+        "description" : "Returns a variety of information about each Tweet that has retweeted the Tweet specified by the requested ID.",
+        "externalDocs" : {
+          "url" : "https://developer.twitter.com/en/docs/twitter-api/tweets/retweets/api-reference/get-tweets-id-retweets"
+        },
+        "operationId" : "findTweetsThatRetweetATweet",
+        "parameters" : [
+          {
+            "name" : "id",
+            "in" : "path",
+            "description" : "A single Tweet ID.",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/components/schemas/TweetId"
+            },
+            "style" : "simple"
+          },
+          {
+            "name" : "max_results",
+            "in" : "query",
+            "description" : "The maximum number of results.",
+            "required" : false,
+            "schema" : {
+              "type" : "integer",
+              "minimum" : 1,
+              "maximum" : 100,
+              "format" : "int32",
+              "default" : 100
+            },
+            "style" : "form"
+          },
+          {
+            "name" : "pagination_token",
+            "in" : "query",
+            "description" : "This parameter is used to get the next 'page' of results.",
+            "required" : false,
+            "schema" : {
+              "$ref" : "#/components/schemas/PaginationToken36"
+            },
+            "style" : "form"
+          },
+          {
+            "$ref" : "#/components/parameters/TweetFieldsParameter"
+          },
+          {
+            "$ref" : "#/components/parameters/TweetExpansionsParameter"
+          },
+          {
+            "$ref" : "#/components/parameters/MediaFieldsParameter"
+          },
+          {
+            "$ref" : "#/components/parameters/PollFieldsParameter"
+          },
+          {
+            "$ref" : "#/components/parameters/UserFieldsParameter"
+          },
+          {
+            "$ref" : "#/components/parameters/PlaceFieldsParameter"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Get2TweetsIdRetweetsResponse"
                 }
               }
             }
@@ -7303,6 +7471,13 @@
         "description" : "The sum of results returned in this response.",
         "format" : "int32"
       },
+      "AllProjectClientApps" : {
+        "type" : "array",
+        "description" : "Client App Rule Counts for all applications in the project",
+        "items" : {
+          "$ref" : "#/components/schemas/AppRulesCount"
+        }
+      },
       "AnimatedGif" : {
         "allOf" : [
           {
@@ -7321,6 +7496,20 @@
             }
           }
         ]
+      },
+      "AppRulesCount" : {
+        "type" : "object",
+        "description" : "A count of user-provided stream filtering rules at the client application level.",
+        "properties" : {
+          "client_app_id" : {
+            "$ref" : "#/components/schemas/ClientAppId"
+          },
+          "rule_count" : {
+            "type" : "integer",
+            "description" : "Number of rules for client application",
+            "format" : "int32"
+          }
+        }
       },
       "BookmarkAddRequest" : {
         "type" : "object",
@@ -7375,6 +7564,12 @@
             "example" : "TWTR"
           }
         }
+      },
+      "ClientAppId" : {
+        "type" : "string",
+        "description" : "The ID of the client application",
+        "minLength" : 1,
+        "maxLength" : 19
       },
       "ClientDisconnectedProblem" : {
         "description" : "Your client has gone away.",
@@ -8883,6 +9078,42 @@
           }
         }
       },
+      "Get2TweetsIdRetweetsResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Tweet"
+            }
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          },
+          "includes" : {
+            "$ref" : "#/components/schemas/Expansions"
+          },
+          "meta" : {
+            "type" : "object",
+            "properties" : {
+              "next_token" : {
+                "$ref" : "#/components/schemas/NextToken"
+              },
+              "previous_token" : {
+                "$ref" : "#/components/schemas/PreviousToken"
+              },
+              "result_count" : {
+                "$ref" : "#/components/schemas/ResultCount"
+              }
+            }
+          }
+        }
+      },
       "Get2TweetsResponse" : {
         "type" : "object",
         "properties" : {
@@ -9034,6 +9265,21 @@
           },
           "includes" : {
             "$ref" : "#/components/schemas/Expansions"
+          }
+        }
+      },
+      "Get2TweetsSearchStreamRulesCountsResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/RulesCount"
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
           }
         }
       },
@@ -10384,6 +10630,19 @@
           "other"
         ]
       },
+      "ReplySettingsWithVerifiedUsers" : {
+        "type" : "string",
+        "description" : "Shows who can reply a Tweet. Fields returned are everyone, mentioned_users, subscribers, verified and following.",
+        "pattern" : "^[A-Za-z]{1,12}$",
+        "enum" : [
+          "everyone",
+          "mentionedUsers",
+          "following",
+          "other",
+          "subscribers",
+          "verified"
+        ]
+      },
       "ResourceNotFoundProblem" : {
         "description" : "A problem that indicates that a given Tweet, User, etc. does not exist.",
         "allOf" : [
@@ -10566,6 +10825,33 @@
             "$ref" : "#/components/schemas/Problem"
           }
         ]
+      },
+      "RulesCount" : {
+        "type" : "object",
+        "description" : "A count of user-provided stream filtering rules at the application and project levels.",
+        "properties" : {
+          "all_project_client_apps" : {
+            "$ref" : "#/components/schemas/AllProjectClientApps"
+          },
+          "cap_per_client_app" : {
+            "type" : "integer",
+            "description" : "Cap of number of rules allowed per client application",
+            "format" : "int32"
+          },
+          "cap_per_project" : {
+            "type" : "integer",
+            "description" : "Cap of number of rules allowed per project",
+            "format" : "int32"
+          },
+          "client_app_rules_count" : {
+            "$ref" : "#/components/schemas/AppRulesCount"
+          },
+          "project_rules_count" : {
+            "type" : "integer",
+            "description" : "Number of rules for project",
+            "format" : "int32"
+          }
+        }
       },
       "RulesLookupResponse" : {
         "type" : "object",
@@ -11161,7 +11447,7 @@
             }
           },
           "reply_settings" : {
-            "$ref" : "#/components/schemas/ReplySettings"
+            "$ref" : "#/components/schemas/ReplySettingsWithVerifiedUsers"
           },
           "source" : {
             "type" : "string",
@@ -11394,7 +11680,8 @@
             "description" : "Settings to indicate who can reply to the Tweet.",
             "enum" : [
               "following",
-              "mentionedUsers"
+              "mentionedUsers",
+              "subscribers"
             ]
           },
           "text" : {
@@ -11982,6 +12269,9 @@
             "type" : "string",
             "description" : "The location specified in the User's profile, if the User provided one. As this is a freeform value, it may not indicate a valid location, but it may be fuzzily evaluated when performing searches with location queries."
           },
+          "most_recent_tweet_id" : {
+            "$ref" : "#/components/schemas/TweetId"
+          },
           "name" : {
             "type" : "string",
             "description" : "The friendly name of this User, as shown on their profile."
@@ -12015,6 +12305,10 @@
               "following_count" : {
                 "type" : "integer",
                 "description" : "Number of Users this User is following."
+              },
+              "like_count" : {
+                "type" : "integer",
+                "description" : "The number of likes created by this User."
               },
               "listed_count" : {
                 "type" : "integer",
@@ -13005,6 +13299,37 @@
         "explode" : false,
         "style" : "form"
       },
+      "RulesCountFieldsParameter" : {
+        "name" : "rules_count.fields",
+        "in" : "query",
+        "description" : "A comma separated list of RulesCount fields to display.",
+        "required" : false,
+        "schema" : {
+          "type" : "array",
+          "description" : "The fields available for a RulesCount object.",
+          "minItems" : 1,
+          "uniqueItems" : true,
+          "items" : {
+            "type" : "string",
+            "enum" : [
+              "all_project_client_apps",
+              "cap_per_client_app",
+              "cap_per_project",
+              "client_app_rules_count",
+              "project_rules_count"
+            ]
+          },
+          "example" : [
+            "all_project_client_apps",
+            "cap_per_client_app",
+            "cap_per_project",
+            "client_app_rules_count",
+            "project_rules_count"
+          ]
+        },
+        "explode" : false,
+        "style" : "form"
+      },
       "SearchCountFieldsParameter" : {
         "name" : "search_count.fields",
         "in" : "query",
@@ -13263,10 +13588,12 @@
           "items" : {
             "type" : "string",
             "enum" : [
+              "most_recent_tweet_id",
               "pinned_tweet_id"
             ]
           },
           "example" : [
+            "most_recent_tweet_id",
             "pinned_tweet_id"
           ]
         },
@@ -13291,6 +13618,7 @@
               "entities",
               "id",
               "location",
+              "most_recent_tweet_id",
               "name",
               "pinned_tweet_id",
               "profile_image_url",
@@ -13309,6 +13637,7 @@
             "entities",
             "id",
             "location",
+            "most_recent_tweet_id",
             "name",
             "pinned_tweet_id",
             "profile_image_url",
