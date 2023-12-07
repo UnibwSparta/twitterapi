@@ -210,7 +210,7 @@ async def get_stream(
                             tweet = TweetResponse(tweet=json_line.get("data", {}), includes=json_line.get("includes", {}))
                             yield tweet
                             try:
-                                print(FilteredStreamingTweetResponse.model_validate(json_line))
+                                FilteredStreamingTweetResponse.model_validate(json_line)
                             except Exception as e:
                                 print(e)
                                 logger.warn(f"Inconsistent twitter OpenAPI documentation {e}")
