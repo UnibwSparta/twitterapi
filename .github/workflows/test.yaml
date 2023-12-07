@@ -53,4 +53,7 @@ jobs:
           BEARER_TOKEN: secrets.BEARER_TOKEN
         run: |
           source .venv/bin/activate
-          pytest --cov=sparta.twitterapi tests/
+          pytest --cov=sparta.twitterapi tests/ -v -s
+      - name: Generate Coverage Report
+        run: |
+          coverage report -m
