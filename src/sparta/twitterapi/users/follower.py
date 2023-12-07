@@ -12,23 +12,21 @@ Examples:
     Get followers by id::
 
         import os
-        import json
         os.environ["BEARER_TOKEN"] = "xxxxxxxxxxx"
         from sparta.twitterapi.users.follower import get_followers_by_id
 
         async for user in get_followers_by_id('1422600096324231168'):
-            print(user.json())
+            print(user.model_dump_json())
 
 
     Get following by id::
 
         import os
-        import json
         os.environ["BEARER_TOKEN"] = "xxxxxxxxxxx"
         from sparta.twitterapi.users.follower import get_following_by_id
 
         async for user in get_following_by_id('1422600096324231168'):
-            print(user.json())
+            print(user.model_dump_json())
 """
 
 import json

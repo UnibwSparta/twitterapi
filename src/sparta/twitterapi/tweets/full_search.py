@@ -28,7 +28,6 @@ Examples:
     Get estimated number for full search query::
 
         import os
-        import json
         os.environ["BEARER_TOKEN"] = "xxxxxxxxxxx"
         from datetime import datetime
         from sparta.twitterapi.tweets.full_search import get_full_search_count
@@ -121,7 +120,7 @@ async def get_full_search(
             logger.debug(f"search recent params={params}")
             async with session.get("https://api.twitter.com/2/tweets/search/all", params=params) as response:
                 if response.status == 400:
-                    logger.error(f"Cannot search recent tweets (HTTP {response.status}): {await response.text()}")
+                    logger.error(f"Cannot search tweets (HTTP {response.status}): {await response.text()}")
                     raise Exception
 
                 if response.status == 429:
@@ -129,7 +128,7 @@ async def get_full_search(
                     await asyncio.sleep(5)
                     continue
                 if not response.ok:
-                    logger.error(f"Cannot search recent tweets (HTTP {response.status}): {await response.text()}")
+                    logger.error(f"Cannot search tweets (HTTP {response.status}): {await response.text()}")
                     await asyncio.sleep(5)
                     continue
 

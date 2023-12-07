@@ -27,7 +27,7 @@ Examples:
 
         rule = '(#test OR @projekt_sparta) -is:retweet'
         rule_tag = "Testrule"
-        addrulesreq = AddOrDeleteRulesRequest.parse_obj(AddRulesRequest(add=[RuleNoId(tag=rule_tag, value=rule)]))
+        addrulesreq = AddOrDeleteRulesRequest.model_validate(AddRulesRequest(add=[RuleNoId(tag=rule_tag, value=rule)]))
         print(await add_or_delete_rules(addrulesreq))
 
     Delete a rule::
@@ -38,18 +38,18 @@ Examples:
         from sparta.twitterapi.models.twitter_v2_spec import AddOrDeleteRulesRequest, DeleteRulesRequest, Delete
 
         ruleid = '123456789'
-        delrulesreq = AddOrDeleteRulesRequest.parse_obj(DeleteRulesRequest(delete=Delete(ids=[ruleid])))
+        delrulesreq = AddOrDeleteRulesRequest.model_validate(DeleteRulesRequest(delete=Delete(ids=[ruleid])))
         await add_or_delete_rules(delrulesreq)
 
     Delete all rules::
 
         import os
         os.environ["BEARER_TOKEN"] = "xxxxxxxxxxx"
-        from sparta.twitterapi.tweets.filtered_stream import get_rules
+        from sparta.twitterapi.tweets.filtered_stream import get_rules, add_or_delete_rules
         from sparta.twitterapi.models.twitter_v2_spec import AddOrDeleteRulesRequest, DeleteRulesRequest, Delete
 
         ruleids = [rule.id async for rule in get_rules()]
-        delrulesreq = AddOrDeleteRulesRequest.parse_obj(DeleteRulesRequest(delete=Delete(ids=ruleids)))
+        delrulesreq = AddOrDeleteRulesRequest.model_validate(DeleteRulesRequest(delete=Delete(ids=ruleids)))
         await add_or_delete_rules(delrulesreq)
 
     Connect to stream::
