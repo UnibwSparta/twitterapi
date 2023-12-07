@@ -117,7 +117,7 @@ async def get_quote_tweets(
                     yield TweetResponse(tweet=tweet, includes=response_json.get("includes", {}))
 
                 # try:
-                #     Get2TweetsIdQuoteTweetsResponse(**response_json)
+                #     Get2TweetsIdQuoteTweetsResponse.model_validate(response_json)
                 # except Exception as e:
                 #     logger.warn(f"Inconsistent twitter OpenAPI documentation {e}")
                 #     # logger.warn(response_text)

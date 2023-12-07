@@ -76,7 +76,7 @@ async def get_tweets_by_id(ids: List[str]) -> AsyncGenerator[TweetResponse, None
             for tweet in response_json.get("data", []):
                 yield TweetResponse(tweet=tweet, includes=response_json.get("includes", {}))
                 try:
-                    # Get2TweetsResponse(**response_json)
+                    # Get2TweetsResponse.model_validate(response_json)
                     pass
                 except Exception as e:
                     logger.warn(f"Inconsistent twitter OpenAPI documentation {e}")
