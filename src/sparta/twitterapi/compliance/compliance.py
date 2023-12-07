@@ -126,7 +126,7 @@ async def create_compliance_job(type: ComplianceJobType, name: str, resumable: b
             if not response.ok:
                 raise Exception(f"Error creating Compliance Job: (HTTP {response.status}): {await response.text()}")
 
-            return CreateComplianceJobResponse(**json.loads(await response.text()))
+            return CreateComplianceJobResponse.model_validate_json(await response.text())
 
 
 async def list_jobs(type: ComplianceJobType, status: ComplianceJobStatus = None) -> Get2ComplianceJobsResponse:
@@ -153,7 +153,7 @@ async def list_jobs(type: ComplianceJobType, status: ComplianceJobStatus = None)
         async with session.get(f"{COMPLIANCE_URL}", params=params) as response:
             if not response.ok:
                 raise Exception(f"Cannot get Compliance Jobs (HTTP {response.status}): {await response.text()}")
-            return Get2ComplianceJobsResponse(**json.loads(await response.text()))
+            return Get2ComplianceJobsResponse.model_validate_json(await response.text())
 
 
 async def list_job(id: str) -> Get2ComplianceJobsIdResponse:
@@ -172,7 +172,7 @@ async def list_job(id: str) -> Get2ComplianceJobsIdResponse:
         async with session.get(f"{COMPLIANCE_URL}/{id}") as response:
             if not response.ok:
                 raise Exception(f"Cannot get Compliance Job (HTTP {response.status}): {await response.text()}")
-            return Get2ComplianceJobsIdResponse(**json.loads(await response.text()))
+            return Get2ComplianceJobsIdResponse.model_validate_json(await response.text())
 
 
 async def upload_ids(upload_url: AnyUrl, ids_file_path: str) -> str:

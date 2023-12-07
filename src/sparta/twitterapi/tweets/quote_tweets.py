@@ -9,7 +9,7 @@ a Tweet quickly and efficiently. It also makes it easy for researchers to study 
 Find the Open API Spec under: https://api.twitter.com/2/openapi.json
 
 Examples:
-    Get Tweets from full search::
+    Get quoted Tweets::
 
         import os
         import json
@@ -18,8 +18,8 @@ Examples:
 
         tweet_ids = ['1511275800758300675', '1594704992480690178']
 
-        for tweetid in tweet_ids:
-            async for tweet in get_quote_tweets(tweet_id):
+        for tweet_id in tweet_ids:
+            async for tweet_response in get_quote_tweets(tweet_id):
                 print(json.dumps(tweet_response.tweet))
                 print(json.dumps(tweet_response.includes))
 """
@@ -117,7 +117,7 @@ async def get_quote_tweets(
                     yield TweetResponse(tweet=tweet, includes=response_json.get("includes", {}))
 
                 # try:
-                #     Get2TweetsIdQuoteTweetsResponse(**response_json)
+                #     Get2TweetsIdQuoteTweetsResponse.model_validate(response_json)
                 # except Exception as e:
                 #     logger.warn(f"Inconsistent twitter OpenAPI documentation {e}")
                 #     # logger.warn(response_text)

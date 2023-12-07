@@ -38,7 +38,7 @@ from typing import Any, AsyncGenerator, Dict, Optional
 
 import aiohttp
 
-from sparta.twitterapi.models.twitter_v2_spec import TweetComplianceStreamResponseItem, UserComplianceStreamResponseItem
+from sparta.twitterapi.models.twitter_v2_spec import TweetComplianceStreamResponse1, UserComplianceStreamResponse1
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +50,7 @@ headers = {"Authorization": f"Bearer {bearer_token}", "content-type": "applicati
 
 async def get_tweet_compliance_stream(
     partition: int = 1, backfill_minutes: Optional[int] = None, start_time: Optional[datetime] = None, end_time: Optional[datetime] = None
-) -> AsyncGenerator[TweetComplianceStreamResponseItem, None]:
+) -> AsyncGenerator[TweetComplianceStreamResponse1, None]:
     """Get an asynchronous tweet compliance-stream as generator.
 
     Args:
@@ -65,10 +65,10 @@ async def get_tweet_compliance_stream(
         Exception: Cannot open the stream due to an http error.
 
     Returns:
-        AsyncGenerator[TweetComplianceStreamResponseItem, None]: AsyncGenerator that yields Twitter TweetComplianceStreamResponseItem objects.
+        AsyncGenerator[TweetComplianceStreamResponse1, None]: AsyncGenerator that yields Twitter TweetComplianceStreamResponse1 objects.
 
     Yields:
-        Iterator[AsyncGenerator[TweetComplianceStreamResponseItem, None]]: A Twitter TweetComplianceStreamResponseItem object.
+        Iterator[AsyncGenerator[TweetComplianceStreamResponse1, None]]: A Twitter TweetComplianceStreamResponse1 object.
     """
     async with aiohttp.ClientSession(headers=headers, timeout=aiohttp.ClientTimeout(total=None)) as session:
         params: Dict[str, Any] = {"partition": str(partition)}
@@ -93,7 +93,7 @@ async def get_tweet_compliance_stream(
                         try:
                             json_line = json.loads(line)
                             try:
-                                yield TweetComplianceStreamResponseItem(**json_line)
+                                yield TweetComplianceStreamResponse1.model_validate_json(json_line)
                             except Exception as e:
                                 logger.warn(f"Inconsistent twitter OpenAPI documentation {e}")
                                 logger.warn(json.dumps(json_line))
@@ -104,7 +104,7 @@ async def get_tweet_compliance_stream(
 
 async def get_user_compliance_stream(
     partition: int = 1, backfill_minutes: Optional[int] = None, start_time: Optional[datetime] = None, end_time: Optional[datetime] = None
-) -> AsyncGenerator[UserComplianceStreamResponseItem, None]:
+) -> AsyncGenerator[UserComplianceStreamResponse1, None]:
     """Get an asynchronous user compliance-stream as generator.
 
     Args:
@@ -119,10 +119,10 @@ async def get_user_compliance_stream(
         Exception: Cannot open the stream due to an http error.
 
     Returns:
-        AsyncGenerator[UserComplianceStreamResponseItem, None]: AsyncGenerator that yields Twitter UserComplianceStreamResponseItem objects.
+        AsyncGenerator[UserComplianceStreamResponse1, None]: AsyncGenerator that yields Twitter UserComplianceStreamResponse1 objects.
 
     Yields:
-        Iterator[AsyncGenerator[UserComplianceStreamResponseItem, None]]: A Twitter UserComplianceStreamResponseItem object.
+        Iterator[AsyncGenerator[UserComplianceStreamResponse1, None]]: A Twitter UserComplianceStreamResponse1 object.
     """
     async with aiohttp.ClientSession(headers=headers, timeout=aiohttp.ClientTimeout(total=None)) as session:
         params: Dict[str, Any] = {"partition": str(partition)}
@@ -147,7 +147,7 @@ async def get_user_compliance_stream(
                         try:
                             json_line = json.loads(line)
                             try:
-                                yield UserComplianceStreamResponseItem(**json_line)
+                                yield UserComplianceStreamResponse1.model_validate_json(json_line)
                             except Exception as e:
                                 logger.warn(f"Inconsistent twitter OpenAPI documentation {e}")
                                 logger.warn(json_line)

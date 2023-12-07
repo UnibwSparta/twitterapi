@@ -76,6 +76,11 @@ Issues? Feedback? Use the [GitHub issue tracker](https://github.com/UnibwSparta/
 MIT License. View [LICENSE](https://github.com/UnibwSparta/twitterapi/blob/main/LICENSE) for details.
 
 ## Create twitter spec
+Install datamodel-code-generator
+```bash
+pip3 install datamodel-code-generator
+```
+
 ```bash
 datamodel-codegen --input openapi.json --input-file-type openapi --output model.py --output-model-type pydantic_v2.BaseModel --collapse-root-models --use-double-quotes
 ```

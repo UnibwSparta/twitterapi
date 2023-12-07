@@ -27,7 +27,7 @@ Examples:
 
         rule = '(#test OR @projekt_sparta) -is:retweet'
         rule_tag = "Testrule"
-        addrulesreq = AddOrDeleteRulesRequest.parse_obj(AddRulesRequest(add=[RuleNoId(tag=rule_tag, value=rule)]))
+        addrulesreq = AddOrDeleteRulesRequest(AddRulesRequest(add=[RuleNoId(tag=rule_tag, value=rule)]))
         print(await add_or_delete_rules(addrulesreq))
 
     Delete a rule::
@@ -38,18 +38,18 @@ Examples:
         from sparta.twitterapi.models.twitter_v2_spec import AddOrDeleteRulesRequest, DeleteRulesRequest, Delete
 
         ruleid = '123456789'
-        delrulesreq = AddOrDeleteRulesRequest.parse_obj(DeleteRulesRequest(delete=Delete(ids=[ruleid])))
+        delrulesreq = AddOrDeleteRulesRequest(DeleteRulesRequest(delete=Delete(ids=[ruleid])))
         await add_or_delete_rules(delrulesreq)
 
     Delete all rules::
 
         import os
         os.environ["BEARER_TOKEN"] = "xxxxxxxxxxx"
-        from sparta.twitterapi.tweets.filtered_stream import get_rules
+        from sparta.twitterapi.tweets.filtered_stream import get_rules, add_or_delete_rules
         from sparta.twitterapi.models.twitter_v2_spec import AddOrDeleteRulesRequest, DeleteRulesRequest, Delete
 
         ruleids = [rule.id async for rule in get_rules()]
-        delrulesreq = AddOrDeleteRulesRequest.parse_obj(DeleteRulesRequest(delete=Delete(ids=ruleids)))
+        delrulesreq = AddOrDeleteRulesRequest(DeleteRulesRequest(delete=Delete(ids=ruleids)))
         await add_or_delete_rules(delrulesreq)
 
     Connect to stream::
@@ -117,8 +117,7 @@ async def get_rules(ids: List[str] = None) -> AsyncGenerator[Rule, None]:
                 if not response.ok:
                     raise Exception(f"Cannot get rules (HTTP {response.status}): {await response.text()}")
 
-                response_json = json.loads(await response.text())
-                lookupResponse = RulesLookupResponse(**response_json)
+                lookupResponse = RulesLookupResponse.model_validate_json(await response.text())
 
                 if not lookupResponse.data:
                     return
@@ -126,8 +125,8 @@ async def get_rules(ids: List[str] = None) -> AsyncGenerator[Rule, None]:
                 for rule in lookupResponse.data:
                     yield rule
 
-                if "next_token" in response_json["meta"]:
-                    params["pagination_token"] = response_json["meta"]["next_token"]
+                if lookupResponse.meta.next_token:
+                    params["pagination_token"] = lookupResponse.meta.next_token
                 else:
                     return
 
@@ -151,10 +150,10 @@ async def add_or_delete_rules(rules: AddOrDeleteRulesRequest, dry_run: bool = Fa
     params: Dict[str, str] = {"dry_run": str(dry_run)}
 
     async with aiohttp.ClientSession(headers=headers) as session:
-        async with session.post("https://api.twitter.com/2/tweets/search/stream/rules", data=rules.json(), params=params) as response:
+        async with session.post("https://api.twitter.com/2/tweets/search/stream/rules", data=rules.model_dump_json(), params=params) as response:
             if not response.ok:
                 raise Exception(f"Cannot add/delete rules (HTTP {response.status}): {await response.text()}")
-            return AddOrDeleteRulesResponse(**json.loads(await response.text()))
+            return AddOrDeleteRulesResponse.model_validate_json(await response.text())
 
 
 async def get_stream(
@@ -211,8 +210,9 @@ async def get_stream(
                             tweet = TweetResponse(tweet=json_line.get("data", {}), includes=json_line.get("includes", {}))
                             yield tweet
                             try:
-                                FilteredStreamingTweetResponse(**json_line)
+                                FilteredStreamingTweetResponse.model_validate(json_line)
                             except Exception as e:
+                                print(e)
                                 logger.warn(f"Inconsistent twitter OpenAPI documentation {e}")
                                 logger.warn(line)
                         except Exception as e:

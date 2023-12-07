@@ -50,8 +50,8 @@ jobs:
       #----------------------------------------------
       - name: Run tests
         env:
-          BEARER_TOKEN: test
+          BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
+
         run: |
           source .venv/bin/activate
-          pytest tests/
-          pytest --cov=sparta.twitterapi tests/
+          pytest --cov=sparta.twitterapi tests/ -v -s

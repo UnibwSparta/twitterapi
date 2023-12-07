@@ -143,7 +143,7 @@ async def get_recent_search(
                     yield TweetResponse(tweet=tweet, includes=response_json.get("includes", {}))
 
                 try:
-                    Get2TweetsSearchRecentResponse(**response_json)
+                    Get2TweetsSearchRecentResponse.model_validate(response_json)
                 except Exception as e:
                     logger.warn(f"Inconsistent twitter OpenAPI documentation {e}")
                     # logger.warn(response_text)
@@ -220,12 +220,12 @@ async def get_recent_search_count(
                 response_text = await response.text()
                 response_json = json.loads(response_text)
 
-                counts = Get2TweetsCountsRecentResponse(**response_json)
+                counts = Get2TweetsCountsRecentResponse.model_validate(response_json)
                 if counts.data:
                     for count in counts.data:
                         yield count
 
-                if "next_token" in response_json["meta"]:
-                    params["next_token"] = response_json["meta"]["next_token"]
+                if counts.meta and counts.meta.next_token:
+                    params["next_token"] = counts.meta.next_token
                 else:
                     return

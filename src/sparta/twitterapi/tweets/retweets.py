@@ -89,7 +89,7 @@ async def get_retweets(id: str) -> AsyncGenerator[User, None]:
                     yield User.model_validate(user)
 
                 try:
-                    Get2TweetsIdRetweetedByResponse(**response_json)
+                    Get2TweetsIdRetweetedByResponse.model_validate(response_json)
                 except Exception as e:
                     logger.warn(f"Inconsistent twitter OpenAPI documentation {e}")
                     # logger.warn(response_text)

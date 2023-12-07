@@ -28,7 +28,6 @@ Examples:
     Get estimated number for full search query::
 
         import os
-        import json
         os.environ["BEARER_TOKEN"] = "xxxxxxxxxxx"
         from datetime import datetime
         from sparta.twitterapi.tweets.full_search import get_full_search_count
@@ -121,7 +120,7 @@ async def get_full_search(
             logger.debug(f"search recent params={params}")
             async with session.get("https://api.twitter.com/2/tweets/search/all", params=params) as response:
                 if response.status == 400:
-                    logger.error(f"Cannot search recent tweets (HTTP {response.status}): {await response.text()}")
+                    logger.error(f"Cannot search tweets (HTTP {response.status}): {await response.text()}")
                     raise Exception
 
                 if response.status == 429:
@@ -129,7 +128,7 @@ async def get_full_search(
                     await asyncio.sleep(5)
                     continue
                 if not response.ok:
-                    logger.error(f"Cannot search recent tweets (HTTP {response.status}): {await response.text()}")
+                    logger.error(f"Cannot search tweets (HTTP {response.status}): {await response.text()}")
                     await asyncio.sleep(5)
                     continue
 
@@ -140,7 +139,7 @@ async def get_full_search(
                     yield TweetResponse(tweet=tweet, includes=response_json.get("includes", {}))
 
                 # try:
-                #     Get2TweetsSearchAllResponse(**response_json)
+                #     Get2TweetsSearchAllResponse.model_validate(response_json)
                 # except Exception as e:
                 #     logger.warn(f"Inconsistent twitter OpenAPI documentation {e}")
                 #     # logger.warn(response_text)
@@ -214,15 +213,12 @@ async def get_full_search_count(
                     await asyncio.sleep(5)
                     continue
 
-                response_text = await response.text()
-                response_json = json.loads(response_text)
-
-                counts = Get2TweetsCountsAllResponse(**response_json)
+                counts = Get2TweetsCountsAllResponse.model_validate_json(await response.text())
                 if counts.data:
                     for count in counts.data:
                         yield count
 
-                if "next_token" in response_json["meta"]:
-                    params["next_token"] = response_json["meta"]["next_token"]
+                if counts.meta and counts.meta.next_token:
+                    params["next_token"] = counts.meta.next_token
                 else:
                     return
