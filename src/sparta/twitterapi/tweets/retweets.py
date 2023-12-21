@@ -20,7 +20,6 @@ Examples:
 """
 
 import asyncio
-import json
 import logging
 import os
 from typing import AsyncGenerator, Dict, Optional
@@ -28,6 +27,7 @@ from typing import AsyncGenerator, Dict, Optional
 import aiohttp
 
 from sparta.twitterapi.models.twitter_v2_spec import Get2TweetsIdRetweetedByResponse, User
+from sparta.twitterapi.rate_limiter import RateLimiter
 from sparta.twitterapi.tweets.constants import TWEET_FIELDS, USER_EXPANSIONS, USER_FIELDS
 
 logger = logging.getLogger(__name__)
@@ -39,21 +39,25 @@ headers = {"Authorization": f"Bearer {bearer_token}", "content-type": "applicati
 
 
 async def get_retweets(id: str) -> AsyncGenerator[User, None]:
-    """Get tweets from the last 7 days (maximum) that match the query.
+    """Asynchronously retrieves users who have retweeted a specified tweet.
+
+    This function queries the Twitter API to find users who have retweeted the tweet corresponding to the given ID. It handles rate limiting using an internal
+    instance of RateLimiter, automatically pausing requests if the rate limit is exceeded. The function also handles pagination automatically if there are more
+    results than can be returned in a single response.
 
     Args:
-        id (str): "A single Tweet ID.
-
-    Raises:
-        Exception: Cannot get the search result due to an http error.
-        Exception: User not found error.
-
-    Returns:
-        AsyncGenerator[User, None]: AsyncGenerator that yields Twitter User objects.
+        id (str): The ID of the tweet for which to retrieve retweeters.
 
     Yields:
-        Iterator[AsyncGenerator[User, None]]: A Twitter User object.
+        User: An object representing a Twitter user who has retweeted the specified tweet.
+
+    Raises:
+        Exception: If an HTTP error occurs that prevents retrieving the retweets or if the tweet ID is invalid.
+
+    Note:
+        The function automatically handles pagination of results using the 'next_token' provided by Twitter's API response.
     """
+    rate_limiter = RateLimiter()
     pagination_token: Optional[str] = None
     async with aiohttp.ClientSession(headers=headers) as session:
         params: Dict[str, str] = {
@@ -70,20 +74,21 @@ async def get_retweets(id: str) -> AsyncGenerator[User, None]:
             logger.debug(f"search recent params={params}")
             async with session.get(f"https://api.twitter.com/2/tweets/{id}/retweeted_by", params=params) as response:
                 if response.status == 400:
-                    logger.error(f"Cannot search recent tweets (HTTP {response.status}): {await response.text()}")
+                    logger.error(f"Cannot search retweets (HTTP {response.status}): {await response.text()}")
                     raise Exception
 
+                rate_limiter.update_limits(dict(response.headers))
+
                 if response.status == 429:
-                    logger.warn("429 Too Many Requests. Sleep for 5 second...")
-                    await asyncio.sleep(5)
-                    continue
-                if not response.ok:
-                    logger.error(f"Cannot search recent tweets (HTTP {response.status}): {await response.text()}")
-                    await asyncio.sleep(5)
+                    await rate_limiter.wait_for_limit_reset()
                     continue
 
-                response_text = await response.text()
-                response_json = json.loads(response_text)
+                if not response.ok:
+                    logger.error(f"Cannot search retweets (HTTP {response.status}): {await response.text()}")
+                    await asyncio.sleep(10)
+                    continue
+
+                response_json = await response.json()
 
                 for user in response_json.get("data", []):
                     yield User.model_validate(user)
@@ -91,10 +96,10 @@ async def get_retweets(id: str) -> AsyncGenerator[User, None]:
                 try:
                     Get2TweetsIdRetweetedByResponse.model_validate(response_json)
                 except Exception as e:
-                    logger.warn(f"Inconsistent twitter OpenAPI documentation {e}")
+                    logger.warning(f"Inconsistent twitter OpenAPI documentation {e}")
                     # logger.warn(response_text)
 
-                if "next_token" in response_json["meta"]:
-                    params["pagination_token"] = response_json["meta"]["next_token"]
+                if "next_token" in response_json.get("meta"):
+                    params["pagination_token"] = response_json.get("meta").get("next_token")
                 else:
-                    return
+                    break

@@ -22,7 +22,6 @@ Examples:
             print(json.dumps(tweet_response.includes))
 """
 
-import json
 import logging
 import os
 from typing import AsyncGenerator, Dict, List
@@ -30,6 +29,7 @@ from typing import AsyncGenerator, Dict, List
 import aiohttp
 
 from sparta.twitterapi.models.tweet_response import TweetResponse
+from sparta.twitterapi.rate_limiter import RateLimiter
 from sparta.twitterapi.tweets.constants import EXPANSIONS, MEDIA_FIELDS, PLACE_FIELDS, POLL_FIELDS, TWEET_FIELDS, USER_FIELDS
 
 logger = logging.getLogger(__name__)
@@ -41,20 +41,24 @@ headers = {"Authorization": f"Bearer {bearer_token}", "content-type": "applicati
 
 
 async def get_tweets_by_id(ids: List[str]) -> AsyncGenerator[TweetResponse, None]:
-    """Returns Tweets specified by the requested ID.
+    """Asynchronously retrieves tweets by their IDs.
+
+    This function handles the retrieval of tweets from Twitter's API based on a list of tweet IDs. It respects the rate limiting by utilizing an internal
+    RateLimiter instance. If the rate limit is exceeded, the function will automatically wait until it can proceed with requests.
 
     Args:
-        ids (List[str]): A list of Tweet IDs. Up to 100 are allowed in a single request.
-
-    Raises:
-        Exception: Cannot get the search result due to an http error.
+        ids (List[str]): A list of tweet IDs for which to retrieve tweets. Up to 100 IDs can be included in a single request.
 
     Returns:
-        AsyncGenerator[TweetResponse, None]: AsyncGenerator that yields TweetResponses.
+        AsyncGenerator[TweetResponse, None]: An asynchronous generator that yields TweetResponse objects for each tweet.
+
+    Raises:
+        Exception: If an HTTP error occurs that prevents retrieving the tweets.
 
     Yields:
-        Iterator[AsyncGenerator[TweetResponse, None]]: A TweetResponse Object.
+        TweetResponse: An object representing the tweet data for each given tweet ID.
     """
+    rate_limiter = RateLimiter()
     async with aiohttp.ClientSession(headers=headers) as session:
         params: Dict[str, str] = {
             "ids": ",".join(ids),
@@ -66,18 +70,20 @@ async def get_tweets_by_id(ids: List[str]) -> AsyncGenerator[TweetResponse, None
             "place.fields": PLACE_FIELDS,
         }
         logger.debug(f"search recent params={params}")
-        async with session.get("https://api.twitter.com/2/tweets", params=params) as response:
-            if not response.ok:
-                raise Exception(f"Cannot search tweets {params} (HTTP {response.status}): {await response.text()}")
+        while True:
+            async with session.get("https://api.twitter.com/2/tweets", params=params) as response:
+                rate_limiter.update_limits(dict(response.headers))
 
-            response_text = await response.text()
-            response_json = json.loads(response_text)
+                if response.status == 429:
+                    await rate_limiter.wait_for_limit_reset()
+                    continue
 
-            for tweet in response_json.get("data", []):
-                yield TweetResponse(tweet=tweet, includes=response_json.get("includes", {}))
-                try:
-                    # Get2TweetsResponse.model_validate(response_json)
-                    pass
-                except Exception as e:
-                    logger.warn(f"Inconsistent twitter OpenAPI documentation {e}")
-                    logger.warn(response_text)
+                if not response.ok:
+                    raise Exception(f"Cannot search tweets {params} (HTTP {response.status}): {await response.text()}")
+
+                response_json = await response.json()
+
+                for tweet in response_json.get("data", []):
+                    yield TweetResponse(tweet=tweet, includes=response_json.get("includes", {}))
+
+            break

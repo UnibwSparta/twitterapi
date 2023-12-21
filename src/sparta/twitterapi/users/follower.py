@@ -29,7 +29,7 @@ Examples:
             print(user.model_dump_json())
 """
 
-import json
+import asyncio
 import logging
 import os
 from typing import AsyncGenerator, Dict
@@ -37,6 +37,7 @@ from typing import AsyncGenerator, Dict
 import aiohttp
 
 from sparta.twitterapi.models.twitter_v2_spec import Get2UsersIdFollowersResponse, User
+from sparta.twitterapi.rate_limiter import RateLimiter
 from sparta.twitterapi.tweets.constants import USER_FIELDS
 
 logger = logging.getLogger(__name__)
@@ -64,6 +65,7 @@ async def get_followers_by_id(id: str, max_resulsts: int = 1000) -> AsyncGenerat
     Yields:
         Iterator[AsyncGenerator[User, None]]: A Twitter User object.
     """
+    rate_limiter = RateLimiter()
     async with aiohttp.ClientSession(headers=headers) as session:
         params: Dict[str, str] = {
             "user.fields": USER_FIELDS,
@@ -75,25 +77,39 @@ async def get_followers_by_id(id: str, max_resulsts: int = 1000) -> AsyncGenerat
         while True:
             logger.debug(f"Search users params={params}")
             async with session.get(f"https://api.twitter.com/2/users/{id}/followers", params=params) as response:
-                if not response.ok:
-                    raise Exception(f"Cannot get followers for user with params: {params} (HTTP {response.status}): {await response.text()}")
+                if response.status == 400:
+                    logger.error(f"Cannot get followers for user (HTTP {response.status}): {await response.text()}")
+                    raise Exception
 
-                response_json = json.loads(await response.text())
+                rate_limiter.update_limits(dict(response.headers))
+
+                if response.status == 429:
+                    await rate_limiter.wait_for_limit_reset()
+                    continue
+
+                if not response.ok:
+                    logger.error(f"Cannot get followers for user with params: {params} (HTTP {response.status}): {await response.text()}")
+                    await asyncio.sleep(10)
+                    continue
+
+                response_json = await response.json()
+
                 try:
                     users = Get2UsersIdFollowersResponse.model_validate(response_json)
                 except Exception as e:
                     logger.warn(f"Inconsistent twitter OpenAPI documentation {e}")
                     logger.warn(response_json)
+
                 if not users.data:
                     raise Exception(users)
 
                 for user in users.data:
                     yield user
 
-                if "next_token" in response_json["meta"]:
-                    params["pagination_token"] = response_json["meta"]["next_token"]
+                if "next_token" in response_json.get("meta"):
+                    params["pagination_token"] = response_json.get("meta").get("next_token")
                 else:
-                    return
+                    break
 
 
 async def get_following_by_id(id: str, max_resulsts: int = 1000) -> AsyncGenerator[User, None]:
@@ -113,6 +129,7 @@ async def get_following_by_id(id: str, max_resulsts: int = 1000) -> AsyncGenerat
     Yields:
         Iterator[AsyncGenerator[User, None]]: A Twitter User object.
     """
+    rate_limiter = RateLimiter()
     async with aiohttp.ClientSession(headers=headers) as session:
         params: Dict[str, str] = {
             "user.fields": USER_FIELDS,
@@ -124,22 +141,36 @@ async def get_following_by_id(id: str, max_resulsts: int = 1000) -> AsyncGenerat
         while True:
             logger.debug(f"Search users params={params}")
             async with session.get(f"https://api.twitter.com/2/users/{id}/following", params=params) as response:
-                if not response.ok:
-                    raise Exception(f"Cannot get followers for user with params: {params} (HTTP {response.status}): {await response.text()}")
+                if response.status == 400:
+                    logger.error(f"Cannot get followed users (HTTP {response.status}): {await response.text()}")
+                    raise Exception
 
-                response_json = json.loads(await response.text())
+                rate_limiter.update_limits(dict(response.headers))
+
+                if response.status == 429:
+                    await rate_limiter.wait_for_limit_reset()
+                    continue
+
+                if not response.ok:
+                    logger.error(f"Cannot get followed users with params: {params} (HTTP {response.status}): {await response.text()}")
+                    await asyncio.sleep(10)
+                    continue
+
+                response_json = await response.json()
+
                 try:
                     users = Get2UsersIdFollowersResponse.model_validate(response_json)
                 except Exception as e:
                     logger.warn(f"Inconsistent twitter OpenAPI documentation {e}")
                     logger.warn(response_json)
+
                 if not users.data:
                     raise Exception(users)
 
                 for user in users.data:
                     yield user
 
-                if "next_token" in response_json["meta"]:
-                    params["pagination_token"] = response_json["meta"]["next_token"]
+                if "next_token" in response_json.get("meta"):
+                    params["pagination_token"] = response_json.get("meta").get("next_token")
                 else:
-                    return
+                    break
