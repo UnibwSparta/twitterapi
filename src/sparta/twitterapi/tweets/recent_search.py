@@ -52,7 +52,8 @@ from typing import AsyncGenerator, Dict, Optional
 import aiohttp
 
 from sparta.twitterapi.models.tweet_response import TweetResponse
-from sparta.twitterapi.models.twitter_v2_spec import Get2TweetsCountsRecentResponse, Get2TweetsSearchRecentResponse, SearchCount
+from sparta.twitterapi.models.twitter_v2_spec import Get2TweetsCountsRecentResponse, SearchCount
+from sparta.twitterapi.rate_limiter import RateLimiter
 from sparta.twitterapi.tweets.constants import EXPANSIONS, MEDIA_FIELDS, PLACE_FIELDS, POLL_FIELDS, TWEET_FIELDS, USER_FIELDS
 
 logger = logging.getLogger(__name__)
@@ -71,28 +72,31 @@ async def get_recent_search(
     until_id: str = None,
     sort_order: str = None,
 ) -> AsyncGenerator[TweetResponse, None]:
-    """Get tweets from the last 7 days (maximum) that match the query.
+    """Asynchronously retrieves tweets from the last 7 days that match the specified query.
+
+    This function queries the Twitter API to find tweets matching the given search criteria within the last 7 days. It uses an internal instance of
+    RateLimiter to handle rate limiting, automatically pausing requests if the rate limit is exceeded.
 
     Args:
-        query (str): One query/rule/filter for matching Tweets. Refer to https://t.co/rulelength to identify the max query length.
-            How to build a rule: https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule
-        start_time (datetime): The oldest UTC timestamp from which the Tweets will be provided. Timestamp is in second granularity and is inclusive
-            (i.e. 12:00:01 includes the first second of the minute). Defaults to None.
-        end_time (datetime): The newest, most recent UTC timestamp to which the Tweets will be provided. Timestamp is in second granularity and is exclusive
-            (i.e. 12:00:01 excludes the first second of the minute). Defaults to None.
-        since_id (str, optional): Returns results with a Tweet ID greater than (that is, more recent than) the specified ID. Defaults to None.
-        until_id (str, optional): Returns results with a Tweet ID less than (that is, older than) the specified ID. Defaults to None.
-        sort_order (str, optional): This order in which to return results. Possible options: recency and relevancy. Defaults to None.
-
-    Raises:
-        Exception: Cannot get the search result due to an http error.
-
-    Returns:
-        AsyncGenerator[TweetResponse, None]: AsyncGenerator that yields TweetResponses.
+        query (str): The search query for matching Tweets. Refer to https://t.co/rulelength to identify the max query length. How to build a rule:
+        https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule
+        start_time (datetime, optional): The oldest UTC timestamp from which tweets will be provided. Inclusive and in second granularity.
+        end_time (datetime, optional): The newest UTC timestamp to which tweets will be provided. Exclusive and in second granularity.
+        since_id (str, optional): Returns results with a Tweet ID greater than this ID.
+        until_id (str, optional): Returns results with a Tweet ID less than this ID.
+        sort_order (str, optional): The order in which to return results (e.g., 'recency' or 'relevancy'). Defaults to None.
 
     Yields:
-        Iterator[AsyncGenerator[TweetResponse, None]]: A TweetResponse Object.
+        TweetResponse: An object representing the tweet data for each tweet that matches the query.
+
+    Raises:
+        Exception: If an HTTP error occurs that prevents retrieving the tweets or if the query parameters are invalid.
+
+    Note:
+        The function automatically handles pagination of results using the 'next_token' provided by Twitter's API response.
     """
+
+    rate_limiter = RateLimiter()
     next_token: Optional[str] = None
     async with aiohttp.ClientSession(headers=headers) as session:
         params: Dict[str, str] = {
@@ -127,31 +131,26 @@ async def get_recent_search(
                     logger.error(f"Cannot search recent tweets (HTTP {response.status}): {await response.text()}")
                     raise Exception
 
+                rate_limiter.update_limits(dict(response.headers))
+
                 if response.status == 429:
-                    logger.warn("429 Too Many Requests. Sleep for 5 second...")
-                    await asyncio.sleep(5)
-                    continue
-                if not response.ok:
-                    logger.error(f"Cannot search recent tweets (HTTP {response.status}): {await response.text()}")
-                    await asyncio.sleep(5)
+                    await rate_limiter.wait_for_limit_reset()
                     continue
 
-                response_text = await response.text()
-                response_json = json.loads(response_text)
+                if not response.ok:
+                    logger.error(f"Cannot search recent tweets (HTTP {response.status}): {await response.text()}")
+                    await asyncio.sleep(10)
+                    continue
+
+                response_json = await response.json()
 
                 for tweet in response_json.get("data", []):
                     yield TweetResponse(tweet=tweet, includes=response_json.get("includes", {}))
 
-                try:
-                    Get2TweetsSearchRecentResponse.model_validate(response_json)
-                except Exception as e:
-                    logger.warn(f"Inconsistent twitter OpenAPI documentation {e}")
-                    # logger.warn(response_text)
-
-                if "next_token" in response_json["meta"]:
-                    params["next_token"] = response_json["meta"]["next_token"]
+                if "next_token" in response_json.get("meta"):
+                    params["next_token"] = response_json.get("meta").get("next_token")
                 else:
-                    return
+                    break
 
 
 async def get_recent_search_count(
@@ -162,29 +161,35 @@ async def get_recent_search_count(
     until_id: str = None,
     granularity: str = None,
 ) -> AsyncGenerator[SearchCount, None]:
-    """Returns the number of tweets that match a search query that match a query according to a granularity (e.g. hourwise) over a given time period (maximum
-    from the last 7 days).
+    """Asynchronously retrieves the count of tweets matching a specified search query from the last 7 days, aggregated according to a specified granularity.
+
+    This function queries the Twitter API to count tweets matching the given search criteria within the last 7 days and aggregates the counts based on the
+    specified granularity. It uses an internal instance of RateLimiter to handle rate limiting, automatically pausing requests if the rate limit is exceeded.
 
     Args:
-        query (str): One query/rule/filter for matching Tweets. Refer to https://t.co/rulelength to identify the max query length.
-            How to build a rule: https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule
-        start_time (datetime): The oldest UTC timestamp from which the Tweets will be provided. Timestamp is in second granularity and is inclusive
-            (i.e. 12:00:01 includes the first second of the minute). Defaults to None.
-        end_time (datetime): The newest, most recent UTC timestamp to which the Tweets will be provided. Timestamp is in second granularity and is exclusive
-            (i.e. 12:00:01 excludes the first second of the minute). Defaults to None.
-        since_id (str, optional): Returns results with a Tweet ID greater than (that is, more recent than) the specified ID. Defaults to None.
-        until_id (str, optional): Returns results with a Tweet ID less than (that is, older than) the specified ID. Defaults to None.
-        granularity (str, optional): The granularity for the search counts results. Defaults to 'hour'
-
-    Returns:
-        AsyncGenerator[SearchCount, None]: AsyncGenerator that yields a Twitter SearchCounts.
+        query (str): The search query for matching Tweets. Refer to https://t.co/rulelength to identify the max query length. How to build a rule:
+        https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule
+        start_time (datetime, optional): The oldest UTC timestamp from which tweet counts will be provided. Inclusive and in second granularity.
+        end_time (datetime, optional): The newest UTC timestamp to which tweet counts will be provided. Exclusive and in second granularity.
+        since_id (str, optional): Returns results with a Tweet ID greater than this ID.
+        until_id (str, optional): Returns results with a Tweet ID less than this ID.
+        granularity (str, optional): The granularity for the search counts results (e.g., 'minute', 'hour', or 'day').
 
     Yields:
-        Iterator[AsyncGenerator[SearchCount, None]]: A Twitter SearchCount Object.
+        SearchCount: An object representing the tweet count data for each interval according to the specified granularity.
+
+    Raises:
+        Exception: If an invalid granularity is specified, if an HTTP error occurs that prevents retrieving the tweet counts, or if the query parameters are
+        invalid.
+
+    Note:
+        The function automatically handles pagination of results using the 'next_token' provided by Twitter's API response.
     """
+
     if granularity not in ["minute", "hour", "day"]:
         raise Exception(f"Wrong granularity. Given granularity: {granularity}. Possible values = minute, hour, day")
 
+    rate_limiter = RateLimiter()
     async with aiohttp.ClientSession(headers=headers) as session:
         params: Dict[str, str] = {
             "query": query,
@@ -204,17 +209,18 @@ async def get_recent_search_count(
             logger.debug(f"search recent params={params}")
             async with session.get("https://api.twitter.com/2/tweets/counts/recent", params=params) as response:
                 if response.status == 400:
-                    logger.error(f"Cannot search recent tweets (HTTP {response.status}): {await response.text()}")
+                    logger.error(f"Cannot get recent tweet counts (HTTP {response.status}): {await response.text()}")
                     raise Exception
 
+                rate_limiter.update_limits(dict(response.headers))
+
                 if response.status == 429:
-                    logger.warn("429 Too Many Requests.")
-                    await asyncio.sleep(5)
+                    await rate_limiter.wait_for_limit_reset()
                     continue
 
                 if not response.ok:
-                    logger.error(f"Cannot search recent tweets (HTTP {response.status}): {await response.text()}")
-                    await asyncio.sleep(5)
+                    logger.error(f"Cannot get recent tweet counts (HTTP {response.status}): {await response.text()}")
+                    await asyncio.sleep(10)
                     continue
 
                 response_text = await response.text()
@@ -228,4 +234,4 @@ async def get_recent_search_count(
                 if counts.meta and counts.meta.next_token:
                     params["next_token"] = counts.meta.next_token
                 else:
-                    return
+                    break

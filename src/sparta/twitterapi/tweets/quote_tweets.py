@@ -25,7 +25,6 @@ Examples:
 """
 
 import asyncio
-import json
 import logging
 import os
 from datetime import datetime
@@ -34,6 +33,7 @@ from typing import AsyncGenerator, Dict
 import aiohttp
 
 from sparta.twitterapi.models.tweet_response import TweetResponse
+from sparta.twitterapi.rate_limiter import RateLimiter
 
 # from sparta.twitterapi.models.twitter_v2_spec import Get2TweetsIdQuoteTweetsResponse
 from sparta.twitterapi.tweets.constants import EXPANSIONS, MEDIA_FIELDS, PLACE_FIELDS, POLL_FIELDS, TWEET_FIELDS, USER_FIELDS
@@ -53,27 +53,29 @@ async def get_quote_tweets(
     since_id: str = None,
     until_id: str = None,
 ) -> AsyncGenerator[TweetResponse, None]:
-    """Returns quoted Tweets.
+    """Asynchronously retrieves tweets quoting a specified tweet.
+
+    This function queries the Twitter API to find tweets that are quote tweets of the tweet corresponding to the given ID. It handles rate limiting using an
+    internal instance of RateLimiter, automatically pausing requests if the rate limit is exceeded. The function also supports time-based filtering and
+    pagination.
 
     Args:
-        id (str): A tweet ID for which to retrieve quote tweets.
-        start_time (datetime): The oldest UTC timestamp from which the Tweets will be provided. Timestamp is in second granularity and is inclusive
-            (i.e. 12:00:01 includes the first second of the minute). Defaults to None.
-        end_time (datetime): The newest, most recent UTC timestamp to which the Tweets will be provided. Timestamp is in second granularity and is exclusive
-            (i.e. 12:00:01 excludes the first second of the minute). Defaults to None.
-        since_id (str, optional): Returns results with a Tweet ID greater than (that is, more recent than) the specified ID. Defaults to None.
-        until_id (str, optional): Returns results with a Tweet ID less than (that is, older than) the specified ID. Defaults to None.
-
-
-    Raises:
-        Exception: Cannot get the search result due to an http error.
-
-    Returns:
-        AsyncGenerator[TweetResponse, None]: AsyncGenerator that yields TweetResponses.
+        id (str): The ID of the tweet for which to retrieve quote tweets.
+        start_time (datetime, optional): The oldest UTC timestamp from which quote tweets will be provided. Inclusive and in second granularity.
+        end_time (datetime, optional): The newest UTC timestamp to which quote tweets will be provided. Exclusive and in second granularity.
+        since_id (str, optional): Returns quote tweets with an ID greater than this ID.
+        until_id (str, optional): Returns quote tweets with an ID less than this ID.
 
     Yields:
-        Iterator[AsyncGenerator[TweetResponse, None]]: A TweetResponse Object.
+        TweetResponse: An object representing a tweet that quotes the specified tweet.
+
+    Raises:
+        Exception: If an HTTP error occurs that prevents retrieving the quote tweets or if the tweet ID is invalid.
+
+    Note:
+        The function automatically handles pagination of results using the 'next_token' provided by Twitter's API response.
     """
+    rate_limiter = RateLimiter()
     async with aiohttp.ClientSession(headers=headers) as session:
         params: Dict[str, str] = {
             "tweet.fields": TWEET_FIELDS,
@@ -101,17 +103,18 @@ async def get_quote_tweets(
                     logger.error(f"Cannot search recent tweets (HTTP {response.status}): {await response.text()}")
                     raise Exception
 
+                rate_limiter.update_limits(dict(response.headers))
+
                 if response.status == 429:
-                    logger.warn(f"{response.status} Too Many Requests. Sleep for 1 minute...")
-                    await asyncio.sleep(60)
-                    continue
-                if not response.ok:
-                    logger.error(f"Cannot search recent tweets (HTTP {response.status}): {await response.text()}")
-                    await asyncio.sleep(5)
+                    await rate_limiter.wait_for_limit_reset()
                     continue
 
-                response_text = await response.text()
-                response_json = json.loads(response_text)
+                if not response.ok:
+                    logger.error(f"Cannot search recent tweets (HTTP {response.status}): {await response.text()}")
+                    await asyncio.sleep(10)
+                    continue
+
+                response_json = await response.json()
 
                 for tweet in response_json.get("data", []):
                     yield TweetResponse(tweet=tweet, includes=response_json.get("includes", {}))
@@ -125,7 +128,7 @@ async def get_quote_tweets(
                     if "errors" in response_json:
                         logger.warn(f'Errors: {response_json["errors"]}')
                     if "next_token" in response_json.get("meta", {}):
-                        params["pagination_token"] = response_json["meta"]["next_token"]
+                        params["pagination_token"] = response_json.get("meta")
                     else:
                         break
                 except Exception as e:
