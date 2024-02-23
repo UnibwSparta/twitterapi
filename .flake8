@@ -1,4 +1,6 @@
 [flake8]
 max-line-length = 160
 ignore = F722
-per-file-ignores = src/sparta/twitterapi/models/twitter_v2_spec.py:E501
+per-file-ignores =
+    src/sparta/twitterapi/models/twitter_v2_spec.py:E501
+    src/sparta/twitterapi/models/model.py:E501
