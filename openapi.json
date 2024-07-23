@@ -2,7 +2,7 @@
   "openapi" : "3.0.0",
   "info" : {
     "description" : "Twitter API v2 available endpoints",
-    "version" : "2.93",
+    "version" : "2.104",
     "title" : "Twitter API v2",
     "termsOfService" : "https://developer.twitter.com/en/developer-terms/agreement-and-policy.html",
     "contact" : {
@@ -789,6 +789,64 @@
       }
     },
     "/2/dm_events/{event_id}" : {
+      "delete" : {
+        "security" : [
+          {
+            "OAuth2UserToken" : [
+              "dm.read",
+              "dm.write"
+            ]
+          },
+          {
+            "UserToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "Direct Messages"
+        ],
+        "summary" : "Delete Dm",
+        "description" : "Delete a Dm Event that you own.",
+        "operationId" : "dmEventDelete",
+        "parameters" : [
+          {
+            "name" : "event_id",
+            "in" : "path",
+            "description" : "The ID of the direct-message event to delete.",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/components/schemas/DmEventId"
+            },
+            "style" : "simple"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeleteDmResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      },
       "get" : {
         "security" : [
           {
@@ -1014,16 +1072,16 @@
             "style" : "form"
           },
           {
-            "$ref" : "#/components/parameters/LikeFieldsParameter"
+            "$ref" : "#/components/parameters/LikeWithTweetAuthorFieldsParameter"
           },
           {
-            "$ref" : "#/components/parameters/LikeExpansionsParameter"
-          },
-          {
-            "$ref" : "#/components/parameters/TweetFieldsParameter"
+            "$ref" : "#/components/parameters/LikeWithTweetAuthorExpansionsParameter"
           },
           {
             "$ref" : "#/components/parameters/UserFieldsParameter"
+          },
+          {
+            "$ref" : "#/components/parameters/TweetFieldsParameter"
           }
         ],
         "responses" : {
@@ -1032,7 +1090,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/StreamingLikeResponse"
+                  "$ref" : "#/components/schemas/StreamingLikeResponseV2"
                 }
               }
             }
@@ -1069,7 +1127,7 @@
         "summary" : "Likes Sample 10 stream",
         "description" : "Streams 10% of public Likes.",
         "externalDocs" : {
-          "url" : "https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/api-reference/get-likes-firehose-stream"
+          "url" : "https://developer.twitter.com/en/docs/twitter-api/likes/firehose/api-reference/get-likes-sample10-stream"
         },
         "operationId" : "likesSample10Stream",
         "parameters" : [
@@ -1094,7 +1152,7 @@
             "schema" : {
               "type" : "integer",
               "minimum" : 1,
-              "maximum" : 20,
+              "maximum" : 2,
               "format" : "int32"
             },
             "style" : "form"
@@ -1124,16 +1182,16 @@
             "style" : "form"
           },
           {
-            "$ref" : "#/components/parameters/LikeFieldsParameter"
+            "$ref" : "#/components/parameters/LikeWithTweetAuthorFieldsParameter"
           },
           {
-            "$ref" : "#/components/parameters/LikeExpansionsParameter"
-          },
-          {
-            "$ref" : "#/components/parameters/TweetFieldsParameter"
+            "$ref" : "#/components/parameters/LikeWithTweetAuthorExpansionsParameter"
           },
           {
             "$ref" : "#/components/parameters/UserFieldsParameter"
+          },
+          {
+            "$ref" : "#/components/parameters/TweetFieldsParameter"
           }
         ],
         "responses" : {
@@ -1142,7 +1200,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/StreamingLikeResponse"
+                  "$ref" : "#/components/schemas/StreamingLikeResponseV2"
                 }
               }
             }
@@ -4709,9 +4767,6 @@
       "get" : {
         "security" : [
           {
-            "BearerToken" : [ ]
-          },
-          {
             "OAuth2UserToken" : [
               "like.read",
               "tweet.read",
@@ -6712,9 +6767,6 @@
     "/2/users/{id}/liked_tweets" : {
       "get" : {
         "security" : [
-          {
-            "BearerToken" : [ ]
-          },
           {
             "OAuth2UserToken" : [
               "like.read",
@@ -8981,6 +9033,26 @@
         "format" : "date-time",
         "example" : "2021-01-06T18:40:40.000Z"
       },
+      "DeleteDmResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "object",
+            "properties" : {
+              "deleted" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
       "DeleteRulesRequest" : {
         "type" : "object",
         "description" : "A response from deleting user-specified stream filtering rules.",
@@ -9694,7 +9766,7 @@
         "type" : "object",
         "properties" : {
           "data" : {
-            "$ref" : "#/components/schemas/Like"
+            "$ref" : "#/components/schemas/LikeWithTweetAuthor"
           },
           "errors" : {
             "type" : "array",
@@ -9712,7 +9784,7 @@
         "type" : "object",
         "properties" : {
           "data" : {
-            "$ref" : "#/components/schemas/Like"
+            "$ref" : "#/components/schemas/LikeWithTweetAuthor"
           },
           "errors" : {
             "type" : "array",
@@ -11237,32 +11309,6 @@
         "pattern" : "^[0-9]{1,19}$",
         "example" : "1372966999991541762"
       },
-      "Like" : {
-        "type" : "object",
-        "description" : "A Like event, with the liking user and the tweet being liked",
-        "properties" : {
-          "created_at" : {
-            "type" : "string",
-            "description" : "Creation time of the Tweet.",
-            "format" : "date-time",
-            "example" : "2021-01-06T18:40:40.000Z"
-          },
-          "id" : {
-            "$ref" : "#/components/schemas/LikeId"
-          },
-          "liked_tweet_id" : {
-            "$ref" : "#/components/schemas/TweetId"
-          },
-          "liking_user_id" : {
-            "$ref" : "#/components/schemas/UserId"
-          },
-          "timestamp_ms" : {
-            "type" : "integer",
-            "description" : "Timestamp in milliseconds of creation.",
-            "format" : "int32"
-          }
-        }
-      },
       "LikeComplianceSchema" : {
         "type" : "object",
         "required" : [
@@ -11279,6 +11325,32 @@
         "description" : "The unique identifier of this Like.",
         "pattern" : "^[A-Za-z0-9_]{1,40}$",
         "example" : "8ba4f34e6235d905a46bac021d98e923"
+      },
+      "LikeWithTweetAuthor" : {
+        "type" : "object",
+        "description" : "A Like event, with the tweet author user and the tweet being liked",
+        "properties" : {
+          "created_at" : {
+            "type" : "string",
+            "description" : "Creation time of the Tweet.",
+            "format" : "date-time",
+            "example" : "2021-01-06T18:40:40.000Z"
+          },
+          "id" : {
+            "$ref" : "#/components/schemas/LikeId"
+          },
+          "liked_tweet_id" : {
+            "$ref" : "#/components/schemas/TweetId"
+          },
+          "timestamp_ms" : {
+            "type" : "integer",
+            "description" : "Timestamp in milliseconds of creation.",
+            "format" : "int32"
+          },
+          "tweet_author_id" : {
+            "$ref" : "#/components/schemas/UserId"
+          }
+        }
       },
       "LikesComplianceStreamResponse" : {
         "description" : "Likes compliance stream events.",
@@ -12490,11 +12562,11 @@
         "description" : "The start time of the bucket.",
         "format" : "date-time"
       },
-      "StreamingLikeResponse" : {
+      "StreamingLikeResponseV2" : {
         "type" : "object",
         "properties" : {
           "data" : {
-            "$ref" : "#/components/schemas/Like"
+            "$ref" : "#/components/schemas/LikeWithTweetAuthor"
           },
           "errors" : {
             "type" : "array",
@@ -12570,11 +12642,6 @@
       },
       "Tweet" : {
         "type" : "object",
-        "required" : [
-          "id",
-          "text",
-          "edit_history_tweet_ids"
-        ],
         "properties" : {
           "attachments" : {
             "type" : "object",
@@ -12863,12 +12930,26 @@
           "reply_settings" : {
             "$ref" : "#/components/schemas/ReplySettingsWithVerifiedUsers"
           },
+          "scopes" : {
+            "type" : "object",
+            "description" : "The scopes for this tweet",
+            "properties" : {
+              "followers" : {
+                "type" : "boolean",
+                "description" : "Indicates if this Tweet is viewable by followers without the Tweet ID",
+                "example" : false
+              }
+            }
+          },
           "source" : {
             "type" : "string",
             "description" : "This is deprecated."
           },
           "text" : {
             "$ref" : "#/components/schemas/TweetText"
+          },
+          "username" : {
+            "$ref" : "#/components/schemas/UserName"
           },
           "withheld" : {
             "$ref" : "#/components/schemas/TweetWithheld"
@@ -12878,7 +12959,8 @@
           "author_id" : "2244994945",
           "created_at" : "Wed Jan 06 18:40:40 +0000 2021",
           "id" : "1346889436626259968",
-          "text" : "Learn how to use the user Tweet timeline and user mention timeline endpoints in the X API v2 to explore Tweet\\u2026 https:\\/\\/t.co\\/56a0vZUx7i"
+          "text" : "Learn how to use the user Tweet timeline and user mention timeline endpoints in the X API v2 to explore Tweet\\u2026 https:\\/\\/t.co\\/56a0vZUx7i",
+          "username" : "XDevelopers"
         }
       },
       "TweetComplianceData" : {
@@ -14710,13 +14792,11 @@
           "items" : {
             "type" : "string",
             "enum" : [
-              "liked_tweet_id",
-              "liking_user_id"
+              "liked_tweet_id"
             ]
           },
           "example" : [
-            "liked_tweet_id",
-            "liking_user_id"
+            "liked_tweet_id"
           ]
         },
         "explode" : false,
@@ -14738,7 +14818,6 @@
               "created_at",
               "id",
               "liked_tweet_id",
-              "liking_user_id",
               "timestamp_ms"
             ]
           },
@@ -14746,7 +14825,61 @@
             "created_at",
             "id",
             "liked_tweet_id",
-            "liking_user_id",
+            "timestamp_ms"
+          ]
+        },
+        "explode" : false,
+        "style" : "form"
+      },
+      "LikeWithTweetAuthorExpansionsParameter" : {
+        "name" : "expansions",
+        "in" : "query",
+        "description" : "A comma separated list of fields to expand.",
+        "schema" : {
+          "type" : "array",
+          "description" : "The list of fields you can expand for a [LikeWithTweetAuthor](#LikeWithTweetAuthor) object. If the field has an ID, it can be expanded into a full object.",
+          "minItems" : 1,
+          "uniqueItems" : true,
+          "items" : {
+            "type" : "string",
+            "enum" : [
+              "liked_tweet_author_id",
+              "liked_tweet_id"
+            ]
+          },
+          "example" : [
+            "liked_tweet_author_id",
+            "liked_tweet_id"
+          ]
+        },
+        "explode" : false,
+        "style" : "form"
+      },
+      "LikeWithTweetAuthorFieldsParameter" : {
+        "name" : "like_with_tweet_author.fields",
+        "in" : "query",
+        "description" : "A comma separated list of LikeWithTweetAuthor fields to display.",
+        "required" : false,
+        "schema" : {
+          "type" : "array",
+          "description" : "The fields available for a LikeWithTweetAuthor object.",
+          "minItems" : 1,
+          "uniqueItems" : true,
+          "items" : {
+            "type" : "string",
+            "enum" : [
+              "created_at",
+              "id",
+              "liked_tweet_author_id",
+              "liked_tweet_id",
+              "timestamp_ms"
+            ]
+          },
+          "example" : [
+            "created_at",
+            "id",
+            "liked_tweet_author_id",
+            "liked_tweet_id",
             "timestamp_ms"
           ]
         },
@@ -15144,7 +15277,8 @@
               "in_reply_to_user_id",
               "entities.note.mentions.username",
               "referenced_tweets.id",
-              "referenced_tweets.id.author_id"
+              "referenced_tweets.id.author_id",
+              "author_screen_name"
             ]
           },
           "example" : [
@@ -15158,7 +15292,8 @@
             "in_reply_to_user_id",
             "entities.note.mentions.username",
             "referenced_tweets.id",
-            "referenced_tweets.id.author_id"
+            "referenced_tweets.id.author_id",
+            "author_screen_name"
           ]
         },
         "explode" : false,
@@ -15198,8 +15333,10 @@
               "public_metrics",
               "referenced_tweets",
               "reply_settings",
+              "scopes",
               "source",
               "text",
+              "username",
               "withheld"
             ]
           },
@@ -15225,8 +15362,10 @@
             "public_metrics",
             "referenced_tweets",
             "reply_settings",
+            "scopes",
             "source",
             "text",
+            "username",
             "withheld"
           ]
         },
@@ -15312,6 +15451,7 @@
               "most_recent_tweet_id",
               "name",
               "pinned_tweet_id",
+              "profile_banner_url",
               "profile_image_url",
               "protected",
               "public_metrics",
@@ -15334,6 +15474,7 @@
             "most_recent_tweet_id",
             "name",
             "pinned_tweet_id",
+            "profile_banner_url",
             "profile_image_url",
             "protected",
             "public_metrics",
