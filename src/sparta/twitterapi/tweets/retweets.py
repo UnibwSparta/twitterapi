@@ -97,7 +97,7 @@ async def get_retweets(id: str) -> AsyncGenerator[User, None]:
                     Get2TweetsIdRetweetedByResponse.model_validate(response_json)
                 except Exception as e:
                     logger.warning(f"Inconsistent twitter OpenAPI documentation {e}")
-                    # logger.warn(response_text)
+                    # logger.warning(response_text)
 
                 if "next_token" in response_json.get("meta"):
                     params["pagination_token"] = response_json.get("meta").get("next_token")

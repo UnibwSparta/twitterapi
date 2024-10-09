@@ -122,16 +122,16 @@ async def get_quote_tweets(
                 # try:
                 #     Get2TweetsIdQuoteTweetsResponse.model_validate(response_json)
                 # except Exception as e:
-                #     logger.warn(f"Inconsistent twitter OpenAPI documentation {e}")
-                #     # logger.warn(response_text)
+                #     logger.warning(f"Inconsistent twitter OpenAPI documentation {e}")
+                #     # logger.warning(response_text)
                 try:
                     if "errors" in response_json:
-                        logger.warn(f'Errors: {response_json["errors"]}')
+                        logger.warning(f'Errors: {response_json["errors"]}')
                     if "next_token" in response_json.get("meta", {}):
                         params["pagination_token"] = response_json.get("meta")
                     else:
                         break
                 except Exception as e:
-                    logger.warn(e)
-                    logger.warn(response_json)
+                    logger.warning(e)
+                    logger.warning(response_json)
                     raise Exception
