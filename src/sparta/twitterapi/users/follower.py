@@ -77,8 +77,8 @@ async def get_followers_by_id(id: str, max_resulsts: int = 1000) -> AsyncGenerat
         while True:
             logger.debug(f"Search users params={params}")
             async with session.get(f"https://api.twitter.com/2/users/{id}/followers", params=params) as response:
-                if response.status == 400:
-                    logger.error(f"Cannot get followers for user (HTTP {response.status}): {await response.text()}")
+                if response.status in [400, 401, 402, 403, 404]:
+                    logger.error(f"Cannot get followers for user {id} (HTTP {response.status}): {await response.text()}")
                     raise Exception
 
                 rate_limiter.update_limits(dict(response.headers))
@@ -88,7 +88,7 @@ async def get_followers_by_id(id: str, max_resulsts: int = 1000) -> AsyncGenerat
                     continue
 
                 if not response.ok:
-                    logger.error(f"Cannot get followers for user with params: {params} (HTTP {response.status}): {await response.text()}")
+                    logger.error(f"Cannot get followers for user {id} with params: {params} (HTTP {response.status}): {await response.text()}")
                     await asyncio.sleep(10)
                     continue
 
@@ -97,8 +97,8 @@ async def get_followers_by_id(id: str, max_resulsts: int = 1000) -> AsyncGenerat
                 try:
                     users = Get2UsersIdFollowersResponse.model_validate(response_json)
                 except Exception as e:
-                    logger.warn(f"Inconsistent twitter OpenAPI documentation {e}")
-                    logger.warn(response_json)
+                    logger.warning(f"Inconsistent twitter OpenAPI documentation {e}")
+                    logger.warning(response_json)
 
                 if not users.data:
                     raise Exception(users)
@@ -141,8 +141,8 @@ async def get_following_by_id(id: str, max_resulsts: int = 1000) -> AsyncGenerat
         while True:
             logger.debug(f"Search users params={params}")
             async with session.get(f"https://api.twitter.com/2/users/{id}/following", params=params) as response:
-                if response.status == 400:
-                    logger.error(f"Cannot get followed users (HTTP {response.status}): {await response.text()}")
+                if response.status in [400, 401, 402, 403, 404]:
+                    logger.error(f"Cannot get followed users for {id} (HTTP {response.status}): {await response.text()}")
                     raise Exception
 
                 rate_limiter.update_limits(dict(response.headers))
@@ -152,7 +152,7 @@ async def get_following_by_id(id: str, max_resulsts: int = 1000) -> AsyncGenerat
                     continue
 
                 if not response.ok:
-                    logger.error(f"Cannot get followed users with params: {params} (HTTP {response.status}): {await response.text()}")
+                    logger.error(f"Cannot get followed users for {id} with params: {params} (HTTP {response.status}): {await response.text()}")
                     await asyncio.sleep(10)
                     continue
 
@@ -161,8 +161,8 @@ async def get_following_by_id(id: str, max_resulsts: int = 1000) -> AsyncGenerat
                 try:
                     users = Get2UsersIdFollowersResponse.model_validate(response_json)
                 except Exception as e:
-                    logger.warn(f"Inconsistent twitter OpenAPI documentation {e}")
-                    logger.warn(response_json)
+                    logger.warning(f"Inconsistent twitter OpenAPI documentation {e}")
+                    logger.warning(response_json)
 
                 if not users.data:
                     raise Exception(users)
