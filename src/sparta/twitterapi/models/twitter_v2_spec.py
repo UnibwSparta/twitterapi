@@ -629,7 +629,6 @@ class UserWithheldComplianceSchema(BaseModel):
     user_withheld: UserTakedownComplianceSchema
 
 
-
 class Data15(BaseModel):
     blocked: Optional[bool] = None
 
@@ -702,7 +701,6 @@ class UsersRetweetsCreateRequest(BaseModel):
         description="Unique identifier of this Tweet. This is returned as a string in order to avoid complications with languages and tools that cannot handle large integers.",
         examples=["1346889436626259968"],
     )
-
 
 
 class Data21(BaseModel):
@@ -1081,11 +1079,6 @@ class Meta34(BaseModel):
     next_token: Optional[constr(min_length=1)] = Field(None, description="The next token.")  # type: ignore
     previous_token: Optional[constr(min_length=1)] = Field(None, description="The previous token.")  # type: ignore
     result_count: Optional[int] = Field(None, description="The number of results returned in this response.")
-
-
-class Meta33(BaseModel):
-    next_token: Optional[constr(min_length=1)] = Field(None, description="The next token.")  # type: ignore
-    previous_token: Optional[constr(min_length=1)] = Field(None, description="The previous token.")  # type: ignore
 
 
 class HashtagEntity(EntityIndicesInclusiveExclusive, HashtagFields):
