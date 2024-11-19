@@ -20,6 +20,7 @@ Welcome to sparta.twitterapi's documentation!
    modules/models
    modules/users
    modules/tweets
+   modules/usage
 
 
 Indices and tables
