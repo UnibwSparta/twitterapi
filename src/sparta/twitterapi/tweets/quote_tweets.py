@@ -124,14 +124,7 @@ async def get_quote_tweets(
                 # except Exception as e:
                 #     logger.warning(f"Inconsistent twitter OpenAPI documentation {e}")
                 #     # logger.warning(response_text)
-                try:
-                    if "errors" in response_json:
-                        logger.warning(f'Errors: {response_json["errors"]}')
-                    if "next_token" in response_json.get("meta", {}):
-                        params["pagination_token"] = response_json.get("meta")
-                    else:
-                        break
-                except Exception as e:
-                    logger.warning(e)
-                    logger.warning(response_json)
-                    raise Exception
+                if "next_token" in response_json.get("meta"):
+                    params["pagination_token"] = response_json.get("meta").get("next_token")
+                else:
+                    break

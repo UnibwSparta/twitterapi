@@ -9,3 +9,6 @@ MEDIA_FIELDS = "media_key,duration_ms,height,preview_image_url,type,url,width,pu
 POLL_FIELDS = "duration_minutes,end_datetime,id,options,voting_status"
 PLACE_FIELDS = "contained_within,country,country_code,full_name,geo,id,name,place_type"
 USER_EXPANSIONS = "affiliation.user_id,most_recent_tweet_id,pinned_tweet_id"
+COMMUNITY_NOTE_FIELDS = "classification,created_at,deleted,id,rating_status,text"
+
+ENGAGEMENT_FIELDS = "errors", "measurement"

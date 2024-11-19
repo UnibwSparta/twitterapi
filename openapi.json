@@ -2,7 +2,7 @@
   "openapi" : "3.0.0",
   "info" : {
     "description" : "Twitter API v2 available endpoints",
-    "version" : "2.112",
+    "version" : "2.114",
     "title" : "Twitter API v2",
     "termsOfService" : "https://developer.twitter.com/en/developer-terms/agreement-and-policy.html",
     "contact" : {
@@ -15,6 +15,179 @@
     }
   },
   "paths" : {
+    "/2/communities/search" : {
+      "get" : {
+        "security" : [
+          {
+            "OAuth2UserToken" : [
+              "tweet.read",
+              "users.read"
+            ]
+          },
+          {
+            "UserToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "Communities"
+        ],
+        "summary" : "Search Communities",
+        "description" : "Returns Communities that match search query",
+        "externalDocs" : {
+          "url" : "https://developer.x.com"
+        },
+        "operationId" : "communitiesSearch",
+        "parameters" : [
+          {
+            "name" : "query",
+            "in" : "query",
+            "description" : "Query to search communities.",
+            "required" : true,
+            "schema" : {
+              "type" : "string",
+              "minLength" : 1,
+              "maxLength" : 4096,
+              "example" : "Love"
+            },
+            "style" : "form"
+          },
+          {
+            "name" : "max_results",
+            "in" : "query",
+            "description" : "The maximum number of search results to be returned by a request.",
+            "required" : false,
+            "schema" : {
+              "type" : "integer",
+              "minimum" : 10,
+              "maximum" : 100,
+              "format" : "int32",
+              "default" : 10
+            },
+            "style" : "form"
+          },
+          {
+            "name" : "next_token",
+            "in" : "query",
+            "description" : "This parameter is used to get the next 'page' of results. The value used with the parameter is pulled directly from the response provided by the API, and should not be modified.",
+            "required" : false,
+            "schema" : {
+              "$ref" : "#/components/schemas/NextToken"
+            },
+            "style" : "form"
+          },
+          {
+            "name" : "pagination_token",
+            "in" : "query",
+            "description" : "This parameter is used to get the next 'page' of results. The value used with the parameter is pulled directly from the response provided by the API, and should not be modified.",
+            "required" : false,
+            "schema" : {
+              "$ref" : "#/components/schemas/NextToken"
+            },
+            "style" : "form"
+          },
+          {
+            "$ref" : "#/components/parameters/CommunityFieldsParameter"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Get2CommunitiesSearchResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/2/communities/{id}" : {
+      "get" : {
+        "security" : [
+          {
+            "BearerToken" : [ ]
+          },
+          {
+            "OAuth2UserToken" : [
+              "list.read",
+              "tweet.read",
+              "users.read"
+            ]
+          },
+          {
+            "UserToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "Communities"
+        ],
+        "summary" : "Communities lookup by Community ID.",
+        "description" : "Returns a Community.",
+        "externalDocs" : {
+          "url" : "https://developer.x.com/en/docs/x-api/communities/api-reference/get-communities-id"
+        },
+        "operationId" : "communityIdGet",
+        "parameters" : [
+          {
+            "name" : "id",
+            "in" : "path",
+            "description" : "The ID of the Community.",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/components/schemas/CommunityId"
+            },
+            "style" : "simple"
+          },
+          {
+            "$ref" : "#/components/parameters/CommunityFieldsParameter"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Get2CommunitiesIdResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/2/compliance/jobs" : {
       "get" : {
         "security" : [
@@ -187,6 +360,52 @@
               "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/Get2ComplianceJobsIdResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/2/connections/all" : {
+      "delete" : {
+        "security" : [
+          {
+            "BearerToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "Connection"
+        ],
+        "summary" : "Force kills all streaming connections of the authenticated application.",
+        "description" : "Force kills all streaming connections of the authenticated application.",
+        "externalDocs" : {
+          "url" : "https://developer.x.com"
+        },
+        "operationId" : "killAllAppConnections",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/KillAllConnectionsResponse"
                 }
               }
             }
@@ -923,6 +1142,294 @@
       }
     },
     "/2/insights/28hr" : {
+      "get" : {
+        "security" : [
+          {
+            "OAuth2UserToken" : [
+              "tweet.read",
+              "tweet.write"
+            ]
+          },
+          {
+            "UserToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "Tweets"
+        ],
+        "summary" : "Get Last 28hr Metrics for Posts",
+        "description" : "Get 28hr Metrics for Posts.",
+        "operationId" : "TwentyEightHoursEngagementApi",
+        "parameters" : [
+          {
+            "name" : "tweet_ids",
+            "in" : "query",
+            "description" : "List of PostIds for 28hr metrics.",
+            "required" : true,
+            "schema" : {
+              "type" : "array",
+              "minItems" : 1,
+              "maxItems" : 25,
+              "uniqueItems" : true,
+              "items" : {
+                "$ref" : "#/components/schemas/TweetId"
+              },
+              "example" : [
+                "20"
+              ]
+            },
+            "style" : "form"
+          },
+          {
+            "name" : "granularity",
+            "in" : "query",
+            "description" : "granularity of metrics response.",
+            "required" : true,
+            "schema" : {
+              "type" : "string",
+              "enum" : [
+                "Daily",
+                "Hourly",
+                "Weekly",
+                "Total"
+              ],
+              "example" : "Total"
+            },
+            "style" : "form"
+          },
+          {
+            "name" : "requested_metrics",
+            "in" : "query",
+            "description" : "request metrics for historical request.",
+            "required" : true,
+            "schema" : {
+              "type" : "array",
+              "minItems" : 1,
+              "uniqueItems" : true,
+              "items" : {
+                "type" : "string",
+                "enum" : [
+                  "AppInstallAttempts",
+                  "AppOpens",
+                  "DetailExpands",
+                  "EmailTweet",
+                  "Engagements",
+                  "Follows",
+                  "HashtagClicks",
+                  "Impressions",
+                  "Likes",
+                  "LinkClicks",
+                  "MediaEngagements",
+                  "MediaViews",
+                  "PermalinkClicks",
+                  "ProfileVisits",
+                  "QuoteTweets",
+                  "Replies",
+                  "Retweets",
+                  "UniqueVideoViews",
+                  "UrlClicks",
+                  "UserProfileClicks",
+                  "VideoCompletions",
+                  "VideoPlayed25Percent",
+                  "VideoPlayed50Percent",
+                  "VideoPlayed75Percent",
+                  "VideoStarts",
+                  "VideoViews"
+                ]
+              }
+            },
+            "style" : "form"
+          },
+          {
+            "$ref" : "#/components/parameters/EngagementFieldsParameter"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Get2Insights28hrResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/2/insights/historical" : {
+      "get" : {
+        "security" : [
+          {
+            "OAuth2UserToken" : [
+              "tweet.read",
+              "tweet.write"
+            ]
+          },
+          {
+            "UserToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "Tweets"
+        ],
+        "summary" : "Get Historical Metrics for Posts",
+        "description" : "Get Historical Metrics for Posts.",
+        "operationId" : "HistoricalEngagementApi",
+        "parameters" : [
+          {
+            "name" : "tweet_ids",
+            "in" : "query",
+            "description" : "List of PostIds for historical metrics.",
+            "required" : true,
+            "schema" : {
+              "type" : "array",
+              "minItems" : 1,
+              "maxItems" : 25,
+              "uniqueItems" : true,
+              "items" : {
+                "$ref" : "#/components/schemas/TweetId"
+              },
+              "example" : [
+                "20"
+              ]
+            },
+            "style" : "form"
+          },
+          {
+            "name" : "end_time",
+            "in" : "query",
+            "description" : "YYYY-MM-DDTHH:mm:ssZ. The UTC timestamp representing the end of the time range.",
+            "required" : true,
+            "example" : "2021-02-01T18:40:40.000Z",
+            "schema" : {
+              "type" : "string",
+              "format" : "date-time"
+            },
+            "style" : "form"
+          },
+          {
+            "name" : "start_time",
+            "in" : "query",
+            "description" : "YYYY-MM-DDTHH:mm:ssZ. The UTC timestamp representing the start of the time range.",
+            "required" : true,
+            "example" : "2021-02-01T18:40:40.000Z",
+            "schema" : {
+              "type" : "string",
+              "format" : "date-time"
+            },
+            "style" : "form"
+          },
+          {
+            "name" : "granularity",
+            "in" : "query",
+            "description" : "granularity of metrics response.",
+            "required" : true,
+            "schema" : {
+              "type" : "string",
+              "enum" : [
+                "Daily",
+                "Hourly",
+                "Weekly",
+                "Total"
+              ],
+              "example" : "Total"
+            },
+            "style" : "form"
+          },
+          {
+            "name" : "requested_metrics",
+            "in" : "query",
+            "description" : "request metrics for historical request.",
+            "required" : true,
+            "schema" : {
+              "type" : "array",
+              "minItems" : 1,
+              "uniqueItems" : true,
+              "items" : {
+                "type" : "string",
+                "enum" : [
+                  "AppInstallAttempts",
+                  "AppOpens",
+                  "DetailExpands",
+                  "EmailTweet",
+                  "Engagements",
+                  "Follows",
+                  "HashtagClicks",
+                  "Impressions",
+                  "Likes",
+                  "LinkClicks",
+                  "MediaEngagements",
+                  "MediaViews",
+                  "PermalinkClicks",
+                  "ProfileVisits",
+                  "QuoteTweets",
+                  "Replies",
+                  "Retweets",
+                  "UniqueVideoViews",
+                  "UrlClicks",
+                  "UserProfileClicks",
+                  "VideoCompletions",
+                  "VideoPlayed25Percent",
+                  "VideoPlayed50Percent",
+                  "VideoPlayed75Percent",
+                  "VideoStarts",
+                  "VideoViews"
+                ]
+              }
+            },
+            "style" : "form"
+          },
+          {
+            "$ref" : "#/components/parameters/EngagementFieldsParameter"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Get2InsightsHistoricalResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/2/likes/compliance/stream" : {
       "get" : {
         "security" : [
           {
@@ -2216,6 +2723,77 @@
               "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/Get2ListsIdTweetsResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/2/notes" : {
+      "get" : {
+        "security" : [
+          {
+            "BearerToken" : [ ]
+          },
+          {
+            "OAuth2UserToken" : [
+              "list.read",
+              "tweet.read",
+              "users.read"
+            ]
+          },
+          {
+            "UserToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "Community Notes"
+        ],
+        "summary" : "Community Note lookup by Post ID",
+        "description" : "Returns a variety of information about the Community Noted specified by the requested Post ID.",
+        "externalDocs" : {
+          "url" : "https://developer.x.com/en/docs/x-api/community_notes/api-reference/get-community-note"
+        },
+        "operationId" : "findNoteByTweetId",
+        "parameters" : [
+          {
+            "name" : "postId",
+            "in" : "query",
+            "description" : "A single Post ID.",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/components/schemas/TweetId"
+            },
+            "explode" : false,
+            "style" : "form"
+          },
+          {
+            "$ref" : "#/components/parameters/NoteFieldsParameter"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Get2NotesResponse"
                 }
               }
             }
@@ -6024,6 +6602,62 @@
         }
       }
     },
+    "/2/users/personalized_trends" : {
+      "get" : {
+        "security" : [
+          {
+            "OAuth2UserToken" : [
+              "tweet.read",
+              "users.read"
+            ]
+          },
+          {
+            "UserToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "Trends"
+        ],
+        "summary" : "Get personalized Trends",
+        "description" : "Returns Personalized trends for the authenticated user",
+        "externalDocs" : {
+          "url" : "https://developer.x.com/"
+        },
+        "operationId" : "personalizedTrends",
+        "parameters" : [
+          {
+            "$ref" : "#/components/parameters/PersonalizedTrendFieldsParameter"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Get2UsersPersonalizedTrendsResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/2/users/reposts_of_me" : {
       "get" : {
         "security" : [
@@ -6501,6 +7135,151 @@
         ],
         "summary" : "Add Post to Bookmarks",
         "description" : "Adds a Post (ID in the body) to the requesting User's (in the path) bookmarks",
+        "externalDocs" : {
+          "url" : "https://developer.twitter.com/en/docs/twitter-api/tweets/bookmarks/api-reference/post-users-id-bookmarks"
+        },
+        "operationId" : "postUsersIdBookmarks",
+        "parameters" : [
+          {
+            "name" : "id",
+            "in" : "path",
+            "description" : "The ID of the authenticated source User for whom to add bookmarks.",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/components/schemas/UserIdMatchesAuthenticatedUser"
+            },
+            "style" : "simple"
+          }
+        ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BookmarkAddRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BookmarkMutationResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/2/users/{id}/bookmarks/{tweet_id}" : {
+      "delete" : {
+        "security" : [
+          {
+            "OAuth2UserToken" : [
+              "bookmark.write",
+              "tweet.read",
+              "users.read"
+            ]
+          }
+        ],
+        "tags" : [
+          "Bookmarks"
+        ],
+        "summary" : "Remove a bookmarked Post",
+        "description" : "Removes a Post from the requesting User's bookmarked Posts.",
+        "externalDocs" : {
+          "url" : "https://developer.twitter.com/en/docs/twitter-api/tweets/bookmarks/api-reference/delete-users-id-bookmarks-tweet_id"
+        },
+        "operationId" : "usersIdBookmarksDelete",
+        "parameters" : [
+          {
+            "name" : "id",
+            "in" : "path",
+            "description" : "The ID of the authenticated source User whose bookmark is to be removed.",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/components/schemas/UserIdMatchesAuthenticatedUser"
+            },
+            "style" : "simple"
+          },
+          {
+            "name" : "tweet_id",
+            "in" : "path",
+            "description" : "The ID of the Post that the source User is removing from bookmarks.",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/components/schemas/TweetId"
+            },
+            "style" : "simple"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BookmarkMutationResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/2/users/{id}/dm/block" : {
+      "post" : {
+        "security" : [
+          {
+            "OAuth2UserToken" : [
+              "dm.write",
+              "tweet.read",
+              "users.read"
+            ]
+          },
+          {
+            "UserToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "Users"
+        ],
+        "summary" : "Causes DMs to/from the target User (in the path) to be blocked by the authenticated request user",
+        "description" : "Causes DMs to/from the target User (in the path) to be blocked by the authenticated request user",
         "externalDocs" : {
           "url" : "https://developer.twitter.com/en/docs/twitter-api/tweets/bookmarks/api-reference/post-users-id-bookmarks"
         },
@@ -9241,6 +10020,33 @@
           }
         ]
       },
+      "Community" : {
+        "type" : "object",
+        "description" : "A X Community is a curated group of Posts.",
+        "required" : [
+          "id",
+          "name"
+        ],
+        "properties" : {
+          "created_at" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "id" : {
+            "$ref" : "#/components/schemas/CommunityId"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "The name of this Community."
+          }
+        }
+      },
+      "CommunityId" : {
+        "type" : "string",
+        "description" : "The unique identifier of this Community.",
+        "pattern" : "^[0-9]{1,19}$",
+        "example" : "1146654567674912769"
+      },
       "ComplianceJob" : {
         "type" : "object",
         "required" : [
@@ -10198,6 +11004,48 @@
           }
         }
       },
+      "Get2CommunitiesIdResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Community"
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
+      "Get2CommunitiesSearchResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Community"
+            }
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          },
+          "meta" : {
+            "type" : "object",
+            "properties" : {
+              "next_token" : {
+                "$ref" : "#/components/schemas/NextToken"
+              }
+            }
+          }
+        }
+      },
       "Get2ComplianceJobsIdResponse" : {
         "type" : "object",
         "properties" : {
@@ -10562,6 +11410,21 @@
               "result_count" : {
                 "$ref" : "#/components/schemas/ResultCount"
               }
+            }
+          }
+        }
+      },
+      "Get2NotesResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Note"
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
             }
           }
         }
@@ -11818,6 +12681,79 @@
           }
         }
       },
+      "Get2UsersPersonalizedTrendsResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/PersonalizedTrend"
+            }
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
+      "Get2UsersRepostsOfMeResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Tweet"
+            }
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          },
+          "includes" : {
+            "$ref" : "#/components/schemas/Expansions"
+          },
+          "meta" : {
+            "type" : "object",
+            "properties" : {
+              "next_token" : {
+                "$ref" : "#/components/schemas/NextToken"
+              },
+              "previous_token" : {
+                "$ref" : "#/components/schemas/PreviousToken"
+              },
+              "result_count" : {
+                "$ref" : "#/components/schemas/ResultCount"
+              }
+            }
+          }
+        }
+      },
+      "Get2UsersMeResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/User"
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          },
+          "includes" : {
+            "$ref" : "#/components/schemas/Expansions"
+          }
+        }
+      },
       "Get2UsersRepostsOfMeResponse" : {
         "type" : "object",
         "properties" : {
@@ -11986,6 +12922,26 @@
         "description" : "Compliance Job ID.",
         "pattern" : "^[0-9]{1,19}$",
         "example" : "1372966999991541762"
+      },
+      "KillAllConnectionsResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "object",
+            "properties" : {
+              "killed_connections" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          }
+        }
       },
       "LikeComplianceSchema" : {
         "type" : "object",
@@ -12448,6 +13404,64 @@
           }
         ]
       },
+      "Note" : {
+        "type" : "object",
+        "description" : "A X Community Note is a note on a Post.",
+        "required" : [
+          "id",
+          "text"
+        ],
+        "properties" : {
+          "classification" : {
+            "$ref" : "#/components/schemas/NoteClassification"
+          },
+          "created_at" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "deleted" : {
+            "type" : "boolean",
+            "description" : "Whether the Community Note has been deleted or not."
+          },
+          "id" : {
+            "$ref" : "#/components/schemas/NoteId"
+          },
+          "rating_status" : {
+            "$ref" : "#/components/schemas/NoteRatingStatus"
+          },
+          "text" : {
+            "type" : "string",
+            "description" : "The text summary in the Community Note."
+          }
+        }
+      },
+      "NoteClassification" : {
+        "type" : "string",
+        "description" : "Community Note classification type.",
+        "enum" : [
+          "HarmfullyMisleading",
+          "MisinformedOrPotentiallyMisleading",
+          "NotMisleading",
+          "PotentiallyMisleading"
+        ]
+      },
+      "NoteId" : {
+        "type" : "string",
+        "description" : "The unique identifier of this Community Note.",
+        "pattern" : "^[0-9]{1,19}$",
+        "example" : "1146654567674912769"
+      },
+      "NoteRatingStatus" : {
+        "type" : "string",
+        "description" : "Community Note rating status.",
+        "enum" : [
+          "CurrentlyRatedHelpful",
+          "CurrentlyRatedNotHelpful",
+          "InsufficientConsensus",
+          "MinimumRatingsNotMet",
+          "NeedsMoreRatings"
+        ]
+      },
       "NoteTweetText" : {
         "type" : "string",
         "description" : "The note content of the Tweet.",
@@ -12506,6 +13520,28 @@
         "description" : "A 'long' pagination token.",
         "minLength" : 1,
         "maxLength" : 19
+      },
+      "PersonalizedTrend" : {
+        "type" : "object",
+        "description" : "A trend.",
+        "properties" : {
+          "category" : {
+            "type" : "string",
+            "description" : "Category of this trend."
+          },
+          "post_count" : {
+            "type" : "integer",
+            "description" : "Number of posts pertaining to this trend."
+          },
+          "trend_name" : {
+            "type" : "string",
+            "description" : "Name of the trend."
+          },
+          "trending_since" : {
+            "type" : "string",
+            "description" : "Time since this is trending."
+          }
+        }
       },
       "Photo" : {
         "allOf" : [
@@ -13354,6 +14390,9 @@
           "author_id" : {
             "$ref" : "#/components/schemas/UserId"
           },
+          "community_id" : {
+            "$ref" : "#/components/schemas/CommunityId"
+          },
           "context_annotations" : {
             "type" : "array",
             "minItems" : 1,
@@ -13736,6 +14775,9 @@
           "card_uri" : {
             "type" : "string",
             "description" : "Card Uri Parameter. This is mutually exclusive from Quote Tweet Id, Poll, Media, and Direct Message Deep Link."
+          },
+          "community_id" : {
+            "$ref" : "#/components/schemas/CommunityId"
           },
           "direct_message_deep_link" : {
             "type" : "string",
@@ -15393,6 +16435,41 @@
       }
     },
     "parameters" : {
+      "CommunityFieldsParameter" : {
+        "name" : "community.fields",
+        "in" : "query",
+        "description" : "A comma separated list of Community fields to display.",
+        "required" : false,
+        "schema" : {
+          "type" : "array",
+          "description" : "The fields available for a Community object.",
+          "minItems" : 1,
+          "uniqueItems" : true,
+          "items" : {
+            "type" : "string",
+            "enum" : [
+              "access",
+              "created_at",
+              "description",
+              "id",
+              "join_policy",
+              "member_count",
+              "name"
+            ]
+          },
+          "example" : [
+            "access",
+            "created_at",
+            "description",
+            "id",
+            "join_policy",
+            "member_count",
+            "name"
+          ]
+        },
+        "explode" : false,
+        "style" : "form"
+      },
       "ComplianceJobFieldsParameter" : {
         "name" : "compliance_job.fields",
         "in" : "query",
@@ -15758,6 +16835,68 @@
             "url",
             "variants",
             "width"
+          ]
+        },
+        "explode" : false,
+        "style" : "form"
+      },
+      "NoteFieldsParameter" : {
+        "name" : "note.fields",
+        "in" : "query",
+        "description" : "A comma separated list of Note fields to display.",
+        "required" : false,
+        "schema" : {
+          "type" : "array",
+          "description" : "The fields available for a Note object.",
+          "minItems" : 1,
+          "uniqueItems" : true,
+          "items" : {
+            "type" : "string",
+            "enum" : [
+              "classification",
+              "created_at",
+              "deleted",
+              "id",
+              "rating_status",
+              "text"
+            ]
+          },
+          "example" : [
+            "classification",
+            "created_at",
+            "deleted",
+            "id",
+            "rating_status",
+            "text"
+          ]
+        },
+        "explode" : false,
+        "style" : "form"
+      },
+      "PersonalizedTrendFieldsParameter" : {
+        "name" : "personalized_trend.fields",
+        "in" : "query",
+        "description" : "A comma separated list of PersonalizedTrend fields to display.",
+        "required" : false,
+        "schema" : {
+          "type" : "array",
+          "description" : "The fields available for a PersonalizedTrend object.",
+          "minItems" : 1,
+          "uniqueItems" : true,
+          "items" : {
+            "type" : "string",
+            "enum" : [
+              "category",
+              "post_count",
+              "trend_name",
+              "trending_since"
+            ]
+          },
+          "example" : [
+            "category",
+            "post_count",
+            "trend_name",
+            "trending_since"
           ]
         },
         "explode" : false,
