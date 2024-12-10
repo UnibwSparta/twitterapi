@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 """usage.py: Implementation of Twitter Usage API endpoint.
 
-"The Twitter API usage endpoint provides information about API usage, including rate limits and counts for various endpoints. This is useful for monitoring
-and optimizing your API usage to avoid exceeding rate limits."
-(Source: https://developer.twitter.com/en/docs/twitter-api/usage)
+"The Usage API in the X API v2 allows developers to programmatically retrieve their project usage. Using this endpoint, developers can keep track and
+monitor the number of Posts they have pulled for a given billing cycle."
+(Source: https://developer.x.com/en/docs/x-api/usage/tweets/introduction)
 
 Find the Open API Spec under: https://api.twitter.com/2/openapi.json
 
