@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sparta-twitterapi"
-version = "0.1.59"
+version = "0.1.60"
 description = ""
 authors = ["Andreas Neumeier <andreas.neumeier@unibw.de>", "Jasmin Riedl <jasmin.riedl@unibw.de>", "Lukas Metzner <lukas.metzner@unibw.de>", "Benedikt Radtke <benedikt.radtke@unibw.de>"]
 readme = "README.md"
