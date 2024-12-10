@@ -91,15 +91,10 @@ async def get_tweet_compliance_stream(
                         break
                     if line != b"\r\n":
                         try:
-                            json_line = json.loads(line)
-                            try:
-                                yield TweetComplianceStreamResponse1.model_validate_json(json_line)
-                            except Exception as e:
-                                logger.warn(f"Inconsistent twitter OpenAPI documentation {e}")
-                                logger.warn(json.dumps(json_line))
+                            yield TweetComplianceStreamResponse1.model_validate_json(line)
                         except Exception as e:
-                            logger.error(f"get_tweet_compliance_stream encountered unexpected exception: {e}")
-                            logger.error(line)
+                            logger.warning(f"Inconsistent twitter OpenAPI documentation {e}")
+                            logger.warning(line)
 
 
 async def get_user_compliance_stream(
@@ -145,12 +140,7 @@ async def get_user_compliance_stream(
                         break
                     if line != b"\r\n":
                         try:
-                            json_line = json.loads(line)
-                            try:
-                                yield UserComplianceStreamResponse1.model_validate_json(json_line)
-                            except Exception as e:
-                                logger.warn(f"Inconsistent twitter OpenAPI documentation {e}")
-                                logger.warn(json_line)
+                            yield UserComplianceStreamResponse1.model_validate_json(line)
                         except Exception as e:
-                            logger.error(f"get_user_compliance_stream encountered unexpected exception: {e}")
-                            logger.error(line)
+                            logger.warning(f"Inconsistent twitter OpenAPI documentation {e}")
+                            logger.warning(line)

@@ -2,10 +2,10 @@
 
 ![Linting Status](https://github.com/UnibwSparta/twitterapi/actions/workflows/linting.yaml/badge.svg)
 ![Test Status](https://github.com/UnibwSparta/twitterapi/actions/workflows/test.yaml/badge.svg)
-![Build Status](https://github.com/UnibwSparta/twitterapi/actions/workflows/build.yaml/badge.svg)
-![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)
+![Build Status](https://github.com/UnibwSparta/twitterapi/actions/workflows/publish.yaml/badge.svg)
+![Python Version](https://img.shields.io/badge/python-3.10%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
-[![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
+![Checked with mypy](https://www.mypy-lang.org/static/mypy_badge.svg)
 
 Welcome to the official GitHub repository for the [SPARTA](https://dtecbw.de/sparta) Twitter API, a powerful Python implementation to interact with Twitter's API v2 in a robust and efficient manner.
 

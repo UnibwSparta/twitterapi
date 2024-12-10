@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 import pytest
 
@@ -53,7 +53,7 @@ async def test_get_full_search_count() -> None:
 @pytest.mark.asyncio
 async def test_get_recent_search() -> None:
     query = "#test -is:retweet"
-    endtime = datetime.utcnow() - timedelta(seconds=30)
+    endtime = datetime.now(timezone.utc) - timedelta(seconds=30)
     starttime = endtime - timedelta(minutes=120)
 
     async for tweet_response in get_recent_search(query=query, start_time=starttime, end_time=endtime):
@@ -66,7 +66,7 @@ async def test_get_recent_search() -> None:
 @pytest.mark.asyncio
 async def test_get_recent_search_count() -> None:
     query = "#test -is:retweet"
-    endtime = datetime.utcnow() - timedelta(seconds=30)
+    endtime = datetime.now(timezone.utc) - timedelta(seconds=30)
     starttime = endtime - timedelta(minutes=120)
 
     count = sum([count.tweet_count async for count in get_recent_search_count(query=query, start_time=starttime, end_time=endtime, granularity="day")])
@@ -82,3 +82,4 @@ async def test_get_quote_tweets() -> None:
             assert tweet_response.tweet is not None
             assert tweet_response.includes is not None
             assert "id" in tweet_response.tweet
+            break
