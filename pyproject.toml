@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sparta-twitterapi"
-version = "0.1.60"
+version = "0.1.61"
 description = ""
 authors = ["Andreas Neumeier <andreas.neumeier@unibw.de>", "Jasmin Riedl <jasmin.riedl@unibw.de>", "Lukas Metzner <lukas.metzner@unibw.de>", "Benedikt Radtke <benedikt.radtke@unibw.de>"]
 readme = "README.md"
@@ -9,26 +9,26 @@ packages = [{include = "sparta", from = "src"}]
 [tool.poetry.dependencies]
 python = "^3.10.12" # PSF
 requests = "^2.32.3" # Apache 2.0
-pydantic = "^2.10.3" # MIT
+pydantic = "^2.10.6" # MIT
 asyncio = "^3.4.3" # PSF
-aiohttp = "^3.11.10" # Apache 2
+aiohttp = "^3.11.11" # Apache 2
 
 [tool.poetry.group.dev.dependencies]
-mypy = "^1.13.0" # MIT
+mypy = "^1.14.1" # MIT
 black = "^24.10.0" # MIT
 isort = "^5.13.2" # MIT
 flake8 = "^7.1.1" # MIT
-coverage = "^7.6.9" # Apache 2.0
+coverage = "^7.6.10" # Apache 2.0
 pytest = "^8.3.4" # MIT
-pytest-cov = "^5.0.0" # MIT
+pytest-cov = "^6.0.0" # MIT
 docformatter = {extras = ["tomli"], version = "^1.7.5"} # MIT
 types-requests = "^2.32.0.20241016" # Apache 2.0
-pytest-asyncio = "^0.23.5"
+pytest-asyncio = "^0.25.2"
 
 [tool.poetry.group.docs.dependencies]
-Sphinx = "^7.4.7" # BSD
-sphinx-rtd-theme = "^2.0.0" # MIT
-myst-parser = "^2.0.0" # MIT
+Sphinx = "^8.1.3" # BSD
+sphinx-rtd-theme = "^3.0.2" # MIT
+myst-parser = "^4.0.0" # MIT
 
 [build-system]
 requires = ["poetry-core"]

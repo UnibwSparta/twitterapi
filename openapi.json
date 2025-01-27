@@ -2,7 +2,7 @@
   "openapi" : "3.0.0",
   "info" : {
     "description" : "Twitter API v2 available endpoints",
-    "version" : "2.114",
+    "version" : "2.122",
     "title" : "Twitter API v2",
     "termsOfService" : "https://developer.twitter.com/en/developer-terms/agreement-and-policy.html",
     "contact" : {
@@ -1433,294 +1433,6 @@
       "get" : {
         "security" : [
           {
-            "OAuth2UserToken" : [
-              "tweet.read",
-              "tweet.write"
-            ]
-          },
-          {
-            "UserToken" : [ ]
-          }
-        ],
-        "tags" : [
-          "Tweets"
-        ],
-        "summary" : "Get Last 28hr Metrics for Posts",
-        "description" : "Get 28hr Metrics for Posts.",
-        "operationId" : "TwentyEightHoursEngagementApi",
-        "parameters" : [
-          {
-            "name" : "tweet_ids",
-            "in" : "query",
-            "description" : "List of PostIds for 28hr metrics.",
-            "required" : true,
-            "schema" : {
-              "type" : "array",
-              "minItems" : 1,
-              "maxItems" : 25,
-              "uniqueItems" : true,
-              "items" : {
-                "$ref" : "#/components/schemas/TweetId"
-              },
-              "example" : [
-                "20"
-              ]
-            },
-            "style" : "form"
-          },
-          {
-            "name" : "granularity",
-            "in" : "query",
-            "description" : "granularity of metrics response.",
-            "required" : true,
-            "schema" : {
-              "type" : "string",
-              "enum" : [
-                "Daily",
-                "Hourly",
-                "Weekly",
-                "Total"
-              ],
-              "example" : "Total"
-            },
-            "style" : "form"
-          },
-          {
-            "name" : "requested_metrics",
-            "in" : "query",
-            "description" : "request metrics for historical request.",
-            "required" : true,
-            "schema" : {
-              "type" : "array",
-              "minItems" : 1,
-              "uniqueItems" : true,
-              "items" : {
-                "type" : "string",
-                "enum" : [
-                  "AppInstallAttempts",
-                  "AppOpens",
-                  "DetailExpands",
-                  "EmailTweet",
-                  "Engagements",
-                  "Follows",
-                  "HashtagClicks",
-                  "Impressions",
-                  "Likes",
-                  "LinkClicks",
-                  "MediaEngagements",
-                  "MediaViews",
-                  "PermalinkClicks",
-                  "ProfileVisits",
-                  "QuoteTweets",
-                  "Replies",
-                  "Retweets",
-                  "UniqueVideoViews",
-                  "UrlClicks",
-                  "UserProfileClicks",
-                  "VideoCompletions",
-                  "VideoPlayed25Percent",
-                  "VideoPlayed50Percent",
-                  "VideoPlayed75Percent",
-                  "VideoStarts",
-                  "VideoViews"
-                ]
-              }
-            },
-            "style" : "form"
-          },
-          {
-            "$ref" : "#/components/parameters/EngagementFieldsParameter"
-          }
-        ],
-        "responses" : {
-          "200" : {
-            "description" : "The request has succeeded.",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Get2Insights28hrResponse"
-                }
-              }
-            }
-          },
-          "default" : {
-            "description" : "The request has failed.",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Error"
-                }
-              },
-              "application/problem+json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Problem"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/2/insights/historical" : {
-      "get" : {
-        "security" : [
-          {
-            "OAuth2UserToken" : [
-              "tweet.read",
-              "tweet.write"
-            ]
-          },
-          {
-            "UserToken" : [ ]
-          }
-        ],
-        "tags" : [
-          "Tweets"
-        ],
-        "summary" : "Get Historical Metrics for Posts",
-        "description" : "Get Historical Metrics for Posts.",
-        "operationId" : "HistoricalEngagementApi",
-        "parameters" : [
-          {
-            "name" : "tweet_ids",
-            "in" : "query",
-            "description" : "List of PostIds for historical metrics.",
-            "required" : true,
-            "schema" : {
-              "type" : "array",
-              "minItems" : 1,
-              "maxItems" : 25,
-              "uniqueItems" : true,
-              "items" : {
-                "$ref" : "#/components/schemas/TweetId"
-              },
-              "example" : [
-                "20"
-              ]
-            },
-            "style" : "form"
-          },
-          {
-            "name" : "end_time",
-            "in" : "query",
-            "description" : "YYYY-MM-DDTHH:mm:ssZ. The UTC timestamp representing the end of the time range.",
-            "required" : true,
-            "example" : "2021-02-01T18:40:40.000Z",
-            "schema" : {
-              "type" : "string",
-              "format" : "date-time"
-            },
-            "style" : "form"
-          },
-          {
-            "name" : "start_time",
-            "in" : "query",
-            "description" : "YYYY-MM-DDTHH:mm:ssZ. The UTC timestamp representing the start of the time range.",
-            "required" : true,
-            "example" : "2021-02-01T18:40:40.000Z",
-            "schema" : {
-              "type" : "string",
-              "format" : "date-time"
-            },
-            "style" : "form"
-          },
-          {
-            "name" : "granularity",
-            "in" : "query",
-            "description" : "granularity of metrics response.",
-            "required" : true,
-            "schema" : {
-              "type" : "string",
-              "enum" : [
-                "Daily",
-                "Hourly",
-                "Weekly",
-                "Total"
-              ],
-              "example" : "Total"
-            },
-            "style" : "form"
-          },
-          {
-            "name" : "requested_metrics",
-            "in" : "query",
-            "description" : "request metrics for historical request.",
-            "required" : true,
-            "schema" : {
-              "type" : "array",
-              "minItems" : 1,
-              "uniqueItems" : true,
-              "items" : {
-                "type" : "string",
-                "enum" : [
-                  "AppInstallAttempts",
-                  "AppOpens",
-                  "DetailExpands",
-                  "EmailTweet",
-                  "Engagements",
-                  "Follows",
-                  "HashtagClicks",
-                  "Impressions",
-                  "Likes",
-                  "LinkClicks",
-                  "MediaEngagements",
-                  "MediaViews",
-                  "PermalinkClicks",
-                  "ProfileVisits",
-                  "QuoteTweets",
-                  "Replies",
-                  "Retweets",
-                  "UniqueVideoViews",
-                  "UrlClicks",
-                  "UserProfileClicks",
-                  "VideoCompletions",
-                  "VideoPlayed25Percent",
-                  "VideoPlayed50Percent",
-                  "VideoPlayed75Percent",
-                  "VideoStarts",
-                  "VideoViews"
-                ]
-              }
-            },
-            "style" : "form"
-          },
-          {
-            "$ref" : "#/components/parameters/EngagementFieldsParameter"
-          }
-        ],
-        "responses" : {
-          "200" : {
-            "description" : "The request has succeeded.",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Get2InsightsHistoricalResponse"
-                }
-              }
-            }
-          },
-          "default" : {
-            "description" : "The request has failed.",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Error"
-                }
-              },
-              "application/problem+json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Problem"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/2/likes/compliance/stream" : {
-      "get" : {
-        "security" : [
-          {
             "BearerToken" : [ ]
           }
         ],
@@ -2745,6 +2457,216 @@
         }
       }
     },
+    "/2/media/upload" : {
+      "get" : {
+        "security" : [
+          {
+            "OAuth2UserToken" : [
+              "media.write"
+            ]
+          }
+        ],
+        "tags" : [
+          "MediaUpload"
+        ],
+        "summary" : "Media Upload Status",
+        "description" : "Get MediaUpload Status",
+        "externalDocs" : {
+          "url" : "https://developer.x.com"
+        },
+        "operationId" : "uploadMediaStatus",
+        "parameters" : [
+          {
+            "name" : "media_id",
+            "in" : "query",
+            "description" : "Media id for the requested media upload status.",
+            "required" : true,
+            "schema" : {
+              "type" : "integer",
+              "format" : "int32"
+            },
+            "style" : "form"
+          },
+          {
+            "name" : "command",
+            "in" : "query",
+            "description" : "The command for the media upload request.",
+            "required" : true,
+            "schema" : {
+              "type" : "string",
+              "enum" : [
+                "STATUS"
+              ]
+            },
+            "style" : "form"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MediaUploadStatusResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "security" : [
+          {
+            "OAuth2UserToken" : [
+              "media.write"
+            ]
+          }
+        ],
+        "tags" : [
+          "MediaUpload"
+        ],
+        "summary" : "Media Upload",
+        "description" : "MediaUpload",
+        "externalDocs" : {
+          "url" : "https://developer.x.com"
+        },
+        "operationId" : "uploadMedia",
+        "parameters" : [
+          {
+            "name" : "total_bytes",
+            "in" : "query",
+            "description" : "Total number of bytes being uploaded.",
+            "required" : true,
+            "schema" : {
+              "type" : "integer",
+              "format" : "int32"
+            },
+            "style" : "form"
+          },
+          {
+            "name" : "media_type",
+            "in" : "query",
+            "description" : "The MIME type of the media being uploaded. For example, video/mp4.",
+            "required" : true,
+            "schema" : {
+              "type" : "string"
+            },
+            "style" : "form"
+          },
+          {
+            "name" : "media_category",
+            "in" : "query",
+            "description" : "A string enum value which identifies a media usecase. This identifier is used to enforce usecase specific constraints (e.g. file size, video duration) and enable advanced features.",
+            "required" : false,
+            "schema" : {
+              "type" : "string",
+              "enum" : [
+                "amplify_video",
+                "tweet_gif",
+                "tweet_image",
+                "tweet_video",
+                "subtitles"
+              ]
+            },
+            "style" : "form"
+          },
+          {
+            "name" : "additional_owners",
+            "in" : "query",
+            "description" : "A comma-separated list of user IDs to set as additional owners allowed to use the returned media_id in Tweets or Cards. Up to 100 additional owners may be specified.",
+            "required" : false,
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/components/schemas/UserId"
+              }
+            },
+            "style" : "form"
+          },
+          {
+            "name" : "command",
+            "in" : "query",
+            "description" : "The type of command to use.",
+            "required" : true,
+            "schema" : {
+              "type" : "string",
+              "enum" : [
+                "INIT",
+                "FINALIZE",
+                "APPEND"
+              ]
+            },
+            "style" : "form"
+          }
+        ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AddOrDeleteRulesRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MediaUploadStatusResponse"
+                }
+              }
+            }
+          },
+          "202" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MediaUploadInitResponse"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "The request has succeeded.",
+            "content" : { }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/2/notes" : {
       "get" : {
         "security" : [
@@ -3423,6 +3345,20 @@
               "format" : "int32"
             },
             "style" : "simple"
+          },
+          {
+            "name" : "max_trends",
+            "in" : "query",
+            "description" : "The maximum number of results.",
+            "required" : false,
+            "schema" : {
+              "type" : "integer",
+              "minimum" : 1,
+              "maximum" : 50,
+              "format" : "int32",
+              "default" : 20
+            },
+            "style" : "form"
           },
           {
             "$ref" : "#/components/parameters/TrendFieldsParameter"
@@ -7190,13 +7126,12 @@
         }
       }
     },
-    "/2/users/{id}/bookmarks/{tweet_id}" : {
-      "delete" : {
+    "/2/users/{id}/bookmarks/folders" : {
+      "get" : {
         "security" : [
           {
             "OAuth2UserToken" : [
-              "bookmark.write",
-              "tweet.read",
+              "bookmark.read",
               "users.read"
             ]
           }
@@ -7204,17 +7139,17 @@
         "tags" : [
           "Bookmarks"
         ],
-        "summary" : "Remove a bookmarked Post",
-        "description" : "Removes a Post from the requesting User's bookmarked Posts.",
+        "summary" : "Bookmark folders by User",
+        "description" : "Returns metadata about Bookmark folders that have been created by the requesting User",
         "externalDocs" : {
-          "url" : "https://developer.twitter.com/en/docs/twitter-api/tweets/bookmarks/api-reference/delete-users-id-bookmarks-tweet_id"
+          "url" : "https://developer.x.com"
         },
-        "operationId" : "usersIdBookmarksDelete",
+        "operationId" : "getUsersIdBookmarkFolders",
         "parameters" : [
           {
             "name" : "id",
             "in" : "path",
-            "description" : "The ID of the authenticated source User whose bookmark is to be removed.",
+            "description" : "The ID of the authenticated source User for whom to return results.",
             "required" : true,
             "schema" : {
               "$ref" : "#/components/schemas/UserIdMatchesAuthenticatedUser"
@@ -7222,14 +7157,27 @@
             "style" : "simple"
           },
           {
-            "name" : "tweet_id",
-            "in" : "path",
-            "description" : "The ID of the Post that the source User is removing from bookmarks.",
-            "required" : true,
+            "name" : "max_results",
+            "in" : "query",
+            "description" : "The maximum number of results.",
+            "required" : false,
             "schema" : {
-              "$ref" : "#/components/schemas/TweetId"
+              "type" : "integer",
+              "minimum" : 1,
+              "maximum" : 100,
+              "format" : "int32"
             },
-            "style" : "simple"
+            "style" : "form"
+          },
+          {
+            "name" : "pagination_token",
+            "in" : "query",
+            "description" : "This parameter is used to get the next 'page' of results.",
+            "required" : false,
+            "schema" : {
+              "$ref" : "#/components/schemas/PaginationToken36"
+            },
+            "style" : "form"
           }
         ],
         "responses" : {
@@ -7238,7 +7186,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/BookmarkMutationResponse"
+                  "$ref" : "#/components/schemas/BookmarkFoldersResponse"
                 }
               }
             }
@@ -7261,58 +7209,55 @@
         }
       }
     },
-    "/2/users/{id}/dm/block" : {
-      "post" : {
+    "/2/users/{id}/bookmarks/folders/{folder_id}" : {
+      "get" : {
         "security" : [
           {
             "OAuth2UserToken" : [
-              "dm.write",
+              "bookmark.read",
               "tweet.read",
               "users.read"
             ]
-          },
-          {
-            "UserToken" : [ ]
           }
         ],
         "tags" : [
-          "Users"
+          "Bookmarks"
         ],
-        "summary" : "Causes DMs to/from the target User (in the path) to be blocked by the authenticated request user",
-        "description" : "Causes DMs to/from the target User (in the path) to be blocked by the authenticated request user",
+        "summary" : "Bookmark Folder Posts by User and Folder id",
+        "description" : "Returns posts belonging to input bookmarks folder id that have been created by the requesting User",
         "externalDocs" : {
-          "url" : "https://developer.twitter.com/en/docs/twitter-api/tweets/bookmarks/api-reference/post-users-id-bookmarks"
+          "url" : "https://developer.x.com"
         },
-        "operationId" : "postUsersIdBookmarks",
+        "operationId" : "getUsersIdBookmarkFolderPosts",
         "parameters" : [
           {
             "name" : "id",
             "in" : "path",
-            "description" : "The ID of the authenticated source User for whom to add bookmarks.",
+            "description" : "The ID of the authenticated source User for whom to return results.",
             "required" : true,
             "schema" : {
               "$ref" : "#/components/schemas/UserIdMatchesAuthenticatedUser"
             },
             "style" : "simple"
+          },
+          {
+            "name" : "folder_id",
+            "in" : "path",
+            "description" : "The ID of the Bookmark Folder that the authenticated User is trying to fetch Posts for.",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/components/schemas/BookmarkFolderId"
+            },
+            "style" : "simple"
           }
         ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/BookmarkAddRequest"
-              }
-            }
-          },
-          "required" : true
-        },
         "responses" : {
           "200" : {
             "description" : "The request has succeeded.",
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/BookmarkMutationResponse"
+                  "$ref" : "#/components/schemas/BookmarkFolderPostsResponse"
                 }
               }
             }
@@ -9789,6 +9734,7 @@
               "like.write" : "Like and un-like Tweets for you.",
               "list.read" : "Lists, list members, and list followers of lists you’ve created or are a member of, including private lists.",
               "list.write" : "Create and manage Lists for you.",
+              "media.write" : "Upload media like photos and videos for you.",
               "mute.read" : "Accounts you’ve muted.",
               "mute.write" : "Mute and unmute accounts for you.",
               "offline.access" : "App can request refresh token.",
@@ -9912,6 +9858,41 @@
         "properties" : {
           "tweet_id" : {
             "$ref" : "#/components/schemas/TweetId"
+          }
+        }
+      },
+      "BookmarkFolderId" : {
+        "type" : "string",
+        "description" : "The unique identifier of this Bookmark folder.",
+        "pattern" : "^[0-9]{1,19}$",
+        "example" : "1146654567674912769"
+      },
+      "BookmarkFolderPostsResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "object",
+            "properties" : {
+              "id" : {
+                "$ref" : "#/components/schemas/TweetId"
+              }
+            }
+          }
+        }
+      },
+      "BookmarkFoldersResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "object",
+            "properties" : {
+              "id" : {
+                "$ref" : "#/components/schemas/BookmarkFolderId"
+              },
+              "name" : {
+                "type" : "string"
+              }
+            }
           }
         }
       },
@@ -12736,60 +12717,6 @@
           }
         }
       },
-      "Get2UsersMeResponse" : {
-        "type" : "object",
-        "properties" : {
-          "data" : {
-            "$ref" : "#/components/schemas/User"
-          },
-          "errors" : {
-            "type" : "array",
-            "minItems" : 1,
-            "items" : {
-              "$ref" : "#/components/schemas/Problem"
-            }
-          },
-          "includes" : {
-            "$ref" : "#/components/schemas/Expansions"
-          }
-        }
-      },
-      "Get2UsersRepostsOfMeResponse" : {
-        "type" : "object",
-        "properties" : {
-          "data" : {
-            "type" : "array",
-            "minItems" : 1,
-            "items" : {
-              "$ref" : "#/components/schemas/Tweet"
-            }
-          },
-          "errors" : {
-            "type" : "array",
-            "minItems" : 1,
-            "items" : {
-              "$ref" : "#/components/schemas/Problem"
-            }
-          },
-          "includes" : {
-            "$ref" : "#/components/schemas/Expansions"
-          },
-          "meta" : {
-            "type" : "object",
-            "properties" : {
-              "next_token" : {
-                "$ref" : "#/components/schemas/NextToken"
-              },
-              "previous_token" : {
-                "$ref" : "#/components/schemas/PreviousToken"
-              },
-              "result_count" : {
-                "$ref" : "#/components/schemas/ResultCount"
-              }
-            }
-          }
-        }
-      },
       "Get2UsersResponse" : {
         "type" : "object",
         "properties" : {
@@ -13326,6 +13253,78 @@
         "description" : "The Media Key identifier for this attachment.",
         "pattern" : "^([0-9]+)_([0-9]+)$"
       },
+      "MediaUploadInitResponse" : {
+        "type" : "object",
+        "description" : "A response from initiating a media upload session.",
+        "required" : [
+          "meta"
+        ],
+        "properties" : {
+          "data" : {
+            "type" : "object",
+            "properties" : {
+              "expires_after_secs" : {
+                "type" : "integer",
+                "description" : "Number of seconds after which upload session expires.",
+                "format" : "int32"
+              },
+              "id" : {
+                "$ref" : "#/components/schemas/MediaId"
+              },
+              "media_key" : {
+                "$ref" : "#/components/schemas/MediaKey"
+              }
+            }
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
+      "MediaUploadStatusResponse" : {
+        "type" : "object",
+        "description" : "A response from getting a media upload request status.",
+        "required" : [
+          "meta"
+        ],
+        "properties" : {
+          "data" : {
+            "type" : "object",
+            "properties" : {
+              "expires_after_secs" : {
+                "type" : "integer",
+                "description" : "Number of seconds after which upload session expires.",
+                "format" : "int32"
+              },
+              "id" : {
+                "$ref" : "#/components/schemas/MediaId"
+              },
+              "media_key" : {
+                "$ref" : "#/components/schemas/MediaKey"
+              },
+              "processing_info" : {
+                "$ref" : "#/components/schemas/ProcessingInfo"
+              },
+              "size" : {
+                "type" : "integer",
+                "description" : "Size of the upload",
+                "format" : "int32"
+              }
+            }
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
       "MediaWidth" : {
         "type" : "integer",
         "description" : "The width of the media in pixels.",
@@ -13775,6 +13774,34 @@
             "https://api.twitter.com/2/problems/streaming-connection" : "#/components/schemas/ConnectionExceptionProblem",
             "https://api.twitter.com/2/problems/unsupported-authentication" : "#/components/schemas/UnsupportedAuthenticationProblem",
             "https://api.twitter.com/2/problems/usage-capped" : "#/components/schemas/UsageCapExceededProblem"
+          }
+        }
+      },
+      "ProcessingInfo" : {
+        "type" : "object",
+        "required" : [
+          "type"
+        ],
+        "properties" : {
+          "check_after_secs" : {
+            "type" : "integer",
+            "description" : "Number of seconds to check again for status",
+            "format" : "int32"
+          },
+          "progress_percent" : {
+            "type" : "integer",
+            "description" : "Percent of upload progress",
+            "format" : "int32"
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "State of upload",
+            "enum" : [
+              "succeeded",
+              "in_progress",
+              "pending",
+              "failed"
+            ]
           }
         }
       },
@@ -17228,6 +17255,7 @@
               "attachments",
               "author_id",
               "card_uri",
+              "community_id",
               "context_annotations",
               "conversation_id",
               "created_at",
@@ -17259,6 +17287,7 @@
             "attachments",
             "author_id",
             "card_uri",
+            "community_id",
             "context_annotations",
             "conversation_id",
             "created_at",
@@ -17366,6 +17395,7 @@
               "description",
               "entities",
               "id",
+              "is_identity_verified",
               "location",
               "most_recent_tweet_id",
               "name",
@@ -17379,6 +17409,7 @@
               "url",
               "username",
               "verified",
+              "verified_followers_count",
               "verified_type",
               "withheld"
             ]
@@ -17390,6 +17421,7 @@
             "description",
             "entities",
             "id",
+            "is_identity_verified",
             "location",
             "most_recent_tweet_id",
             "name",
@@ -17403,6 +17435,7 @@
             "url",
             "username",
             "verified",
+            "verified_followers_count",
             "verified_type",
             "withheld"
           ]
