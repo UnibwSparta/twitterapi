@@ -2,7 +2,7 @@
   "openapi" : "3.0.0",
   "info" : {
     "description" : "Twitter API v2 available endpoints",
-    "version" : "2.127",
+    "version" : "2.142",
     "title" : "Twitter API v2",
     "termsOfService" : "https://developer.twitter.com/en/developer-terms/agreement-and-policy.html",
     "contact" : {
@@ -15,6 +15,394 @@
     }
   },
   "paths" : {
+    "/2/account_activity/replay/webhooks/{webhook_id}/subscriptions/all" : {
+      "post" : {
+        "security" : [
+          {
+            "BearerToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "AAASubscriptions"
+        ],
+        "summary" : "Request Activity Replay",
+        "description" : "Submits a request to retrieve activities from up to the past five days for all subscriptions associated with the specified webhook during the date and time windows provided.",
+        "externalDocs" : {
+          "url" : "https://docs.x.com/x-api/account-activity/introduction"
+        },
+        "operationId" : "postAccountActivityReplay",
+        "parameters" : [
+          {
+            "name" : "webhook_id",
+            "in" : "path",
+            "description" : "The unique identifier for the webhook configuration.",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/components/schemas/WebhookConfigId"
+            },
+            "style" : "simple"
+          },
+          {
+            "name" : "from_date",
+            "in" : "query",
+            "description" : "The oldest (starting) UTC timestamp (inclusive) from which events will be provided, in `yyyymmddhhmm` format.",
+            "required" : true,
+            "schema" : {
+              "type" : "string",
+              "pattern" : "^\\d{12}$",
+              "example" : "202504242000"
+            },
+            "style" : "form"
+          },
+          {
+            "name" : "to_date",
+            "in" : "query",
+            "description" : "The latest (ending) UTC timestamp (exclusive) up to which events will be provided, in `yyyymmddhhmm` format.",
+            "required" : true,
+            "schema" : {
+              "type" : "string",
+              "pattern" : "^\\d{12}$",
+              "example" : "202504242200"
+            },
+            "style" : "form"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ReplayJobCreateResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/2/account_activity/subscriptions/count" : {
+      "get" : {
+        "security" : [
+          {
+            "BearerToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "AAASubscriptions"
+        ],
+        "summary" : "Get a count of subscriptions that are currently active on your account",
+        "description" : "Get a count of subscriptions that are currently active on your account.",
+        "externalDocs" : {
+          "url" : "https://docs.x.com/x-api/account-activity/introduction"
+        },
+        "operationId" : "getSubscriptionCount",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SubscriptionsCountGetResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/2/account_activity/webhooks/{webhook_id}/subscriptions/all" : {
+      "get" : {
+        "security" : [
+          {
+            "OAuth2UserToken" : [
+              "dm.read",
+              "dm.write",
+              "tweet.read",
+              "users.read"
+            ]
+          },
+          {
+            "UserToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "AAASubscriptions"
+        ],
+        "summary" : "Check if a subscription exists for a given webhook and user",
+        "description" : "Check if a subscription exists for a given webhook and user.",
+        "externalDocs" : {
+          "url" : "https://docs.x.com/x-api/account-activity/introduction"
+        },
+        "operationId" : "getSubscription",
+        "parameters" : [
+          {
+            "name" : "webhook_id",
+            "in" : "path",
+            "description" : "The webhook ID to check subscription against.",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/components/schemas/WebhookConfigId"
+            },
+            "style" : "simple"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SubscriptionsGetResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "security" : [
+          {
+            "OAuth2UserToken" : [
+              "dm.read",
+              "dm.write",
+              "tweet.read",
+              "users.read"
+            ]
+          },
+          {
+            "UserToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "AAASubscriptions"
+        ],
+        "summary" : "Subscribes the provided application to all events for the provided user context for all message types",
+        "description" : "Subscribes the provided application to all events for the provided user context for all message types.",
+        "externalDocs" : {
+          "url" : "https://docs.x.com/x-api/account-activity/introduction"
+        },
+        "operationId" : "postSubscription",
+        "parameters" : [
+          {
+            "name" : "webhook_id",
+            "in" : "path",
+            "description" : "The webhook ID to check subscription against.",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/components/schemas/WebhookConfigId"
+            },
+            "style" : "simple"
+          }
+        ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SubscriptionsCreateRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SubscriptionsCreateResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/2/account_activity/webhooks/{webhook_id}/subscriptions/all/list" : {
+      "get" : {
+        "security" : [
+          {
+            "BearerToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "AAASubscriptions"
+        ],
+        "summary" : "Get a list of the current All Activity type subscriptions for the specified webhook",
+        "description" : "Get a list of the current All Activity type subscriptions for the specified webhook.",
+        "externalDocs" : {
+          "url" : "https://docs.x.com/x-api/account-activity/introduction"
+        },
+        "operationId" : "getSubscriptionList",
+        "parameters" : [
+          {
+            "name" : "webhook_id",
+            "in" : "path",
+            "description" : "The webhook ID to pull subscriptions for.",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/components/schemas/WebhookConfigId"
+            },
+            "style" : "simple"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SubscriptionsListGetResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/2/account_activity/webhooks/{webhook_id}/subscriptions/{user_id}/all" : {
+      "delete" : {
+        "security" : [
+          {
+            "BearerToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "AAASubscriptions"
+        ],
+        "summary" : "Deactivates a subscription for the specified webhook and user id",
+        "description" : "Deactivates a subscription for the specified webhook and user id.",
+        "externalDocs" : {
+          "url" : "https://docs.x.com/x-api/account-activity/introduction"
+        },
+        "operationId" : "deleteSubscription",
+        "parameters" : [
+          {
+            "name" : "webhook_id",
+            "in" : "path",
+            "description" : "The webhook ID to check subscription against.",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/components/schemas/WebhookConfigId"
+            },
+            "style" : "simple"
+          },
+          {
+            "name" : "user_id",
+            "in" : "path",
+            "description" : "User ID to unsubscribe from.",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/components/schemas/UserId"
+            },
+            "style" : "simple"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SubscriptionsDeleteResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/2/communities/search" : {
       "get" : {
         "security" : [
@@ -506,7 +894,7 @@
         ],
         "summary" : "Get DM Events for a DM Conversation",
         "description" : "Returns DM Events for a DM Conversation",
-        "operationId" : "getDmConversationsWithParticipantIdDmEvents",
+        "operationId" : "getDmEventsByParticipantId",
         "parameters" : [
           {
             "name" : "participant_id",
@@ -1146,8 +1534,7 @@
         "security" : [
           {
             "OAuth2UserToken" : [
-              "tweet.read",
-              "tweet.write"
+              "tweet.read"
             ]
           },
           {
@@ -1278,8 +1665,7 @@
         "security" : [
           {
             "OAuth2UserToken" : [
-              "tweet.read",
-              "tweet.write"
+              "tweet.read"
             ]
           },
           {
@@ -2457,7 +2843,189 @@
         }
       }
     },
-    "/2/media/metadata/create" : {
+    "/2/media" : {
+      "get" : {
+        "security" : [
+          {
+            "BearerToken" : [ ]
+          },
+          {
+            "OAuth2UserToken" : [
+              "tweet.read"
+            ]
+          },
+          {
+            "UserToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "Media"
+        ],
+        "summary" : "Media lookup by Media Key",
+        "description" : "Returns a variety of information about the Media specified by the requested Media Key.",
+        "externalDocs" : {
+          "url" : "https://developer.x.com"
+        },
+        "operationId" : "findMediaByMediaKeys",
+        "parameters" : [
+          {
+            "name" : "media_keys",
+            "in" : "query",
+            "description" : "A comma separated list of Media Keys. Up to 100 are allowed in a single request.",
+            "required" : true,
+            "schema" : {
+              "type" : "array",
+              "minItems" : 1,
+              "maxItems" : 100,
+              "items" : {
+                "$ref" : "#/components/schemas/MediaKey"
+              }
+            },
+            "explode" : false,
+            "style" : "form"
+          },
+          {
+            "$ref" : "#/components/parameters/MediaFieldsParameter"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Get2MediaResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/2/media/analytics" : {
+      "get" : {
+        "security" : [
+          {
+            "OAuth2UserToken" : [
+              "tweet.read"
+            ]
+          },
+          {
+            "UserToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "Media"
+        ],
+        "summary" : "Analytics of Media",
+        "description" : "Returns analytics of Media.",
+        "operationId" : "MediaAnalytics",
+        "parameters" : [
+          {
+            "name" : "media_keys",
+            "in" : "query",
+            "description" : "A comma separated list of Media Keys. Up to 100 are allowed in a single request.",
+            "required" : true,
+            "schema" : {
+              "type" : "array",
+              "minItems" : 1,
+              "maxItems" : 100,
+              "items" : {
+                "$ref" : "#/components/schemas/MediaKey"
+              }
+            },
+            "explode" : false,
+            "style" : "form"
+          },
+          {
+            "name" : "end_time",
+            "in" : "query",
+            "description" : "YYYY-MM-DDTHH:mm:ssZ. The UTC timestamp representing the end of the time range.",
+            "required" : true,
+            "example" : "2021-02-01T18:40:40.000Z",
+            "schema" : {
+              "type" : "string",
+              "format" : "date-time"
+            },
+            "style" : "form"
+          },
+          {
+            "name" : "start_time",
+            "in" : "query",
+            "description" : "YYYY-MM-DDTHH:mm:ssZ. The UTC timestamp representing the start of the time range.",
+            "required" : true,
+            "example" : "2021-02-01T18:40:40.000Z",
+            "schema" : {
+              "type" : "string",
+              "format" : "date-time"
+            },
+            "style" : "form"
+          },
+          {
+            "name" : "granularity",
+            "in" : "query",
+            "description" : "The granularity for the search counts results.",
+            "required" : true,
+            "schema" : {
+              "type" : "string",
+              "enum" : [
+                "hourly",
+                "daily",
+                "total"
+              ],
+              "default" : "daily"
+            },
+            "style" : "form"
+          },
+          {
+            "$ref" : "#/components/parameters/MediaAnalyticsFieldsParameter"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MediaAnalytics"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/2/media/metadata" : {
       "post" : {
         "security" : [
           {
@@ -2475,7 +3043,7 @@
         "summary" : "Metadata Create",
         "description" : "MetadataCreate",
         "externalDocs" : {
-          "url" : "https://developer.x.com"
+          "url" : "https://docs.x.com/x-api/media/media-metadata-create#metadata-create"
         },
         "operationId" : "metadataCreate",
         "parameters" : [ ],
@@ -2517,8 +3085,8 @@
         }
       }
     },
-    "/2/media/subtitles/create" : {
-      "post" : {
+    "/2/media/subtitles" : {
+      "delete" : {
         "security" : [
           {
             "OAuth2UserToken" : [
@@ -2532,18 +3100,18 @@
         "tags" : [
           "MediaUpload"
         ],
-        "summary" : "Subtitle Create",
-        "description" : "SubtitleCreate",
+        "summary" : "Subtitle Delete",
+        "description" : "SubtitleDelete",
         "externalDocs" : {
-          "url" : "https://developer.x.com"
+          "url" : "https://docs.x.com/x-api/media/media-subtitles-delete"
         },
-        "operationId" : "subtitleCreate",
+        "operationId" : "deleteSubtitles",
         "parameters" : [ ],
         "requestBody" : {
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/SubtitlesCreateRequest"
+                "$ref" : "#/components/schemas/SubtitlesDeleteRequest"
               }
             }
           }
@@ -2554,7 +3122,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/SubtitlesCreateResponse"
+                  "$ref" : "#/components/schemas/SubtitlesDeleteResponse"
                 }
               }
             }
@@ -2575,9 +3143,7 @@
             }
           }
         }
-      }
-    },
-    "/2/media/subtitles/delete" : {
+      },
       "post" : {
         "security" : [
           {
@@ -2592,18 +3158,18 @@
         "tags" : [
           "MediaUpload"
         ],
-        "summary" : "Subtitle Delete",
-        "description" : "SubtitleDelete",
+        "summary" : "Subtitle Create",
+        "description" : "SubtitleCreate",
         "externalDocs" : {
-          "url" : "https://developer.x.com"
+          "url" : "https://docs.x.com/x-api/media/media-subtitles-create"
         },
-        "operationId" : "subtitleDelete",
+        "operationId" : "createSubtitles",
         "parameters" : [ ],
         "requestBody" : {
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/SubtitlesDeleteRequest"
+                "$ref" : "#/components/schemas/SubtitlesCreateRequest"
               }
             }
           }
@@ -2614,7 +3180,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/SubtitlesDeleteResponse"
+                  "$ref" : "#/components/schemas/SubtitlesCreateResponse"
                 }
               }
             }
@@ -2655,7 +3221,7 @@
         "summary" : "Media Upload Status",
         "description" : "Get MediaUpload Status",
         "externalDocs" : {
-          "url" : "https://developer.x.com"
+          "url" : "https://docs.x.com/x-api/media/media-upload-status#media-upload-status"
         },
         "operationId" : "uploadMediaStatus",
         "parameters" : [
@@ -2665,8 +3231,7 @@
             "description" : "Media id for the requested media upload status.",
             "required" : true,
             "schema" : {
-              "type" : "integer",
-              "format" : "int32"
+              "$ref" : "#/components/schemas/MediaId"
             },
             "style" : "form"
           },
@@ -2674,7 +3239,7 @@
             "name" : "command",
             "in" : "query",
             "description" : "The command for the media upload request.",
-            "required" : true,
+            "required" : false,
             "schema" : {
               "type" : "string",
               "enum" : [
@@ -2690,7 +3255,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/MediaUploadStatusResponse"
+                  "$ref" : "#/components/schemas/MediaUploadResponse"
                 }
               }
             }
@@ -2726,87 +3291,23 @@
         "tags" : [
           "MediaUpload"
         ],
-        "summary" : "Media Upload",
-        "description" : "MediaUpload",
+        "summary" : "Image or subtitle media upload",
+        "description" : "Uploads an image or a subtitle using a single API call.",
         "externalDocs" : {
-          "url" : "https://developer.x.com"
+          "url" : "https://docs.x.com/x-api/media/media-upload"
         },
         "operationId" : "uploadMedia",
-        "parameters" : [
-          {
-            "name" : "total_bytes",
-            "in" : "query",
-            "description" : "Total number of bytes being uploaded.",
-            "required" : true,
-            "schema" : {
-              "type" : "integer",
-              "format" : "int32"
-            },
-            "style" : "form"
-          },
-          {
-            "name" : "media_type",
-            "in" : "query",
-            "description" : "The MIME type of the media being uploaded. For example, video/mp4.",
-            "required" : true,
-            "schema" : {
-              "type" : "string"
-            },
-            "style" : "form"
-          },
-          {
-            "name" : "media_category",
-            "in" : "query",
-            "description" : "A string enum value which identifies a media usecase. This identifier is used to enforce usecase specific constraints (e.g. file size, video duration) and enable advanced features.",
-            "required" : false,
-            "schema" : {
-              "type" : "string",
-              "enum" : [
-                "amplify_video",
-                "tweet_gif",
-                "tweet_image",
-                "tweet_video",
-                "dm_video",
-                "dm_image",
-                "subtitles"
-              ]
-            },
-            "style" : "form"
-          },
-          {
-            "name" : "additional_owners",
-            "in" : "query",
-            "description" : "A comma-separated list of user IDs to set as additional owners allowed to use the returned media_id in Tweets or Cards. Up to 100 additional owners may be specified.",
-            "required" : false,
-            "schema" : {
-              "type" : "array",
-              "items" : {
-                "$ref" : "#/components/schemas/UserId"
-              }
-            },
-            "style" : "form"
-          },
-          {
-            "name" : "command",
-            "in" : "query",
-            "description" : "The type of command to use.",
-            "required" : true,
-            "schema" : {
-              "type" : "string",
-              "enum" : [
-                "INIT",
-                "FINALIZE",
-                "APPEND"
-              ]
-            },
-            "style" : "form"
-          }
-        ],
+        "parameters" : [ ],
         "requestBody" : {
           "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MediaUploadRequestOneShot"
+              }
+            },
             "multipart/form-data" : {
               "schema" : {
-                "$ref" : "#/components/schemas/MediaUploadAppendRequest"
+                "$ref" : "#/components/schemas/MediaUploadRequestOneShot"
               }
             }
           }
@@ -2817,24 +3318,10 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/MediaUploadStatusResponse"
+                  "$ref" : "#/components/schemas/MediaUploadResponse"
                 }
               }
             }
-          },
-          "202" : {
-            "description" : "The request has succeeded.",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/MediaUploadInitResponse"
-                }
-              }
-            }
-          },
-          "204" : {
-            "description" : "The request has succeeded.",
-            "content" : { }
           },
           "default" : {
             "description" : "The request has failed.",
@@ -2854,17 +3341,12 @@
         }
       }
     },
-    "/2/notes" : {
-      "get" : {
+    "/2/media/upload/initialize" : {
+      "post" : {
         "security" : [
           {
-            "BearerToken" : [ ]
-          },
-          {
             "OAuth2UserToken" : [
-              "list.read",
-              "tweet.read",
-              "users.read"
+              "media.write"
             ]
           },
           {
@@ -2872,28 +3354,160 @@
           }
         ],
         "tags" : [
-          "Community Notes"
+          "MediaUpload"
         ],
-        "summary" : "Community Note lookup by Post ID",
-        "description" : "Returns a variety of information about the Community Noted specified by the requested Post ID.",
+        "summary" : "Initialize a media upload request.",
+        "description" : "Initialize a media upload request.",
         "externalDocs" : {
-          "url" : "https://developer.x.com/en/docs/x-api/community_notes/api-reference/get-community-note"
+          "url" : "https://docs.x.com/x-api/media/media-upload"
         },
-        "operationId" : "findNoteByTweetId",
-        "parameters" : [
+        "operationId" : "initializeMediaUpload",
+        "parameters" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MediaUploadConfigRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MediaUploadResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/2/media/upload/{id}/append" : {
+      "post" : {
+        "security" : [
           {
-            "name" : "postId",
-            "in" : "query",
-            "description" : "A single Post ID.",
-            "required" : true,
-            "schema" : {
-              "$ref" : "#/components/schemas/TweetId"
-            },
-            "explode" : false,
-            "style" : "form"
+            "OAuth2UserToken" : [
+              "media.write"
+            ]
           },
           {
-            "$ref" : "#/components/parameters/NoteFieldsParameter"
+            "UserToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "MediaUpload"
+        ],
+        "summary" : "Media upload resumable upload append endpoint.",
+        "description" : "MediaUpload",
+        "externalDocs" : {
+          "url" : "https://docs.x.com/x-api/media/media-upload"
+        },
+        "operationId" : "appendMediaUpload",
+        "parameters" : [
+          {
+            "name" : "id",
+            "in" : "path",
+            "description" : "The media identifier for the media to perform the append operation.",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/components/schemas/MediaId"
+            },
+            "style" : "simple"
+          }
+        ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MediaUploadAppendRequest"
+              }
+            },
+            "multipart/form-data" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MediaUploadAppendRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MediaUploadAppendResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/2/media/upload/{id}/finalize" : {
+      "post" : {
+        "security" : [
+          {
+            "OAuth2UserToken" : [
+              "media.write"
+            ]
+          },
+          {
+            "UserToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "MediaUpload"
+        ],
+        "summary" : "Finalize a media upload request.",
+        "description" : "Finalize a media upload request.",
+        "externalDocs" : {
+          "url" : "https://docs.x.com/x-api/media/media-upload"
+        },
+        "operationId" : "finalizeMediaUpload",
+        "parameters" : [
+          {
+            "name" : "id",
+            "in" : "path",
+            "description" : "The media id of the targeted media to finalize.",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/components/schemas/MediaId"
+            },
+            "style" : "simple"
           }
         ],
         "responses" : {
@@ -2902,7 +3516,75 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/Get2NotesResponse"
+                  "$ref" : "#/components/schemas/MediaUploadResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/2/media/{media_key}" : {
+      "get" : {
+        "security" : [
+          {
+            "BearerToken" : [ ]
+          },
+          {
+            "OAuth2UserToken" : [
+              "tweet.read"
+            ]
+          },
+          {
+            "UserToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "Media"
+        ],
+        "summary" : "Media lookup by Media Key",
+        "description" : "Returns a variety of information about the Media specified by the requested Media Key.",
+        "externalDocs" : {
+          "url" : "https://developer.x.com"
+        },
+        "operationId" : "findMediaByMediaKey",
+        "parameters" : [
+          {
+            "name" : "media_key",
+            "in" : "path",
+            "description" : "A single Media Key.",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/components/schemas/MediaKey"
+            },
+            "style" : "simple"
+          },
+          {
+            "$ref" : "#/components/parameters/MediaFieldsParameter"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Get2MediaMediaKeyResponse"
                 }
               }
             }
@@ -3709,6 +4391,116 @@
               "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/TweetCreateResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/2/tweets/analytics" : {
+      "get" : {
+        "security" : [
+          {
+            "OAuth2UserToken" : [
+              "tweet.read",
+              "users.read"
+            ]
+          },
+          {
+            "UserToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "Tweets"
+        ],
+        "summary" : "Analytics of posts",
+        "description" : "Returns analytics of posts.",
+        "operationId" : "postAnalytics2",
+        "parameters" : [
+          {
+            "name" : "ids",
+            "in" : "query",
+            "description" : "A comma separated list of Post IDs. Up to 100 are allowed in a single request.",
+            "required" : true,
+            "schema" : {
+              "type" : "array",
+              "minItems" : 1,
+              "maxItems" : 100,
+              "items" : {
+                "$ref" : "#/components/schemas/TweetId"
+              }
+            },
+            "explode" : false,
+            "style" : "form"
+          },
+          {
+            "name" : "end_time",
+            "in" : "query",
+            "description" : "YYYY-MM-DDTHH:mm:ssZ. The UTC timestamp representing the end of the time range.",
+            "required" : true,
+            "example" : "2021-02-01T18:40:40.000Z",
+            "schema" : {
+              "type" : "string",
+              "format" : "date-time"
+            },
+            "style" : "form"
+          },
+          {
+            "name" : "start_time",
+            "in" : "query",
+            "description" : "YYYY-MM-DDTHH:mm:ssZ. The UTC timestamp representing the start of the time range.",
+            "required" : true,
+            "example" : "2021-02-01T18:40:40.000Z",
+            "schema" : {
+              "type" : "string",
+              "format" : "date-time"
+            },
+            "style" : "form"
+          },
+          {
+            "name" : "granularity",
+            "in" : "query",
+            "description" : "The granularity for the search counts results.",
+            "required" : true,
+            "schema" : {
+              "type" : "string",
+              "enum" : [
+                "hourly",
+                "daily",
+                "weekly",
+                "total"
+              ],
+              "default" : "total"
+            },
+            "style" : "form"
+          },
+          {
+            "$ref" : "#/components/parameters/AnalyticsFieldsParameter"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Analytics"
                 }
               }
             }
@@ -9823,6 +10615,230 @@
           }
         }
       }
+    },
+    "/2/webhooks" : {
+      "get" : {
+        "security" : [
+          {
+            "BearerToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "Webhooks"
+        ],
+        "summary" : "Get a list of webhook configs associated with a client app",
+        "description" : "Get a list of webhook configs associated with a client app.",
+        "externalDocs" : {
+          "url" : "https://docs.x.com/x-api/webhooks/introduction"
+        },
+        "operationId" : "getWebhooksConfig",
+        "parameters" : [
+          {
+            "$ref" : "#/components/parameters/WebhookConfigFieldsParameter"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Get2WebhooksResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "security" : [
+          {
+            "BearerToken" : [ ]
+          },
+          {
+            "UserToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "Webhooks"
+        ],
+        "summary" : "Create Webhook Config",
+        "description" : "Creates a new webhook config.",
+        "externalDocs" : {
+          "url" : "https://docs.x.com/x-api/webhooks/introduction"
+        },
+        "operationId" : "createWebhooksConfig",
+        "parameters" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/WebhookConfigCreateRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/WebhookConfigCreateResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/2/webhooks/{webhook_id}" : {
+      "delete" : {
+        "security" : [
+          {
+            "BearerToken" : [ ]
+          },
+          {
+            "UserToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "Webhooks"
+        ],
+        "summary" : "Delete Webhook Config",
+        "description" : "Deletes a webhook config.",
+        "externalDocs" : {
+          "url" : "https://docs.x.com/x-api/webhooks/introduction"
+        },
+        "operationId" : "deleteWebhooksConfig",
+        "parameters" : [
+          {
+            "name" : "webhook_id",
+            "in" : "path",
+            "description" : "The ID of the webhook to delete.",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/components/schemas/WebhookConfigId"
+            },
+            "style" : "simple"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/WebhookConfigDeleteResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "security" : [
+          {
+            "BearerToken" : [ ]
+          },
+          {
+            "UserToken" : [ ]
+          }
+        ],
+        "tags" : [
+          "Webhooks"
+        ],
+        "summary" : "Webhook CRC Check",
+        "description" : "Manually trigger a CRC check for a webhook.",
+        "externalDocs" : {
+          "url" : "https://docs.x.com/x-api/webhooks/introduction"
+        },
+        "operationId" : "putWebhooksConfig",
+        "parameters" : [
+          {
+            "name" : "webhook_id",
+            "in" : "path",
+            "description" : "The ID of the webhook to check.",
+            "required" : true,
+            "schema" : {
+              "$ref" : "#/components/schemas/WebhookConfigId"
+            },
+            "style" : "simple"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "The request has succeeded.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/WebhookConfigPutResponse"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "The request has failed.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                }
+              },
+              "application/problem+json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "servers" : [
@@ -9870,6 +10886,22 @@
       "externalDocs" : {
         "description" : "Find out more",
         "url" : "https://developer.twitter.com/en/docs/twitter-api/lists"
+      }
+    },
+    {
+      "name" : "Media",
+      "description" : "Endpoints related to Media",
+      "externalDocs" : {
+        "description" : "Find out more",
+        "url" : "https://developer.x.com"
+      }
+    },
+    {
+      "name" : "MediaUpload",
+      "description" : "Endpoints related to uploading Media",
+      "externalDocs" : {
+        "description" : "Find out more",
+        "url" : "https://developer.x.com"
       }
     },
     {
@@ -10009,7 +11041,7 @@
         "properties" : {
           "allow_download" : {
             "type" : "boolean",
-            "example" : "true"
+            "example" : true
           }
         }
       },
@@ -10018,9 +11050,37 @@
         "properties" : {
           "text" : {
             "type" : "string",
-            "description" : "Alternate text Metadata (Must be <=1000 chars)",
-            "pattern" : "^.{0,1000}$",
-            "example" : "dancing cat"
+            "description" : "Description of media ( <= 1000 characters )",
+            "maxLength" : 1000,
+            "example" : "A dancing cat"
+          }
+        }
+      },
+      "Analytics" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "object",
+            "properties" : {
+              "id" : {
+                "$ref" : "#/components/schemas/TweetId"
+              },
+              "timestamped_metrics" : {
+                "type" : "array",
+                "title" : "Timestamped Metrics",
+                "description" : "Array containing metrics data along with the timestamps of their recording.",
+                "items" : {
+                  "$ref" : "#/components/schemas/TimestampedMetrics"
+                }
+              }
+            }
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
           }
         }
       },
@@ -10054,6 +11114,29 @@
             "type" : "integer",
             "description" : "Number of rules for client application",
             "format" : "int32"
+          }
+        }
+      },
+      "AudiencePolicy" : {
+        "type" : "object",
+        "properties" : {
+          "creator_subscriptions" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "enum" : [
+                "Any"
+              ]
+            }
+          },
+          "x_subscriptions" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "enum" : [
+                "Any"
+              ]
+            }
           }
         }
       },
@@ -10331,6 +11414,17 @@
             }
           }
         ]
+      },
+      "ContentExpiration" : {
+        "type" : "object",
+        "properties" : {
+          "timestamp_sec" : {
+            "type" : "number",
+            "description" : "Expiration time for content as a Unix timestamp in seconds",
+            "format" : "long",
+            "example" : 1740787200
+          }
+        }
       },
       "ContextAnnotation" : {
         "type" : "object",
@@ -10623,6 +11717,16 @@
           }
         ]
       },
+      "DisplayTextRange" : {
+        "type" : "array",
+        "description" : "Represent a boundary range (start and end zero-based indices) for the portion of text that is displayed for a post. `start` must be smaller than `end`. The start index is inclusive, the end index is exclusive.",
+        "minItems" : 2,
+        "maxItems" : 2,
+        "items" : {
+          "type" : "integer",
+          "minimum" : 0
+        }
+      },
       "DmAttachments" : {
         "type" : "array",
         "description" : "Attachments to a DM Event.",
@@ -10763,6 +11867,18 @@
         "maxItems" : 49,
         "items" : {
           "$ref" : "#/components/schemas/UserId"
+        }
+      },
+      "DomainRestrictions" : {
+        "type" : "object",
+        "properties" : {
+          "whitelist" : {
+            "type" : "array",
+            "description" : "List of whitelisted domains",
+            "items" : {
+              "type" : "string"
+            }
+          }
         }
       },
       "DownloadExpiration" : {
@@ -11082,10 +12198,12 @@
         "properties" : {
           "id" : {
             "type" : "string",
-            "description" : "external_id"
+            "description" : "Unique Identifier of media within provider ( <= 24 characters ))",
+            "example" : "u5BzatR15TZ04"
           },
           "provider" : {
             "type" : "string",
+            "description" : "The media provider (e.g., 'giphy') that sourced the media ( <= 8 Characters )",
             "example" : "giphy"
           }
         }
@@ -11204,6 +12322,74 @@
             ]
           }
         }
+      },
+      "GeoRestrictions" : {
+        "oneOf" : [
+          {
+            "type" : "object",
+            "required" : [
+              "whitelisted_country_codes",
+              "blacklisted_country_codes"
+            ],
+            "properties" : {
+              "blacklisted_country_codes" : {
+                "type" : "array",
+                "description" : "List of blacklisted country codes",
+                "minItems" : 0,
+                "maxItems" : 0,
+                "items" : {
+                  "type" : "string",
+                  "description" : "Country code in ISO 3166-1 alpha-2 format",
+                  "pattern" : "^[a-zA-Z]{2}$",
+                  "example" : "us"
+                }
+              },
+              "whitelisted_country_codes" : {
+                "type" : "array",
+                "description" : "List of whitelisted country codes",
+                "minItems" : 1,
+                "items" : {
+                  "type" : "string",
+                  "description" : "Country code in ISO 3166-1 alpha-2 format",
+                  "pattern" : "^[a-zA-Z]{2}$",
+                  "example" : "us"
+                }
+              }
+            }
+          },
+          {
+            "type" : "object",
+            "required" : [
+              "whitelisted_country_codes",
+              "blacklisted_country_codes"
+            ],
+            "properties" : {
+              "blacklisted_country_codes" : {
+                "type" : "array",
+                "description" : "List of blacklisted country codes",
+                "minItems" : 1,
+                "items" : {
+                  "type" : "string",
+                  "description" : "Country code in ISO 3166-1 alpha-2 format",
+                  "pattern" : "^[a-zA-Z]{2}$",
+                  "example" : "us"
+                }
+              },
+              "whitelisted_country_codes" : {
+                "type" : "array",
+                "description" : "List of whitelisted country codes",
+                "minItems" : 0,
+                "maxItems" : 0,
+                "items" : {
+                  "type" : "string",
+                  "description" : "Country code in ISO 3166-1 alpha-2 format",
+                  "pattern" : "^[a-zA-Z]{2}$",
+                  "example" : "us"
+                }
+              }
+            }
+          }
+        ]
       },
       "Get2CommunitiesIdResponse" : {
         "type" : "object",
@@ -11415,6 +12601,89 @@
           }
         }
       },
+      "Get2FdxAccountsAccountidContactResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/PlaidAccountContact"
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
+      "Get2FdxAccountsAccountidPayment-networksResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/PlaidAccountPaymentNetwork"
+            }
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
+      "Get2FdxAccountsAccountidResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/PlaidAccount"
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
+      "Get2FdxAccountsAccountidTransactionsResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/PlaidAccountTransaction"
+            }
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
+      "Get2FdxCustomersCurrentResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/PlaidCustomer"
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
       "Get2Insights28hrResponse" : {
         "type" : "object",
         "properties" : {
@@ -11615,17 +12884,114 @@
           }
         }
       },
-      "Get2NotesResponse" : {
+      "Get2MediaAnalyticsResponse" : {
         "type" : "object",
         "properties" : {
           "data" : {
-            "$ref" : "#/components/schemas/Note"
+            "$ref" : "#/components/schemas/MediaAnalytics"
           },
           "errors" : {
             "type" : "array",
             "minItems" : 1,
             "items" : {
               "$ref" : "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
+      "Get2MediaMediaKeyResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Media"
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
+      "Get2MediaResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Media"
+            }
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
+      "Get2NotesSearchNotesWrittenResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Note"
+            }
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          },
+          "meta" : {
+            "type" : "object",
+            "properties" : {
+              "next_token" : {
+                "$ref" : "#/components/schemas/NextToken"
+              },
+              "result_count" : {
+                "$ref" : "#/components/schemas/ResultCount"
+              }
+            }
+          }
+        }
+      },
+      "Get2NotesSearchPostsEligibleForNotesResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Tweet"
+            }
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          },
+          "includes" : {
+            "$ref" : "#/components/schemas/Expansions"
+          },
+          "meta" : {
+            "type" : "object",
+            "properties" : {
+              "next_token" : {
+                "$ref" : "#/components/schemas/NextToken"
+              },
+              "result_count" : {
+                "$ref" : "#/components/schemas/ResultCount"
+              }
             }
           }
         }
@@ -11811,6 +13177,21 @@
             "items" : {
               "$ref" : "#/components/schemas/Trend"
             }
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
+      "Get2TweetsAnalyticsResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/Analytics"
           },
           "errors" : {
             "type" : "array",
@@ -12992,6 +14373,33 @@
           }
         }
       },
+      "Get2WebhooksResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/WebhookConfig"
+            }
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          },
+          "meta" : {
+            "type" : "object",
+            "properties" : {
+              "result_count" : {
+                "$ref" : "#/components/schemas/ResultCount"
+              }
+            }
+          }
+        }
+      },
       "HashtagEntity" : {
         "allOf" : [
           {
@@ -13429,6 +14837,16 @@
           }
         }
       },
+      "ManagementInfo" : {
+        "type" : "object",
+        "properties" : {
+          "managed" : {
+            "type" : "boolean",
+            "description" : "Indicates if the media is managed by Media Studio",
+            "example" : false
+          }
+        }
+      },
       "Media" : {
         "type" : "object",
         "required" : [
@@ -13457,16 +14875,67 @@
           }
         }
       },
+      "MediaAnalytics" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "object",
+            "properties" : {
+              "media_key" : {
+                "$ref" : "#/components/schemas/MediaKey"
+              },
+              "timestamped_metrics" : {
+                "type" : "array",
+                "title" : "Timestamped Metrics",
+                "description" : "Array containing metrics data along with the timestamps of their recording.",
+                "items" : {
+                  "$ref" : "#/components/schemas/MediaTimestampedMetrics"
+                }
+              }
+            }
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
       "MediaCategory" : {
         "type" : "string",
-        "description" : "The media category of uploaded media",
+        "description" : "A string enum value which identifies a media use-case. This identifier is used to enforce use-case specific constraints (e.g. file size, video duration) and enable advanced features.",
         "enum" : [
           "amplify_video",
           "tweet_gif",
           "tweet_image",
           "tweet_video",
+          "dm_gif",
+          "dm_image",
+          "dm_video",
           "subtitles"
-        ]
+        ],
+        "example" : "tweet_video"
+      },
+      "MediaCategoryOneShot" : {
+        "type" : "string",
+        "description" : "A string enum value which identifies a media use-case. This identifier is used to enforce use-case specific constraints (e.g. file size) and enable advanced features.",
+        "enum" : [
+          "tweet_image",
+          "dm_image",
+          "subtitles"
+        ],
+        "example" : "tweet_image"
+      },
+      "MediaCategorySubtitles" : {
+        "type" : "string",
+        "description" : "The media category of uploaded media to which subtitles should be added/deleted",
+        "enum" : [
+          "AmplifyVideo",
+          "TweetVideo"
+        ],
+        "example" : "TweetVideo"
       },
       "MediaHeight" : {
         "type" : "integer",
@@ -13484,22 +14953,139 @@
         "description" : "The Media Key identifier for this attachment.",
         "pattern" : "^([0-9]+)_([0-9]+)$"
       },
-      "MediaPayload" : {
+      "MediaMetrics" : {
+        "type" : "object",
+        "properties" : {
+          "cta_url_clicks" : {
+            "type" : "integer",
+            "title" : "CTA URL Clicks",
+            "description" : "Tracks the number of clicks on a call-to-action URL"
+          },
+          "cta_watch_clicks" : {
+            "type" : "integer",
+            "title" : "CTA Watch Clicks",
+            "description" : "Tracks the number of clicks to watch a video or media content"
+          },
+          "play_from_tap" : {
+            "type" : "integer",
+            "title" : "Play From Tap",
+            "description" : "Tracks the number of times a video or media is played from a user tap"
+          },
+          "playback25" : {
+            "type" : "integer",
+            "title" : "Playback 25%",
+            "description" : "Tracks the number of times a video reaches 25% of its duration"
+          },
+          "playback50" : {
+            "type" : "integer",
+            "title" : "Playback 50%",
+            "description" : "Tracks the number of times a video reaches 50% of its duration"
+          },
+          "playback75" : {
+            "type" : "integer",
+            "title" : "Playback 75%",
+            "description" : "Tracks the number of times a video reaches 75% of its duration"
+          },
+          "playback_complete" : {
+            "type" : "integer",
+            "title" : "Playback Complete",
+            "description" : "Tracks the number of times a video is played to completion"
+          },
+          "playback_start" : {
+            "type" : "integer",
+            "title" : "Playback Start",
+            "description" : "Tracks the number of times a video playback is initiated"
+          },
+          "video_views" : {
+            "type" : "integer",
+            "title" : "Video Views",
+            "description" : "Tracks the number of times a video is viewed"
+          },
+          "watch_time_ms" : {
+            "type" : "integer",
+            "title" : "Watch Time (ms)",
+            "description" : "Tracks the total time spent watching a video, measured in milliseconds"
+          }
+        }
+      },
+      "MediaPayloadBinary" : {
         "type" : "string",
         "description" : "The file to upload.",
         "format" : "binary"
       },
-      "MediaUploadAppendRequest" : {
+      "MediaPayloadByte" : {
+        "type" : "string",
+        "description" : "The file to upload.",
+        "format" : "byte"
+      },
+      "MediaSegments" : {
+        "oneOf" : [
+          {
+            "type" : "integer",
+            "description" : "An integer value representing the media upload segment.",
+            "minimum" : 0,
+            "maximum" : 999,
+            "format" : "int32"
+          },
+          {
+            "type" : "string",
+            "description" : "An integer value representing the media upload segment.",
+            "pattern" : "^[0-9]{1,3}$",
+            "format" : "integer"
+          }
+        ]
+      },
+      "MediaTimestampedMetrics" : {
         "type" : "object",
         "properties" : {
-          "media" : {
-            "$ref" : "#/components/schemas/MediaPayload"
+          "metrics" : {
+            "$ref" : "#/components/schemas/MediaMetrics"
+          },
+          "timestamp" : {
+            "type" : "string",
+            "title" : "Timestamp",
+            "description" : "ISO8601 Time",
+            "example" : "2025-03-17T06:30:00Z"
           }
         }
       },
-      "MediaUploadInitResponse" : {
+      "MediaUploadAppendRequest" : {
+        "anyOf" : [
+          {
+            "type" : "object",
+            "required" : [
+              "media",
+              "segment_index"
+            ],
+            "properties" : {
+              "media" : {
+                "$ref" : "#/components/schemas/MediaPayloadBinary"
+              },
+              "segment_index" : {
+                "$ref" : "#/components/schemas/MediaSegments"
+              }
+            }
+          },
+          {
+            "type" : "object",
+            "required" : [
+              "media",
+              "segment_index"
+            ],
+            "properties" : {
+              "media" : {
+                "$ref" : "#/components/schemas/MediaPayloadByte"
+              },
+              "segment_index" : {
+                "$ref" : "#/components/schemas/MediaSegments"
+              }
+            }
+          }
+        ]
+      },
+      "MediaUploadAppendResponse" : {
         "type" : "object",
-        "description" : "A response from initiating a media upload session.",
+        "description" : "A response from getting a media upload request status.",
         "required" : [
           "meta"
         ],
@@ -13507,16 +15093,10 @@
           "data" : {
             "type" : "object",
             "properties" : {
-              "expires_after_secs" : {
+              "expires_at" : {
                 "type" : "integer",
-                "description" : "Number of seconds after which upload session expires.",
-                "format" : "int32"
-              },
-              "id" : {
-                "$ref" : "#/components/schemas/MediaId"
-              },
-              "media_key" : {
-                "$ref" : "#/components/schemas/MediaKey"
+                "description" : "Unix epoch time in seconds after when the upload session expires.",
+                "format" : "int64"
               }
             }
           },
@@ -13529,7 +15109,103 @@
           }
         }
       },
-      "MediaUploadStatusResponse" : {
+      "MediaUploadConfigRequest" : {
+        "type" : "object",
+        "properties" : {
+          "additional_owners" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/UserId"
+            }
+          },
+          "media_category" : {
+            "$ref" : "#/components/schemas/MediaCategory"
+          },
+          "media_type" : {
+            "type" : "string",
+            "description" : "The type of media.",
+            "enum" : [
+              "video/mp4",
+              "video/webm",
+              "video/mp2t",
+              "video/quicktime",
+              "text/srt",
+              "text/vtt",
+              "image/jpeg",
+              "image/gif",
+              "image/bmp",
+              "image/png",
+              "image/webp",
+              "image/pjpeg",
+              "image/tiff",
+              "model/gltf-binary",
+              "model/vnd.usdz+zip"
+            ],
+            "example" : "video/mp4"
+          },
+          "shared" : {
+            "type" : "boolean",
+            "description" : "Whether this media is shared or not."
+          },
+          "total_bytes" : {
+            "type" : "integer",
+            "description" : "The total size of the media upload in bytes.",
+            "minimum" : 0,
+            "maximum" : 17179869184
+          }
+        },
+        "additionalProperties" : false
+      },
+      "MediaUploadRequestOneShot" : {
+        "type" : "object",
+        "required" : [
+          "media",
+          "media_category"
+        ],
+        "properties" : {
+          "additional_owners" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/UserId"
+            }
+          },
+          "media" : {
+            "anyOf" : [
+              {
+                "$ref" : "#/components/schemas/MediaPayloadBinary"
+              },
+              {
+                "$ref" : "#/components/schemas/MediaPayloadByte"
+              }
+            ]
+          },
+          "media_category" : {
+            "$ref" : "#/components/schemas/MediaCategoryOneShot"
+          },
+          "media_type" : {
+            "type" : "string",
+            "description" : "The type of image or subtitle.",
+            "enum" : [
+              "text/srt",
+              "text/vtt",
+              "image/jpeg",
+              "image/bmp",
+              "image/png",
+              "image/webp",
+              "image/pjpeg",
+              "image/tiff"
+            ],
+            "example" : "image/png"
+          },
+          "shared" : {
+            "type" : "boolean",
+            "description" : "Whether this media is shared or not.",
+            "default" : false
+          }
+        },
+        "additionalProperties" : false
+      },
+      "MediaUploadResponse" : {
         "type" : "object",
         "description" : "A response from getting a media upload request status.",
         "required" : [
@@ -13538,6 +15214,10 @@
         "properties" : {
           "data" : {
             "type" : "object",
+            "required" : [
+              "id",
+              "media_key"
+            ],
             "properties" : {
               "expires_after_secs" : {
                 "type" : "integer",
@@ -13602,26 +15282,55 @@
       "MetadataCreateRequest" : {
         "type" : "object",
         "required" : [
-          "media_id"
+          "id"
         ],
         "properties" : {
-          "allow_download_status" : {
-            "$ref" : "#/components/schemas/AllowDownloadStatus"
-          },
-          "alt_text" : {
-            "$ref" : "#/components/schemas/AltText"
-          },
-          "found_media_origin" : {
-            "$ref" : "#/components/schemas/FoundMediaOrigin"
-          },
-          "media_id" : {
+          "id" : {
             "$ref" : "#/components/schemas/MediaId"
           },
-          "sticker_info" : {
-            "$ref" : "#/components/schemas/StickerInfo"
-          },
-          "upload_source" : {
-            "$ref" : "#/components/schemas/UploadSource"
+          "metadata" : {
+            "type" : "object",
+            "properties" : {
+              "allow_download_status" : {
+                "$ref" : "#/components/schemas/AllowDownloadStatus"
+              },
+              "alt_text" : {
+                "$ref" : "#/components/schemas/AltText"
+              },
+              "audience_policy" : {
+                "$ref" : "#/components/schemas/AudiencePolicy"
+              },
+              "content_expiration" : {
+                "$ref" : "#/components/schemas/ContentExpiration"
+              },
+              "domain_restrictions" : {
+                "$ref" : "#/components/schemas/DomainRestrictions"
+              },
+              "found_media_origin" : {
+                "$ref" : "#/components/schemas/FoundMediaOrigin"
+              },
+              "geo_restrictions" : {
+                "$ref" : "#/components/schemas/GeoRestrictions"
+              },
+              "management_info" : {
+                "$ref" : "#/components/schemas/ManagementInfo"
+              },
+              "preview_image" : {
+                "$ref" : "#/components/schemas/PreviewImage"
+              },
+              "sensitive_media_warning" : {
+                "$ref" : "#/components/schemas/SensitiveMediaWarning"
+              },
+              "shared_info" : {
+                "$ref" : "#/components/schemas/SharedInfo"
+              },
+              "sticker_info" : {
+                "$ref" : "#/components/schemas/StickerInfo"
+              },
+              "upload_source" : {
+                "$ref" : "#/components/schemas/UploadSource"
+              }
+            }
           }
         }
       },
@@ -13640,8 +15349,32 @@
                   "alt_text" : {
                     "$ref" : "#/components/schemas/AltText"
                   },
+                  "audience_policy" : {
+                    "$ref" : "#/components/schemas/AudiencePolicy"
+                  },
+                  "content_expiration" : {
+                    "$ref" : "#/components/schemas/ContentExpiration"
+                  },
+                  "domain_restrictions" : {
+                    "$ref" : "#/components/schemas/DomainRestrictions"
+                  },
                   "found_media_origin" : {
                     "$ref" : "#/components/schemas/FoundMediaOrigin"
+                  },
+                  "geo_restrictions" : {
+                    "$ref" : "#/components/schemas/GeoRestrictions"
+                  },
+                  "management_info" : {
+                    "$ref" : "#/components/schemas/ManagementInfo"
+                  },
+                  "preview_image" : {
+                    "$ref" : "#/components/schemas/PreviewImage"
+                  },
+                  "sensitive_media_warning" : {
+                    "$ref" : "#/components/schemas/SensitiveMediaWarning"
+                  },
+                  "shared_info" : {
+                    "$ref" : "#/components/schemas/SharedInfo"
                   },
                   "sticker_info" : {
                     "$ref" : "#/components/schemas/StickerInfo"
@@ -13664,6 +15397,119 @@
             }
           }
         }
+      },
+      "Metrics" : {
+        "type" : "object",
+        "properties" : {
+          "app_install_attempts" : {
+            "type" : "integer",
+            "title" : "App Install Attempts",
+            "description" : "Tracks number of App Install Attempts"
+          },
+          "app_opens" : {
+            "type" : "integer",
+            "title" : "App Opens",
+            "description" : "Tracks number of App opens"
+          },
+          "detail_expands" : {
+            "type" : "integer",
+            "title" : "Detail Expands",
+            "description" : "Tracks number of Detail expands"
+          },
+          "email_tweet" : {
+            "type" : "integer",
+            "title" : "Email Tweet",
+            "description" : "Tracks number of Email Tweet actions"
+          },
+          "engagements" : {
+            "type" : "integer",
+            "title" : "Engagements",
+            "description" : "Tracks total Engagements"
+          },
+          "follows" : {
+            "type" : "integer",
+            "title" : "Follows",
+            "description" : "Tracks number of Follows"
+          },
+          "hashtag_clicks" : {
+            "type" : "integer",
+            "title" : "Hashtag Clicks",
+            "description" : "Tracks number of Hashtag clicks"
+          },
+          "impressions" : {
+            "type" : "integer",
+            "title" : "Impressions",
+            "description" : "Tracks number of Impressions"
+          },
+          "likes" : {
+            "type" : "integer",
+            "title" : "Likes",
+            "description" : "Tracks number of Likes"
+          },
+          "link_clicks" : {
+            "type" : "integer",
+            "title" : "Link Clicks",
+            "description" : "Tracks number of Link clicks"
+          },
+          "media_engagements" : {
+            "type" : "integer",
+            "title" : "Media Engagements",
+            "description" : "Tracks number of Media engagements"
+          },
+          "media_views" : {
+            "type" : "integer",
+            "title" : "Media Views",
+            "description" : "Tracks number of Media views"
+          },
+          "permalink_clicks" : {
+            "type" : "integer",
+            "title" : "Permalink Clicks",
+            "description" : "Tracks number of Permalink clicks"
+          },
+          "profile_visits" : {
+            "type" : "integer",
+            "title" : "Profile Visits",
+            "description" : "Tracks number of Profile visits"
+          },
+          "quote_tweets" : {
+            "type" : "integer",
+            "title" : "Quote Tweets",
+            "description" : "Tracks number of Quote Tweets"
+          },
+          "replies" : {
+            "type" : "integer",
+            "title" : "Replies",
+            "description" : "Tracks number of Replies"
+          },
+          "retweets" : {
+            "type" : "integer",
+            "title" : "Retweets",
+            "description" : "Tracks number of Retweets"
+          },
+          "url_clicks" : {
+            "type" : "integer",
+            "title" : "URL Clicks",
+            "description" : "Tracks number of URL clicks"
+          },
+          "user_profile_clicks" : {
+            "type" : "integer",
+            "title" : "User Profile Clicks",
+            "description" : "Tracks number of User Profile clicks"
+          }
+        }
+      },
+      "MisleadingTags" : {
+        "type" : "string",
+        "description" : "Community Note misleading tags type.",
+        "enum" : [
+          "disputed_claim_as_fact",
+          "factual_error",
+          "manipulated_media",
+          "misinterpreted_satire",
+          "missing_important_context",
+          "other",
+          "outdated_information"
+        ]
       },
       "MuteUserMutationResponse" : {
         "type" : "object",
@@ -13718,29 +15564,25 @@
         "description" : "A X Community Note is a note on a Post.",
         "required" : [
           "id",
-          "text"
+          "post_id",
+          "note_info"
         ],
         "properties" : {
-          "classification" : {
-            "$ref" : "#/components/schemas/NoteClassification"
-          },
-          "created_at" : {
-            "type" : "string",
-            "format" : "date-time"
-          },
-          "deleted" : {
-            "type" : "boolean",
-            "description" : "Whether the Community Note has been deleted or not."
-          },
           "id" : {
             "$ref" : "#/components/schemas/NoteId"
           },
-          "rating_status" : {
+          "info" : {
+            "$ref" : "#/components/schemas/NoteInfo"
+          },
+          "post_id" : {
+            "$ref" : "#/components/schemas/TweetId"
+          },
+          "status" : {
             "$ref" : "#/components/schemas/NoteRatingStatus"
           },
-          "text" : {
-            "type" : "string",
-            "description" : "The text summary in the Community Note."
+          "test_result" : {
+            "type" : "boolean",
+            "description" : "Test result information. Only returned when test result is true."
           }
         }
       },
@@ -13748,10 +15590,8 @@
         "type" : "string",
         "description" : "Community Note classification type.",
         "enum" : [
-          "HarmfullyMisleading",
-          "MisinformedOrPotentiallyMisleading",
-          "NotMisleading",
-          "PotentiallyMisleading"
+          "misinformed_or_potentially_misleading",
+          "not_misleading"
         ]
       },
       "NoteId" : {
@@ -13760,15 +15600,48 @@
         "pattern" : "^[0-9]{1,19}$",
         "example" : "1146654567674912769"
       },
+      "NoteInfo" : {
+        "type" : "object",
+        "description" : "A X Community Note is a note on a Post.",
+        "required" : [
+          "text",
+          "classification",
+          "misleading_tags",
+          "trustworthy_sources"
+        ],
+        "properties" : {
+          "classification" : {
+            "$ref" : "#/components/schemas/NoteClassification"
+          },
+          "misleading_tags" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MisleadingTags"
+            }
+          },
+          "text" : {
+            "type" : "string",
+            "description" : "The text summary in the Community Note.",
+            "pattern" : "^(?=.*https?://\\S+).+$"
+          },
+          "trustworthy_sources" : {
+            "type" : "boolean",
+            "description" : "Whether the note provided trustworthy links."
+          }
+        },
+        "additionalProperties" : false
+      },
       "NoteRatingStatus" : {
         "type" : "string",
-        "description" : "Community Note rating status.",
+        "description" : "Community Note rating status. Only returned when test result is false",
         "enum" : [
-          "CurrentlyRatedHelpful",
-          "CurrentlyRatedNotHelpful",
-          "InsufficientConsensus",
-          "MinimumRatingsNotMet",
-          "NeedsMoreRatings"
+          "currently_rated_helpful",
+          "currently_rated_not_helpful",
+          "firm_reject",
+          "insufficient_consensus",
+          "minimum_ratings_not_met",
+          "needs_more_ratings",
+          "needs_your_help"
         ]
       },
       "NoteTweetText" : {
@@ -13931,6 +15804,278 @@
         ],
         "example" : "city"
       },
+      "PlaidAccount" : {
+        "type" : "object",
+        "description" : "Descriptor for a Plaid account.",
+        "required" : [
+          "accountId",
+          "accountCategory",
+          "accountNumberDisplay",
+          "accountType",
+          "currency",
+          "productName",
+          "status"
+        ],
+        "properties" : {
+          "accountCategory" : {
+            "type" : "string",
+            "description" : "The category of the account (e.g., personal, business)."
+          },
+          "accountId" : {
+            "type" : "string",
+            "description" : "The Plaid account ID."
+          },
+          "accountNumberDisplay" : {
+            "type" : "string",
+            "description" : "The last 2-4 digits of the account number."
+          },
+          "accountType" : {
+            "type" : "string",
+            "description" : "The type of the account (e.g., checking, savings)."
+          },
+          "availableBalance" : {
+            "type" : "number",
+            "description" : "The available balance of the account."
+          },
+          "currency" : {
+            "$ref" : "#/components/schemas/PlaidCurrency"
+          },
+          "currentBalance" : {
+            "type" : "number",
+            "description" : "The current balance of the account."
+          },
+          "nickname" : {
+            "type" : "string",
+            "description" : "The nickname of the account."
+          },
+          "productName" : {
+            "type" : "string",
+            "description" : "The name of the product associated with the account."
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "The status of the account."
+          }
+        }
+      },
+      "PlaidAccountContact" : {
+        "type" : "object",
+        "description" : "Contact information associated with a Plaid account.",
+        "required" : [
+          "name",
+          "addresses",
+          "emails",
+          "telephones"
+        ],
+        "properties" : {
+          "addresses" : {
+            "type" : "array",
+            "description" : "List of addresses associated with the account holder.",
+            "items" : {
+              "$ref" : "#/components/schemas/PlaidAddress"
+            }
+          },
+          "emails" : {
+            "type" : "array",
+            "description" : "List of email addresses associated with the account holder.",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "name" : {
+            "$ref" : "#/components/schemas/PlaidName"
+          },
+          "relationship" : {
+            "type" : "string",
+            "description" : "Relationship of the contact to the account."
+          },
+          "telephones" : {
+            "type" : "array",
+            "description" : "List of telephone numbers associated with the account holder.",
+            "items" : {
+              "$ref" : "#/components/schemas/PlaidTelephone"
+            }
+          }
+        }
+      },
+      "PlaidAccountPaymentNetwork" : {
+        "type" : "object",
+        "description" : "Payment network details associated with the account.",
+        "required" : [
+          "identifier",
+          "type",
+          "transferIn",
+          "transferOut",
+          "bankId"
+        ],
+        "properties" : {
+          "bankId" : {
+            "type" : "string",
+            "description" : "The bank ID associated with the account."
+          },
+          "identifier" : {
+            "type" : "string",
+            "description" : "The payment network identifier."
+          },
+          "transferIn" : {
+            "type" : "boolean",
+            "description" : "Indicates if transfers into the account are supported."
+          },
+          "transferOut" : {
+            "type" : "boolean",
+            "description" : "Indicates if transfers out of the account are supported."
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "The type of payment network (e.g., ACH, SEPA)."
+          }
+        }
+      },
+      "PlaidAccountTransaction" : {
+        "type" : "object",
+        "description" : "Descriptor for a Plaid account.",
+        "required" : [
+          "accountCategory",
+          "amount",
+          "debitCreditMemo",
+          "description",
+          "status",
+          "transactionId",
+          "transactionTimestamp"
+        ],
+        "properties" : {
+          "accountCategory" : {
+            "type" : "string",
+            "description" : "The category of the account (e.g., personal, business)."
+          },
+          "amount" : {
+            "type" : "number",
+            "description" : "The amount transacted."
+          },
+          "debitCreditMemo" : {
+            "type" : "string",
+            "description" : "Memo for transaction (e.g. CREDIT)"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "The transaction description"
+          },
+          "postedTimestamp" : {
+            "type" : "string",
+            "description" : "The timestamp when the transaction was posted."
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "The status of the transaction."
+          },
+          "transactionId" : {
+            "type" : "string",
+            "description" : "The identifier for the transaction."
+          },
+          "transactionTimestamp" : {
+            "type" : "string",
+            "description" : "The timestamp when the transaction occurred."
+          }
+        }
+      },
+      "PlaidAddress" : {
+        "type" : "object",
+        "description" : "Address information for the account holder.",
+        "required" : [
+          "city",
+          "country",
+          "line1"
+        ],
+        "properties" : {
+          "city" : {
+            "type" : "string",
+            "description" : "The city of the address."
+          },
+          "country" : {
+            "type" : "string",
+            "description" : "The country of the address (ISO 3166-1 alpha-2 code)."
+          },
+          "line1" : {
+            "type" : "string",
+            "description" : "The first line of the address."
+          },
+          "line2" : {
+            "type" : "string",
+            "description" : "The second line of the address."
+          },
+          "postalCode" : {
+            "type" : "string",
+            "description" : "The postal code of the address."
+          },
+          "region" : {
+            "type" : "string",
+            "description" : "The region or state of the address."
+          }
+        }
+      },
+      "PlaidCurrency" : {
+        "type" : "object",
+        "description" : "Currency information.",
+        "required" : [
+          "currencyCode"
+        ],
+        "properties" : {
+          "currencyCode" : {
+            "type" : "string",
+            "description" : "The ISO 4217 currency code."
+          }
+        }
+      },
+      "PlaidCustomer" : {
+        "type" : "object",
+        "description" : "A user id for the plaid customer",
+        "properties" : {
+          "customerId" : {
+            "$ref" : "#/components/schemas/UserId"
+          }
+        }
+      },
+      "PlaidName" : {
+        "type" : "object",
+        "description" : "Name information for the account holder.",
+        "required" : [
+          "first",
+          "last"
+        ],
+        "properties" : {
+          "first" : {
+            "type" : "string",
+            "description" : "The first name of the account holder."
+          },
+          "last" : {
+            "type" : "string",
+            "description" : "The last name of the account holder."
+          }
+        }
+      },
+      "PlaidTelephone" : {
+        "type" : "object",
+        "description" : "Telephone information for the account holder.",
+        "required" : [
+          "country",
+          "number",
+          "type"
+        ],
+        "properties" : {
+          "country" : {
+            "type" : "string",
+            "description" : "The country code for the phone number (e.g., '+1')."
+          },
+          "number" : {
+            "type" : "string",
+            "description" : "The phone number."
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "The type of phone number (e.g., 'mobile')."
+          }
+        }
+      },
       "Point" : {
         "type" : "object",
         "description" : "A [GeoJson Point](https://tools.ietf.org/html/rfc7946#section-3.1.2) geometry object.",
@@ -14036,6 +16181,28 @@
           40.247749999999996
         ]
       },
+      "PreviewImage" : {
+        "type" : "object",
+        "properties" : {
+          "media_key" : {
+            "type" : "object",
+            "properties" : {
+              "media" : {
+                "$ref" : "#/components/schemas/MediaId"
+              },
+              "media_category" : {
+                "type" : "string",
+                "description" : "The media category of media",
+                "enum" : [
+                  "TweetImage"
+                ],
+                "default" : "TweetImage",
+                "example" : "TweetImage"
+              }
+            }
+          }
+        }
+      },
       "PreviousToken" : {
         "type" : "string",
         "description" : "The previous token.",
@@ -14076,7 +16243,6 @@
             "https://api.twitter.com/2/problems/noncompliant-rules" : "#/components/schemas/NonCompliantRulesProblem",
             "https://api.twitter.com/2/problems/not-authorized-for-field" : "#/components/schemas/FieldUnauthorizedProblem",
             "https://api.twitter.com/2/problems/not-authorized-for-resource" : "#/components/schemas/ResourceUnauthorizedProblem",
-            "https://api.twitter.com/2/problems/oauth1-permissions" : "#/components/schemas/Oauth1PermissionsProblem",
             "https://api.twitter.com/2/problems/operational-disconnect" : "#/components/schemas/OperationalDisconnectProblem",
             "https://api.twitter.com/2/problems/resource-not-found" : "#/components/schemas/ResourceNotFoundProblem",
             "https://api.twitter.com/2/problems/resource-unavailable" : "#/components/schemas/ResourceUnavailableProblem",
@@ -14112,6 +16278,27 @@
               "pending",
               "failed"
             ]
+          }
+        }
+      },
+      "ReplayJobCreateResponse" : {
+        "type" : "object",
+        "description" : "Confirmation that the replay job request was accepted.",
+        "required" : [
+          "job_id",
+          "created_at"
+        ],
+        "properties" : {
+          "created_at" : {
+            "type" : "string",
+            "description" : "The UTC timestamp indicating when the replay job was created.",
+            "format" : "date-time",
+            "example" : "2025-04-24T20:57:15.242Z"
+          },
+          "job_id" : {
+            "type" : "string",
+            "description" : "The unique identifier for the initiated replay job.",
+            "example" : "1915510368169844736"
           }
         }
       },
@@ -14467,6 +16654,36 @@
           }
         }
       },
+      "SensitiveMediaWarning" : {
+        "type" : "object",
+        "properties" : {
+          "adult_content" : {
+            "type" : "boolean",
+            "description" : "Indicates if the content contains adult material",
+            "example" : true
+          },
+          "graphic_violence" : {
+            "type" : "boolean",
+            "description" : "Indicates if the content depicts graphic violence",
+            "example" : true
+          },
+          "other" : {
+            "type" : "boolean",
+            "description" : "Indicates if the content has other sensitive characteristics",
+            "example" : false
+          }
+        }
+      },
+      "SharedInfo" : {
+        "type" : "object",
+        "properties" : {
+          "shared" : {
+            "type" : "boolean",
+            "description" : "Indicates if the media is shared in direct messages",
+            "example" : false
+          }
+        }
+      },
       "Space" : {
         "type" : "object",
         "description" : "",
@@ -14618,42 +16835,62 @@
         "properties" : {
           "aspect_ratio" : {
             "type" : "number",
-            "format" : "double"
+            "description" : "width-to-height ratio of the media",
+            "format" : "double",
+            "example" : 1.78
           },
           "group_annotation_id" : {
             "type" : "number",
-            "format" : "long"
+            "description" : "A unique identifier for the group of annotations associated with the media",
+            "format" : "long",
+            "example" : 987654321098765
           },
           "id" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Unique identifier for sticker",
+            "example" : "12345"
           },
           "sticker_set_annotation_id" : {
             "type" : "number",
-            "format" : "long"
+            "description" : "A unique identifier for the sticker set associated with the media",
+            "format" : "long",
+            "example" : 123456789012345
           },
           "transform_a" : {
             "type" : "number",
-            "format" : "double"
+            "description" : "Scale or rotate the media on the x-axis",
+            "format" : "double",
+            "example" : 1.0
           },
           "transform_b" : {
             "type" : "number",
-            "format" : "double"
+            "description" : "Skew the media on the x-axis",
+            "format" : "double",
+            "example" : 0.0
           },
           "transform_c" : {
             "type" : "number",
-            "format" : "double"
+            "description" : "Skew the media on the y-axis",
+            "format" : "double",
+            "example" : 0.0
           },
           "transform_d" : {
             "type" : "number",
-            "format" : "double"
+            "description" : "Scale or rotate the media on the y-axis",
+            "format" : "double",
+            "example" : 1.0
           },
           "transform_tx" : {
             "type" : "number",
-            "format" : "double"
+            "description" : "Scale or rotate the media on the x-axis",
+            "format" : "double",
+            "example" : 10.5
           },
           "transform_ty" : {
             "type" : "number",
-            "format" : "double"
+            "description" : "The vertical translation (shift) value for the media",
+            "format" : "double",
+            "example" : -5.2
           }
         }
       },
@@ -14662,6 +16899,7 @@
         "properties" : {
           "stickers" : {
             "type" : "array",
+            "description" : "Stickers list must not be empty and should not exceed 25",
             "items" : {
               "$ref" : "#/components/schemas/Sticker"
             }
@@ -14704,65 +16942,191 @@
           }
         }
       },
-      "SubtitleDeleteInfo" : {
+      "SubscriptionsCountGetResponse" : {
         "type" : "object",
         "properties" : {
-          "subtitles" : {
+          "data" : {
+            "type" : "object",
+            "description" : "The count of active subscriptions across all webhooks",
+            "required" : [
+              "account_name",
+              "provisioned_count",
+              "subscriptions_count_all",
+              "subscriptions_count_direct_messages"
+            ],
+            "properties" : {
+              "account_name" : {
+                "type" : "string",
+                "description" : "The account name"
+              },
+              "provisioned_count" : {
+                "type" : "string",
+                "description" : "The limit for subscriptions for this app"
+              },
+              "subscriptions_count_all" : {
+                "type" : "string",
+                "description" : "The number of active subscriptions across all webhooks"
+              },
+              "subscriptions_count_direct_messages" : {
+                "type" : "string",
+                "description" : "The number of active direct message subscriptions"
+              }
+            }
+          },
+          "errors" : {
             "type" : "array",
             "minItems" : 1,
             "items" : {
-              "type" : "object",
-              "properties" : {
-                "language_code" : {
-                  "type" : "string",
-                  "description" : "The language code should be a BCP47 code (e.g. 'en\", \"sp\")",
-                  "pattern" : "^[a-z]{2}$"
-                }
-              }
+              "$ref" : "#/components/schemas/Problem"
             }
           }
         }
       },
-      "SubtitleInfo" : {
+      "SubscriptionsCreateRequest" : {
+        "type" : "object"
+      },
+      "SubscriptionsCreateResponse" : {
         "type" : "object",
         "properties" : {
-          "subtitles" : {
+          "data" : {
+            "type" : "object",
+            "properties" : {
+              "subscribed" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "errors" : {
             "type" : "array",
             "minItems" : 1,
             "items" : {
-              "$ref" : "#/components/schemas/Subtitles"
+              "$ref" : "#/components/schemas/Problem"
             }
           }
         }
+      },
+      "SubscriptionsDeleteResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "object",
+            "properties" : {
+              "subscribed" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
+      "SubscriptionsGetResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "object",
+            "properties" : {
+              "subscribed" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
+      "SubscriptionsListGetResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "object",
+            "description" : "The list of active subscriptions for a specified webhook",
+            "required" : [
+              "application_id",
+              "webhook_id",
+              "webhook_url",
+              "subscriptions"
+            ],
+            "properties" : {
+              "application_id" : {
+                "type" : "string",
+                "description" : "The application ID"
+              },
+              "subscriptions" : {
+                "type" : "array",
+                "description" : "List of active subscriptions for the webhook",
+                "items" : {
+                  "type" : "object",
+                  "properties" : {
+                    "user_id" : {
+                      "type" : "string",
+                      "description" : "The ID of the user the webhook is subscribed to"
+                    }
+                  }
+                }
+              },
+              "webhook_id" : {
+                "type" : "string",
+                "description" : "The associated webhook ID"
+              },
+              "webhook_url" : {
+                "type" : "string",
+                "description" : "The url for the associated webhook"
+              }
+            }
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
+      "SubtitleLanguageCode" : {
+        "type" : "string",
+        "description" : "The language code should be a BCP47 code (e.g. 'EN\", \"SP\")",
+        "pattern" : "^[A-Z]{2}$",
+        "example" : "EN"
       },
       "Subtitles" : {
         "type" : "object",
         "properties" : {
           "display_name" : {
             "type" : "string",
-            "description" : "Language name in a human redable form"
+            "description" : "Language name in a human readable form",
+            "example" : "English"
+          },
+          "id" : {
+            "$ref" : "#/components/schemas/MediaId"
           },
           "language_code" : {
-            "type" : "string",
-            "description" : "The language code should be a BCP47 code (e.g. 'en\", \"sp\")",
-            "pattern" : "^[a-z]{2}$"
-          },
-          "media_id" : {
-            "$ref" : "#/components/schemas/MediaId"
+            "$ref" : "#/components/schemas/SubtitleLanguageCode"
           }
         }
       },
       "SubtitlesCreateRequest" : {
         "type" : "object",
         "properties" : {
-          "media_category" : {
-            "$ref" : "#/components/schemas/MediaCategory"
-          },
-          "media_id" : {
+          "id" : {
             "$ref" : "#/components/schemas/MediaId"
           },
-          "subtitle_info" : {
-            "$ref" : "#/components/schemas/SubtitleInfo"
+          "media_category" : {
+            "$ref" : "#/components/schemas/MediaCategorySubtitles"
+          },
+          "subtitles" : {
+            "$ref" : "#/components/schemas/Subtitles"
           }
         }
       },
@@ -14771,6 +17135,11 @@
         "properties" : {
           "data" : {
             "type" : "object",
+            "required" : [
+              "id",
+              "media_category",
+              "associated_subtitles"
+            ],
             "properties" : {
               "associated_subtitles" : {
                 "type" : "array",
@@ -14783,7 +17152,7 @@
                 "$ref" : "#/components/schemas/MediaId"
               },
               "media_category" : {
-                "$ref" : "#/components/schemas/MediaCategory"
+                "$ref" : "#/components/schemas/MediaCategorySubtitles"
               }
             }
           },
@@ -14799,14 +17168,14 @@
       "SubtitlesDeleteRequest" : {
         "type" : "object",
         "properties" : {
-          "media_category" : {
-            "$ref" : "#/components/schemas/MediaCategory"
-          },
-          "media_id" : {
+          "id" : {
             "$ref" : "#/components/schemas/MediaId"
           },
-          "subtitle_info" : {
-            "$ref" : "#/components/schemas/SubtitleDeleteInfo"
+          "language_code" : {
+            "$ref" : "#/components/schemas/SubtitleLanguageCode"
+          },
+          "media_category" : {
+            "$ref" : "#/components/schemas/MediaCategorySubtitles"
           }
         }
       },
@@ -14815,26 +17184,12 @@
         "properties" : {
           "data" : {
             "type" : "object",
+            "required" : [
+              "deleted"
+            ],
             "properties" : {
-              "deleted_subtitles" : {
-                "type" : "array",
-                "minItems" : 1,
-                "items" : {
-                  "type" : "object",
-                  "properties" : {
-                    "language_code" : {
-                      "type" : "string",
-                      "description" : "The language code should be a BCP47 code (e.g. 'en\", \"sp\")",
-                      "pattern" : "^[a-z]{2}$"
-                    }
-                  }
-                }
-              },
-              "id" : {
-                "$ref" : "#/components/schemas/MediaId"
-              },
-              "media_category" : {
-                "$ref" : "#/components/schemas/MediaCategory"
+              "deleted" : {
+                "type" : "boolean"
               }
             }
           },
@@ -14844,6 +17199,20 @@
             "items" : {
               "$ref" : "#/components/schemas/Problem"
             }
+          }
+        }
+      },
+      "TimestampedMetrics" : {
+        "type" : "object",
+        "properties" : {
+          "metrics" : {
+            "$ref" : "#/components/schemas/Metrics"
+          },
+          "timestamp" : {
+            "type" : "string",
+            "title" : "Timestamp",
+            "description" : "ISO8601 Time",
+            "example" : "2025-03-17T06:30:00Z"
           }
         }
       },
@@ -14943,6 +17312,9 @@
             "description" : "Creation time of the Tweet.",
             "format" : "date-time",
             "example" : "2021-01-06T18:40:40.000Z"
+          },
+          "display_text_range" : {
+            "$ref" : "#/components/schemas/DisplayTextRange"
           },
           "edit_controls" : {
             "type" : "object",
@@ -15397,7 +17769,9 @@
                 "description" : "Settings to indicate who can reply to the Tweet.",
                 "enum" : [
                   "following",
-                  "mentionedUsers"
+                  "mentionedUsers",
+                  "subscribers",
+                  "verified"
                 ]
               }
             },
@@ -15432,7 +17806,8 @@
             "enum" : [
               "following",
               "mentionedUsers",
-              "subscribers"
+              "subscribers",
+              "verified"
             ]
           },
           "text" : {
@@ -15893,9 +18268,10 @@
       "UploadSource" : {
         "type" : "object",
         "properties" : {
-          "text" : {
+          "upload_source" : {
             "type" : "string",
-            "description" : "Upload Source"
+            "description" : "Records the source (e.g., app, device) from which the media was uploaded",
+            "example" : "gallery"
           }
         }
       },
@@ -16980,9 +19356,183 @@
             }
           }
         ]
+      },
+      "WebhookConfig" : {
+        "type" : "object",
+        "description" : "A Webhook Configuration",
+        "required" : [
+          "id",
+          "url",
+          "valid",
+          "created_at"
+        ],
+        "properties" : {
+          "created_at" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "id" : {
+            "$ref" : "#/components/schemas/WebhookConfigId"
+          },
+          "url" : {
+            "type" : "string",
+            "description" : "The callback URL of the webhook."
+          },
+          "valid" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "WebhookConfigCreateRequest" : {
+        "type" : "object",
+        "required" : [
+          "url"
+        ],
+        "properties" : {
+          "url" : {
+            "type" : "string",
+            "minLength" : 1,
+            "maxLength" : 200
+          }
+        }
+      },
+      "WebhookConfigCreateResponse" : {
+        "type" : "object",
+        "description" : "A Webhook Configuration",
+        "required" : [
+          "id",
+          "url",
+          "valid",
+          "created_at"
+        ],
+        "properties" : {
+          "created_at" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "id" : {
+            "$ref" : "#/components/schemas/WebhookConfigId"
+          },
+          "url" : {
+            "type" : "string",
+            "description" : "The callback URL of the webhook."
+          },
+          "valid" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "WebhookConfigDeleteResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "object",
+            "properties" : {
+              "deleted" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
+      "WebhookConfigId" : {
+        "type" : "string",
+        "description" : "The unique identifier of this webhook config.",
+        "pattern" : "^[0-9]{1,19}$",
+        "example" : "1146654567674912769"
+      },
+      "WebhookConfigPutResponse" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "object",
+            "properties" : {
+              "attempted" : {
+                "type" : "boolean"
+              }
+            }
+          },
+          "errors" : {
+            "type" : "array",
+            "minItems" : 1,
+            "items" : {
+              "$ref" : "#/components/schemas/Problem"
+            }
+          }
+        }
       }
     },
     "parameters" : {
+      "AnalyticsFieldsParameter" : {
+        "name" : "analytics.fields",
+        "in" : "query",
+        "description" : "A comma separated list of Analytics fields to display.",
+        "required" : false,
+        "schema" : {
+          "type" : "array",
+          "description" : "The fields available for a Analytics object.",
+          "minItems" : 1,
+          "uniqueItems" : true,
+          "items" : {
+            "type" : "string",
+            "enum" : [
+              "app_install_attempts",
+              "app_opens",
+              "bookmarks",
+              "detail_expands",
+              "email_tweet",
+              "engagements",
+              "follows",
+              "hashtag_clicks",
+              "id",
+              "impressions",
+              "likes",
+              "media_views",
+              "permalink_clicks",
+              "quote_tweets",
+              "replies",
+              "retweets",
+              "shares",
+              "timestamp",
+              "unfollows",
+              "url_clicks",
+              "user_profile_clicks"
+            ]
+          },
+          "example" : [
+            "app_install_attempts",
+            "app_opens",
+            "bookmarks",
+            "detail_expands",
+            "email_tweet",
+            "engagements",
+            "follows",
+            "hashtag_clicks",
+            "id",
+            "impressions",
+            "likes",
+            "media_views",
+            "permalink_clicks",
+            "quote_tweets",
+            "replies",
+            "retweets",
+            "shares",
+            "timestamp",
+            "unfollows",
+            "url_clicks",
+            "user_profile_clicks"
+          ]
+        },
+        "explode" : false,
+        "style" : "form"
+      },
       "CommunityFieldsParameter" : {
         "name" : "community.fields",
         "in" : "query",
@@ -17341,6 +19891,51 @@
         "explode" : false,
         "style" : "form"
       },
+      "MediaAnalyticsFieldsParameter" : {
+        "name" : "media_analytics.fields",
+        "in" : "query",
+        "description" : "A comma separated list of MediaAnalytics fields to display.",
+        "required" : false,
+        "schema" : {
+          "type" : "array",
+          "description" : "The fields available for a MediaAnalytics object.",
+          "minItems" : 1,
+          "uniqueItems" : true,
+          "items" : {
+            "type" : "string",
+            "enum" : [
+              "cta_url_clicks",
+              "cta_watch_clicks",
+              "media_key",
+              "play_from_tap",
+              "playback25",
+              "playback50",
+              "playback75",
+              "playback_complete",
+              "playback_start",
+              "timestamp",
+              "video_views",
+              "watch_time_ms"
+            ]
+          },
+          "example" : [
+            "cta_url_clicks",
+            "cta_watch_clicks",
+            "media_key",
+            "play_from_tap",
+            "playback25",
+            "playback50",
+            "playback75",
+            "playback_complete",
+            "playback_start",
+            "timestamp",
+            "video_views",
+            "watch_time_ms"
+          ]
+        },
+        "explode" : false,
+        "style" : "form"
+      },
       "MediaFieldsParameter" : {
         "name" : "media.fields",
         "in" : "query",
@@ -17401,21 +19996,15 @@
           "items" : {
             "type" : "string",
             "enum" : [
-              "classification",
-              "created_at",
-              "deleted",
               "id",
-              "rating_status",
-              "text"
+              "status",
+              "test_result"
             ]
           },
           "example" : [
-            "classification",
-            "created_at",
-            "deleted",
             "id",
-            "rating_status",
-            "text"
+            "status",
+            "test_result"
           ]
         },
         "explode" : false,
@@ -17482,6 +20071,167 @@
             "id",
             "name",
             "place_type"
+          ]
+        },
+        "explode" : false,
+        "style" : "form"
+      },
+      "PlaidAccountContactFieldsParameter" : {
+        "name" : "plaid_account_contact.fields",
+        "in" : "query",
+        "description" : "A comma separated list of PlaidAccountContact fields to display.",
+        "required" : false,
+        "schema" : {
+          "type" : "array",
+          "description" : "The fields available for a PlaidAccountContact object.",
+          "minItems" : 1,
+          "uniqueItems" : true,
+          "items" : {
+            "type" : "string",
+            "enum" : [
+              "addresses",
+              "emails",
+              "holders",
+              "telephones"
+            ]
+          },
+          "example" : [
+            "addresses",
+            "emails",
+            "holders",
+            "telephones"
+          ]
+        },
+        "explode" : false,
+        "style" : "form"
+      },
+      "PlaidAccountFieldsParameter" : {
+        "name" : "plaid_account.fields",
+        "in" : "query",
+        "description" : "A comma separated list of PlaidAccount fields to display.",
+        "required" : false,
+        "schema" : {
+          "type" : "array",
+          "description" : "The fields available for a PlaidAccount object.",
+          "minItems" : 1,
+          "uniqueItems" : true,
+          "items" : {
+            "type" : "string",
+            "enum" : [
+              "accountCategory",
+              "accountId",
+              "accountNumberDisplay",
+              "accountType",
+              "availableBalance",
+              "currency",
+              "currentBalance",
+              "nickname",
+              "productName",
+              "status"
+            ]
+          },
+          "example" : [
+            "accountCategory",
+            "accountId",
+            "accountNumberDisplay",
+            "accountType",
+            "availableBalance",
+            "currency",
+            "currentBalance",
+            "nickname",
+            "productName",
+            "status"
+          ]
+        },
+        "explode" : false,
+        "style" : "form"
+      },
+      "PlaidAccountPaymentNetworkFieldsParameter" : {
+        "name" : "plaid_account_payment_network.fields",
+        "in" : "query",
+        "description" : "A comma separated list of PlaidAccountPaymentNetwork fields to display.",
+        "required" : false,
+        "schema" : {
+          "type" : "array",
+          "description" : "The fields available for a PlaidAccountPaymentNetwork object.",
+          "minItems" : 1,
+          "uniqueItems" : true,
+          "items" : {
+            "type" : "string",
+            "enum" : [
+              "bankId",
+              "identifier",
+              "transferIn",
+              "transferOut",
+              "type"
+            ]
+          },
+          "example" : [
+            "bankId",
+            "identifier",
+            "transferIn",
+            "transferOut",
+            "type"
+          ]
+        },
+        "explode" : false,
+        "style" : "form"
+      },
+      "PlaidAccountTransactionFieldsParameter" : {
+        "name" : "plaid_account_transaction.fields",
+        "in" : "query",
+        "description" : "A comma separated list of PlaidAccountTransaction fields to display.",
+        "required" : false,
+        "schema" : {
+          "type" : "array",
+          "description" : "The fields available for a PlaidAccountTransaction object.",
+          "minItems" : 1,
+          "uniqueItems" : true,
+          "items" : {
+            "type" : "string",
+            "enum" : [
+              "accountCategory",
+              "amount",
+              "debitCreditMemo",
+              "description",
+              "postedTimestamp",
+              "status",
+              "transactionId",
+              "transactionTimestamp"
+            ]
+          },
+          "example" : [
+            "accountCategory",
+            "amount",
+            "debitCreditMemo",
+            "description",
+            "postedTimestamp",
+            "status",
+            "transactionId",
+            "transactionTimestamp"
+          ]
+        },
+        "explode" : false,
+        "style" : "form"
+      },
+      "PlaidCustomerFieldsParameter" : {
+        "name" : "plaid_customer.fields",
+        "in" : "query",
+        "description" : "A comma separated list of PlaidCustomer fields to display.",
+        "required" : false,
+        "schema" : {
+          "type" : "array",
+          "description" : "The fields available for a PlaidCustomer object.",
+          "minItems" : 1,
+          "uniqueItems" : true,
+          "items" : {
+            "type" : "string",
+            "enum" : [
+              "customerId"
+            ]
+          },
+          "example" : [
+            "customerId"
           ]
         },
         "explode" : false,
@@ -17913,6 +20663,7 @@
             "type" : "string",
             "enum" : [
               "affiliation",
+              "confirmed_email",
               "connection_status",
               "created_at",
               "description",
@@ -17941,6 +20692,7 @@
           },
           "example" : [
             "affiliation",
+            "confirmed_email",
             "connection_status",
             "created_at",
             "description",
@@ -17965,6 +20717,35 @@
             "verified_followers_count",
             "verified_type",
             "withheld"
+          ]
+        },
+        "explode" : false,
+        "style" : "form"
+      },
+      "WebhookConfigFieldsParameter" : {
+        "name" : "webhook_config.fields",
+        "in" : "query",
+        "description" : "A comma separated list of WebhookConfig fields to display.",
+        "required" : false,
+        "schema" : {
+          "type" : "array",
+          "description" : "The fields available for a WebhookConfig object.",
+          "minItems" : 1,
+          "uniqueItems" : true,
+          "items" : {
+            "type" : "string",
+            "enum" : [
+              "created_at",
+              "id",
+              "url",
+              "valid"
+            ]
+          },
+          "example" : [
+            "created_at",
+            "id",
+            "url",
+            "valid"
           ]
         },
         "explode" : false,

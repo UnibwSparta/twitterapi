@@ -19,6 +19,7 @@ Welcome to sparta.twitterapi's documentation!
    modules/compliance
    modules/models
    modules/users
+   modules/trends
    modules/tweets
    modules/usage
 

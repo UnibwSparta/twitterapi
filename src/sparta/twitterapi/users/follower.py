@@ -48,7 +48,7 @@ bearer_token = os.environ["BEARER_TOKEN"]
 headers = {"Authorization": f"Bearer {bearer_token}", "content-type": "application/json"}
 
 
-async def get_followers_by_id(id: str, max_resulsts: int = 1000) -> AsyncGenerator[User, None]:
+async def get_followers_by_id(id: str, max_results: int = 1000) -> AsyncGenerator[User, None]:
     """Returns Users who are followers of the specified User ID.
 
     Args:
@@ -71,7 +71,7 @@ async def get_followers_by_id(id: str, max_resulsts: int = 1000) -> AsyncGenerat
             "user.fields": USER_FIELDS,
             # "tweet.fields": tweet_fields,
             # "expansions": user_expansions,
-            "max_results": str(max_resulsts),  # Max results per response
+            "max_results": str(max_results),  # Max results per response
         }
 
         while True:
@@ -112,7 +112,7 @@ async def get_followers_by_id(id: str, max_resulsts: int = 1000) -> AsyncGenerat
                     break
 
 
-async def get_following_by_id(id: str, max_resulsts: int = 1000) -> AsyncGenerator[User, None]:
+async def get_following_by_id(id: str, max_results: int = 1000) -> AsyncGenerator[User, None]:
     """Returns Users that are being followed by the provided User ID.
 
     Args:
@@ -135,7 +135,7 @@ async def get_following_by_id(id: str, max_resulsts: int = 1000) -> AsyncGenerat
             "user.fields": USER_FIELDS,
             # "tweet.fields": tweet_fields,
             # "expansions": user_expansions,
-            "max_results": str(max_resulsts),  # Max results per response
+            "max_results": str(max_results),  # Max results per response
         }
 
         while True:
