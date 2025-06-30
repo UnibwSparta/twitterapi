@@ -81,6 +81,12 @@ Install datamodel-code-generator
 pip3 install datamodel-code-generator
 ```
 
+Download the OpenAPI spec
+```bash
+wget https://api.twitter.com/2/openapi.json
+```
+
+Create the model and make the manual changes that are described at the top of `models/twitter_v2_spec.py`
 ```bash
 datamodel-codegen --input openapi.json --input-file-type openapi --output model.py --output-model-type pydantic_v2.BaseModel --collapse-root-models --use-double-quotes
 ```

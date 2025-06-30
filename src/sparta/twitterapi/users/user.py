@@ -87,8 +87,8 @@ async def get_users_by_username(usernames: List[str]) -> AsyncGenerator[User, No
                 try:
                     users = Get2UsersByResponse.model_validate(response_json)
                 except Exception as e:
-                    logger.warn(f"Inconsistent twitter OpenAPI documentation {e}")
-                    logger.warn(response_json)
+                    logger.warning(f"Inconsistent twitter OpenAPI documentation {e}")
+                    logger.warning(response_json)
                 if not users.data:
                     raise Exception(users)
                 for user in users.data:
@@ -137,8 +137,8 @@ async def get_users_by_ids(ids: List[str]) -> AsyncGenerator[User, None]:
                 try:
                     users = Get2UsersResponse.model_validate(response_json)
                 except Exception as e:
-                    logger.warn(f"Inconsistent twitter OpenAPI documentation {e}")
-                    logger.warn(response_json)
+                    logger.warning(f"Inconsistent twitter OpenAPI documentation {e}")
+                    logger.warning(response_json)
                 if not users.data:
                     raise Exception(users)
                 for user in users.data:

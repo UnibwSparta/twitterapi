@@ -1,4 +1,4 @@
-twitterapi.users
+twitterapi.trends
 -------------------------------
 
 ..
@@ -8,6 +8,4 @@ twitterapi.users
 .. toctree::
   :maxdepth: 2
 
-  users.follower
-  users.timeline
-  users.user
+  trends.trends
