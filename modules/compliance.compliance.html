@@ -1,0 +1,320 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>twitterapi.compliance.compliance module &mdash; Sparta Twitterapi</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="twitterapi.models" href="models.html" />
+    <link rel="prev" title="twitterapi.compliance.compliance_stream module" href="compliance.compliance_stream.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            sparta.twitterapi
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">SPARTA Twitter API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="compliance.html">twitterapi.compliance</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="compliance.compliance_stream.html">twitterapi.compliance.compliance_stream module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">twitterapi.compliance.compliance module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sparta.twitterapi.compliance.compliance.create_compliance_job"><code class="docutils literal notranslate"><span class="pre">create_compliance_job()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sparta.twitterapi.compliance.compliance.download_results"><code class="docutils literal notranslate"><span class="pre">download_results()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sparta.twitterapi.compliance.compliance.list_job"><code class="docutils literal notranslate"><span class="pre">list_job()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sparta.twitterapi.compliance.compliance.list_jobs"><code class="docutils literal notranslate"><span class="pre">list_jobs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sparta.twitterapi.compliance.compliance.upload_ids"><code class="docutils literal notranslate"><span class="pre">upload_ids()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">twitterapi.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users.html">twitterapi.users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trends.html">twitterapi.trends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tweets.html">twitterapi.tweets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">twitterapi.usage module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sparta.twitterapi</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="compliance.html">twitterapi.compliance</a></li>
+      <li class="breadcrumb-item active">twitterapi.compliance.compliance module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/compliance.compliance.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-sparta.twitterapi.compliance.compliance">
+<span id="twitterapi-compliance-compliance-module"></span><h1>twitterapi.compliance.compliance module<a class="headerlink" href="#module-sparta.twitterapi.compliance.compliance" title="Link to this heading"></a></h1>
+<p>compliance.py: Implementation of Twitter batch compliance.</p>
+<p>“These batch compliance endpoints allow you to upload large datasets of Tweet or user IDs to retrieve their compliance status in order to determine what data
+requires action in order to bring your datasets into compliance. Please note, use of the batch compliance endpoints is restricted to aforementioned use cases,
+and any other purpose is prohibited and may result in enforcement action.”
+(Source: <a class="reference external" href="https://developer.twitter.com/en/docs/twitter-api/compliance/batch-compliance">https://developer.twitter.com/en/docs/twitter-api/compliance/batch-compliance</a>/introduction´)</p>
+<p>Working with the batch compliance endpoints generally involves 5 steps:</p>
+<ol class="arabic simple">
+<li><p>Preparing the list of Tweet IDs or user IDs</p></li>
+<li><p>Creating a compliance job</p></li>
+<li><p>Uploading the list of Tweet IDs or user IDs</p></li>
+<li><p>Checking the status of the compliance job</p></li>
+<li><p>Downloading the results</p></li>
+</ol>
+<p>More detailed information can be found at: <a class="reference external" href="https://developer.twitter.com/en/docs/twitter-api/compliance/batch-compliance/introduction">https://developer.twitter.com/en/docs/twitter-api/compliance/batch-compliance/introduction</a></p>
+<p class="rubric">Examples</p>
+<p>Creating a compliance job:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;BEARER_TOKEN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;xxxxxxxxxxx&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sparta.twitterapi.compliance.compliance</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_compliance_job</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sparta.twitterapi.models.twitter_v2_spec</span><span class="w"> </span><span class="kn">import</span> <span class="n">ComplianceJobType</span>
+
+<span class="n">compliancejobresponse</span> <span class="o">=</span> <span class="k">await</span> <span class="n">create_compliance_job</span><span class="p">(</span><span class="n">ComplianceJobType</span><span class="o">.</span><span class="n">tweets</span><span class="p">,</span> <span class="s1">&#39;testjob&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">compliancejobresponse</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">()</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">compliancejob</span> <span class="o">=</span> <span class="n">compliancejobresponse</span><span class="o">.</span><span class="n">data</span>
+<span class="n">jobid</span> <span class="o">=</span> <span class="n">compliancejob</span><span class="o">.</span><span class="n">id</span>
+<span class="n">uploadurl</span> <span class="o">=</span> <span class="n">compliancejob</span><span class="o">.</span><span class="n">upload_url</span>
+</pre></div>
+</div>
+<p>Uploading the list of Tweet IDs or user IDs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;BEARER_TOKEN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;xxxxxxxxxxx&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sparta.twitterapi.compliance.compliance</span><span class="w"> </span><span class="kn">import</span> <span class="n">upload_ids</span>
+
+<span class="k">await</span> <span class="n">upload_ids</span><span class="p">(</span><span class="n">uploadurl</span><span class="p">,</span> <span class="s2">&quot;filename.txt&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Checking the status of the compliance job:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;BEARER_TOKEN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;xxxxxxxxxxx&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sparta.twitterapi.compliance.compliance</span><span class="w"> </span><span class="kn">import</span> <span class="n">list_job</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sparta.twitterapi.models.twitter_v2_spec</span><span class="w"> </span><span class="kn">import</span> <span class="n">ComplianceJobStatus</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">check_job</span><span class="p">(</span><span class="n">jobid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">compliancejobresponse</span> <span class="o">=</span> <span class="k">await</span> <span class="n">list_job</span><span class="p">(</span><span class="n">jobid</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">compliancejobresponse</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">compliancejob</span> <span class="o">=</span> <span class="n">compliancejobresponse</span><span class="o">.</span><span class="n">data</span>
+
+    <span class="k">if</span> <span class="n">compliancejob</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">ComplianceJobStatus</span><span class="o">.</span><span class="n">complete</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+<span class="k">await</span> <span class="n">check_job</span><span class="p">(</span><span class="n">jobid</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Downloading the results:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;BEARER_TOKEN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;xxxxxxxxxxx&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sparta.twitterapi.compliance.compliance</span><span class="w"> </span><span class="kn">import</span> <span class="n">download_results</span><span class="p">,</span> <span class="n">list_job</span>
+
+<span class="n">compliancejobresponse</span> <span class="o">=</span> <span class="k">await</span> <span class="n">list_job</span><span class="p">(</span><span class="n">jobid</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">compliancejobresponse</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">()</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">compliancejob</span> <span class="o">=</span> <span class="n">compliancejobresponse</span><span class="o">.</span><span class="n">data</span>
+<span class="n">downloadurl</span> <span class="o">=</span> <span class="n">compliancejob</span><span class="o">.</span><span class="n">download_url</span>
+
+<span class="k">await</span> <span class="n">download_results</span><span class="p">(</span><span class="n">downloadurl</span><span class="p">,</span> <span class="s1">&#39;results.txt&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="sparta.twitterapi.compliance.compliance.create_compliance_job">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sparta.twitterapi.compliance.compliance.</span></span><span class="sig-name descname"><span class="pre">create_compliance_job</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.twitter_v2_spec.html#sparta.twitterapi.models.twitter_v2_spec.ComplianceJobType" title="sparta.twitterapi.models.twitter_v2_spec.ComplianceJobType"><span class="pre">ComplianceJobType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resumable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="models.twitter_v2_spec.html#sparta.twitterapi.models.twitter_v2_spec.CreateComplianceJobResponse" title="sparta.twitterapi.models.twitter_v2_spec.CreateComplianceJobResponse"><span class="pre">CreateComplianceJobResponse</span></a></span></span><a class="headerlink" href="#sparta.twitterapi.compliance.compliance.create_compliance_job" title="Link to this definition"></a></dt>
+<dd><p>Creates a compliance job.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> (<em>str</em>) – Type of Compliance Job to list. Possible values = tweets, users</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – User-provided name for a compliance job.</p></li>
+<li><p><strong>resumable</strong> (<em>bool</em>) – If true, this endpoint will return a pre-signed URL with resumable uploads enabled.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – Compliance Job can not be created due to an http error.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Returns an Twitter CreateComplianceJobResponse object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="models.twitter_v2_spec.html#sparta.twitterapi.models.twitter_v2_spec.CreateComplianceJobResponse" title="sparta.twitterapi.models.twitter_v2_spec.CreateComplianceJobResponse">CreateComplianceJobResponse</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sparta.twitterapi.compliance.compliance.download_results">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sparta.twitterapi.compliance.compliance.</span></span><span class="sig-name descname"><span class="pre">download_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">download_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AnyUrl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">results_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#sparta.twitterapi.compliance.compliance.download_results" title="Link to this definition"></a></dt>
+<dd><p>Downloads the results of a compliance job and saves them to a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>download_url</strong> (<em>AnyUrl</em>) – Download URL for a Jompliance Job</p></li>
+<li><p><strong>results_file_path</strong> (<em>str</em>) – File path where the results will be saved.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>Exception</strong> – Results can not be fetched due to an http error.</p></li>
+<li><p><strong>Exception</strong> – Results can not be writen into the file.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Respone status.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sparta.twitterapi.compliance.compliance.list_job">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sparta.twitterapi.compliance.compliance.</span></span><span class="sig-name descname"><span class="pre">list_job</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="models.twitter_v2_spec.html#sparta.twitterapi.models.twitter_v2_spec.Get2ComplianceJobsIdResponse" title="sparta.twitterapi.models.twitter_v2_spec.Get2ComplianceJobsIdResponse"><span class="pre">Get2ComplianceJobsIdResponse</span></a></span></span><a class="headerlink" href="#sparta.twitterapi.compliance.compliance.list_job" title="Link to this definition"></a></dt>
+<dd><p>Returns a single Compliance Job by ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> (<em>str</em>) – The ID of the Compliance Job to retrieve.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – Compliance Job can not be fetched due to an http error.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Returns an Twitter Get2ComplianceJobsIdResponse object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="models.twitter_v2_spec.html#sparta.twitterapi.models.twitter_v2_spec.Get2ComplianceJobsIdResponse" title="sparta.twitterapi.models.twitter_v2_spec.Get2ComplianceJobsIdResponse">Get2ComplianceJobsIdResponse</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sparta.twitterapi.compliance.compliance.list_jobs">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sparta.twitterapi.compliance.compliance.</span></span><span class="sig-name descname"><span class="pre">list_jobs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.twitter_v2_spec.html#sparta.twitterapi.models.twitter_v2_spec.ComplianceJobType" title="sparta.twitterapi.models.twitter_v2_spec.ComplianceJobType"><span class="pre">ComplianceJobType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.twitter_v2_spec.html#sparta.twitterapi.models.twitter_v2_spec.ComplianceJobStatus" title="sparta.twitterapi.models.twitter_v2_spec.ComplianceJobStatus"><span class="pre">ComplianceJobStatus</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="models.twitter_v2_spec.html#sparta.twitterapi.models.twitter_v2_spec.Get2ComplianceJobsResponse" title="sparta.twitterapi.models.twitter_v2_spec.Get2ComplianceJobsResponse"><span class="pre">Get2ComplianceJobsResponse</span></a></span></span><a class="headerlink" href="#sparta.twitterapi.compliance.compliance.list_jobs" title="Link to this definition"></a></dt>
+<dd><p>Returns recent Compliance Jobs for a given job type and optional job status.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> (<em>str</em>) – Type of Compliance Job to list. Possible values = tweets, users</p></li>
+<li><p><strong>status</strong> (<em>str</em><em>, </em><em>optional</em>) – Status of Compliance Job to list. Possible values = created, in_progress, failed, complete. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – Compliance Jobs can not be fetched due to an http error.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Returns an Twitter Get2ComplianceJobsResponse object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="models.twitter_v2_spec.html#sparta.twitterapi.models.twitter_v2_spec.Get2ComplianceJobsResponse" title="sparta.twitterapi.models.twitter_v2_spec.Get2ComplianceJobsResponse">Get2ComplianceJobsResponse</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sparta.twitterapi.compliance.compliance.upload_ids">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sparta.twitterapi.compliance.compliance.</span></span><span class="sig-name descname"><span class="pre">upload_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upload_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AnyUrl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids_file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#sparta.twitterapi.compliance.compliance.upload_ids" title="Link to this definition"></a></dt>
+<dd><p>Uploads IDs for a compliance job.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>upload_url</strong> (<em>AnyUrl</em>) – Upload URL for a Compliance Job</p></li>
+<li><p><strong>ids_file_path</strong> (<em>str</em>) – File path where the results IDs are in. Plain text file newline separated.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – IDs cannot uploaded due to an http error.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Response text</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="compliance.compliance_stream.html" class="btn btn-neutral float-left" title="twitterapi.compliance.compliance_stream module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="models.html" class="btn btn-neutral float-right" title="twitterapi.models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Neumeier, Riedl, Metzner, Radtke.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
