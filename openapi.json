@@ -3503,7 +3503,6 @@
             "name" : "id",
             "in" : "path",
             "description" : "The media id of the targeted media to finalize.",
-
             "required" : true,
             "schema" : {
               "$ref" : "#/components/schemas/MediaId"

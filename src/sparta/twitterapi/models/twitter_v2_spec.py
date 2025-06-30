@@ -887,10 +887,6 @@ class UploadSource(BaseModel):
     upload_source: Optional[str] = Field(None, description="Records the source (e.g., app, device) from which the media was uploaded", examples=["gallery"])
 
 
-class UploadSource(BaseModel):
-    text: Optional[str] = Field(None, description="Upload Source")
-
-
 class UrlImage(BaseModel):
     height: Optional[conint(ge=0)] = Field(None, description="The height of the media in pixels.")  # type: ignore
     url: Optional[AnyUrl] = Field(None, description="A validly formatted URL.", examples=["https://developer.twitter.com/en/docs/twitter-api"])
@@ -1765,11 +1761,6 @@ class MuteUserMutationResponse(BaseModel):
     errors: Optional[List[Problem]] = Field(None, min_length=1)
 
 
-class MuteUserMutationResponse(BaseModel):
-    data: Optional[Data16] = None
-    errors: Optional[List[Problem]] = Field(None, min_length=1)
-
-
 class MuteUserRequest(BaseModel):
     target_user_id: constr(pattern=r"^[0-9]{1,19}$") = Field(  # type: ignore
         ...,
@@ -1897,16 +1888,6 @@ class Space(BaseModel):
     title: Optional[str] = Field(None, description="The title of the Space.", examples=["Spaces are Awesome"])
     topics: Optional[List[Topic1]] = Field(None, description="The topics of a Space, as selected by its creator.")
     updated_at: Optional[datetime] = Field(None, description="When the Space was last updated.", examples=["2021-7-14T04:35:55Z"])
-
-
-class SubtitleInfo(BaseModel):
-    subtitles: Optional[List[Subtitles]] = Field(None, min_length=1)
-
-
-class SubtitlesCreateRequest(BaseModel):
-    media_category: Optional[MediaCategory] = None
-    media_id: Optional[constr(pattern=r"^[0-9]{1,19}$")] = Field(None, description="The unique identifier of this Media.", examples=["1146654567674912769"])  # type: ignore
-    subtitle_info: Optional[SubtitleInfo] = None
 
 
 class Topic(BaseModel):
