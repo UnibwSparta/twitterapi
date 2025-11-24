@@ -1,0 +1,217 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SPARTA Twitter API &mdash; Sparta Twitterapi</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="twitterapi.compliance" href="modules/compliance.html" />
+    <link rel="prev" title="Indices and tables" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            sparta.twitterapi
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SPARTA Twitter API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#features">🚀 Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">📦 Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start">📝 Quick Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#development-contribution">🛠 Development &amp; Contribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing">🧪 Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#support-feedback">❓ Support &amp; Feedback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#license">📜 License</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-twitter-spec">Create twitter spec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#project-sparta">Project SPARTA</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/compliance.html">twitterapi.compliance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/models.html">twitterapi.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/users.html">twitterapi.users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/trends.html">twitterapi.trends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/tweets.html">twitterapi.tweets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/usage.html">twitterapi.usage module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">sparta.twitterapi</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">SPARTA Twitter API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/README.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sparta-twitter-api">
+<h1>SPARTA Twitter API<a class="headerlink" href="#sparta-twitter-api" title="Link to this heading"></a></h1>
+<p><img alt="Linting Status" src="https://github.com/UnibwSparta/twitterapi/actions/workflows/linting.yaml/badge.svg" />
+<img alt="Test Status" src="https://github.com/UnibwSparta/twitterapi/actions/workflows/test.yaml/badge.svg" />
+<img alt="Build Status" src="https://github.com/UnibwSparta/twitterapi/actions/workflows/publish.yaml/badge.svg" />
+<img alt="Python Version" src="https://img.shields.io/badge/python-3.10%2B-blue" />
+<img alt="License" src="https://img.shields.io/badge/license-MIT-green" />
+<img alt="Checked with mypy" src="https://www.mypy-lang.org/static/mypy_badge.svg" /></p>
+<p>Welcome to the official GitHub repository for the <a class="reference external" href="https://dtecbw.de/sparta">SPARTA</a> Twitter API, a powerful Python implementation to interact with Twitter’s API v2 in a robust and efficient manner.</p>
+<section id="features">
+<h2>🚀 Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Methods for gathering tweets, users and more.</p></li>
+<li><p>Asynchronous API calls support.</p></li>
+<li><p>Efficient error handling and rate limit management.</p></li>
+<li><p>Comprehensive documentation with usage examples.</p></li>
+</ul>
+</section>
+<section id="installation">
+<h2>📦 Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<p>We recommend using <a class="reference external" href="https://python-poetry.org/docs/">Poetry</a> for managing the project dependencies. If you don’t have Poetry installed, check their <a class="reference external" href="https://python-poetry.org/docs/#installation">official documentation</a> for guidance.</p>
+<p>To install the SPARTA Twitter API via Poetry:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>add<span class="w"> </span>sparta-twitterapi
+</pre></div>
+</div>
+<p>or to install it via pip:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3<span class="w"> </span>install<span class="w"> </span>sparta-twitterapi
+</pre></div>
+</div>
+</section>
+<section id="quick-start">
+<h2>📝 Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
+<p>Here’s a simple example to get you started:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;BEARER_TOKEN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;XXXXXXXXXXXXXX&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sparta.twitterapi.tweets.tweets</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_tweets_by_id</span>
+
+<span class="k">async</span> <span class="k">for</span> <span class="n">tweet_response</span> <span class="ow">in</span> <span class="n">get_tweets_by_id</span><span class="p">([</span><span class="s1">&#39;1511275800758300675&#39;</span><span class="p">,</span> <span class="s1">&#39;1546866845180887040&#39;</span><span class="p">]):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tweet_response</span><span class="o">.</span><span class="n">tweet</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For in-depth methods and examples, consult our <a class="reference external" href="https://unibwsparta.github.io/twitterapi/index.html">official documentation</a>.</p>
+</section>
+<section id="development-contribution">
+<h2>🛠 Development &amp; Contribution<a class="headerlink" href="#development-contribution" title="Link to this heading"></a></h2>
+<p>Clone the Repo:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/UnibwSparta/twitterapi.git
+<span class="nb">cd</span><span class="w"> </span>twitterapi
+</pre></div>
+</div>
+<p>Install Dependencies:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>install
+</pre></div>
+</div>
+<p>Submit Your Changes: Make your improvements and propose a Pull Request!</p>
+</section>
+<section id="testing">
+<h2>🧪 Testing<a class="headerlink" href="#testing" title="Link to this heading"></a></h2>
+<p>Tests are powered by pytest. Execute tests with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/
+</pre></div>
+</div>
+</section>
+<section id="support-feedback">
+<h2>❓ Support &amp; Feedback<a class="headerlink" href="#support-feedback" title="Link to this heading"></a></h2>
+<p>Issues? Feedback? Use the <a class="reference external" href="https://github.com/UnibwSparta/twitterapi/issues">GitHub issue tracker</a>.</p>
+</section>
+<section id="license">
+<h2>📜 License<a class="headerlink" href="#license" title="Link to this heading"></a></h2>
+<p>MIT License. View <a class="reference external" href="https://github.com/UnibwSparta/twitterapi/blob/main/LICENSE">LICENSE</a> for details.</p>
+</section>
+<section id="create-twitter-spec">
+<h2>Create twitter spec<a class="headerlink" href="#create-twitter-spec" title="Link to this heading"></a></h2>
+<p>Install datamodel-code-generator</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3<span class="w"> </span>install<span class="w"> </span>datamodel-code-generator
+</pre></div>
+</div>
+<p>Download the OpenAPI spec</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget<span class="w"> </span>https://api.twitter.com/2/openapi.json
+</pre></div>
+</div>
+<p>Create the model and make the manual changes that are described at the top of <code class="docutils literal notranslate"><span class="pre">models/twitter_v2_spec.py</span></code></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>datamodel-codegen<span class="w"> </span>--input<span class="w"> </span>openapi.json<span class="w"> </span>--input-file-type<span class="w"> </span>openapi<span class="w"> </span>--output<span class="w"> </span>model.py<span class="w"> </span>--output-model-type<span class="w"> </span>pydantic_v2.BaseModel<span class="w"> </span>--collapse-root-models<span class="w"> </span>--use-double-quotes
+</pre></div>
+</div>
+</section>
+<section id="project-sparta">
+<h2>Project SPARTA<a class="headerlink" href="#project-sparta" title="Link to this heading"></a></h2>
+<p>SPARTA is an interdisciplinary research project at the UniBw M. The Chair of Political Science is responsible for managing the project. The project is funded by dtec.bw (Digitalization and Technology Research Center of the Bundeswehr). dtec.bw is funded by the European Union - NextGenerationEU.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Indices and tables" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="modules/compliance.html" class="btn btn-neutral float-right" title="twitterapi.compliance" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Neumeier, Riedl, Metzner, Radtke.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,234 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>twitterapi.users.follower module &mdash; Sparta Twitterapi</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="twitterapi.users.timeline module" href="users.timeline.html" />
+    <link rel="prev" title="twitterapi.users" href="users.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            sparta.twitterapi
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">SPARTA Twitter API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="compliance.html">twitterapi.compliance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">twitterapi.models</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="users.html">twitterapi.users</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">twitterapi.users.follower module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sparta.twitterapi.users.follower.get_followers_by_id"><code class="docutils literal notranslate"><span class="pre">get_followers_by_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sparta.twitterapi.users.follower.get_following_by_id"><code class="docutils literal notranslate"><span class="pre">get_following_by_id()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="users.timeline.html">twitterapi.users.timeline module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="users.user.html">twitterapi.users.user module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="trends.html">twitterapi.trends</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tweets.html">twitterapi.tweets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">twitterapi.usage module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sparta.twitterapi</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="users.html">twitterapi.users</a></li>
+      <li class="breadcrumb-item active">twitterapi.users.follower module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/users.follower.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-sparta.twitterapi.users.follower">
+<span id="twitterapi-users-follower-module"></span><h1>twitterapi.users.follower module<a class="headerlink" href="#module-sparta.twitterapi.users.follower" title="Link to this heading"></a></h1>
+<p>user.py: Implementation of Twitter Follower lookup endpoint.</p>
+<p>“The follows lookup endpoints enable you to explore and analyze relationships between users, which is sometimes called network analysis. Specifically, there are
+two REST endpoints that return user objects representing who a specified user is following, or who is following a specified user.”
+(Source: <a class="reference external" href="https://developer.twitter.com/en/docs/twitter-api/users/follows/introduction">https://developer.twitter.com/en/docs/twitter-api/users/follows/introduction</a>)</p>
+<p>Find the Open API Spec under: <a class="reference external" href="https://api.twitter.com/2/openapi.json">https://api.twitter.com/2/openapi.json</a></p>
+<p class="rubric">Examples</p>
+<p>Get followers by id:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;BEARER_TOKEN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;xxxxxxxxxxx&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sparta.twitterapi.users.follower</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_followers_by_id</span>
+
+<span class="k">async</span> <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">get_followers_by_id</span><span class="p">(</span><span class="s1">&#39;1422600096324231168&#39;</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Get following by id:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;BEARER_TOKEN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;xxxxxxxxxxx&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sparta.twitterapi.users.follower</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_following_by_id</span>
+
+<span class="k">async</span> <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">get_following_by_id</span><span class="p">(</span><span class="s1">&#39;1422600096324231168&#39;</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">())</span>
+</pre></div>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="sparta.twitterapi.users.follower.get_followers_by_id">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sparta.twitterapi.users.follower.</span></span><span class="sig-name descname"><span class="pre">get_followers_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_exception_on_http_503</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_exception_on_model_validation_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sleep_time_on_not_ok</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_tries_on_not_ok</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">AsyncGenerator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="models.twitter_v2_spec.html#sparta.twitterapi.models.twitter_v2_spec.User" title="sparta.twitterapi.models.twitter_v2_spec.User"><span class="pre">User</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#sparta.twitterapi.users.follower.get_followers_by_id" title="Link to this definition"></a></dt>
+<dd><p>Returns Users who are followers of the specified User ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>str</em>) – The ID of the User to lookup.</p></li>
+<li><p><strong>max_results</strong> (<em>int</em><em>, </em><em>optional</em>) – The maximum number of results. Defaults to 1000.</p></li>
+<li><p><strong>raise_exception_on_http_503</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to raise an exception on HTTP 503 errors.
+If False, then wait until HTTP 503 resolves, which is better suitable in case of live streaming.
+True, is more suitable for batch processing. Defaults to False.
+NOTE: In some cases, the Twitter API returns HTTP 503 errors during pagination, which may be transient, but still block live streaming.</p></li>
+<li><p><strong>raise_exception_on_model_validation_error</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to raise an exception on model validation errors.
+If False, then only logs warnings, which is better suitable in case of live streaming.
+True, is more suitable for batch processing. Defaults to False.</p></li>
+<li><p><strong>sleep_time_on_not_ok</strong> (<em>int</em><em>, </em><em>optional</em>) – The sleep time in seconds to wait before retrying after an HTTP error. Defaults to 10.</p></li>
+<li><p><strong>num_tries_on_not_ok</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of tries to attempt after an HTTP error.
+If -1, then unlimited. Defaults to -1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>Exception</strong> – Cannot get the search result due to an http error.</p></li>
+<li><p><strong>Exception</strong> – User not found error.</p></li>
+<li><p><strong>Exception</strong> – HTTP 503 error.</p></li>
+<li><p><strong>Exception</strong> – Model validation error.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>AsyncGenerator that yields Twitter User objects.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>AsyncGenerator[<a class="reference internal" href="models.twitter_v2_spec.html#sparta.twitterapi.models.twitter_v2_spec.User" title="sparta.twitterapi.models.twitter_v2_spec.User">User</a>, None]</p>
+</dd>
+<dt class="field-odd">Yields<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>Iterator[AsyncGenerator[User, None]]</em> – A Twitter User object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sparta.twitterapi.users.follower.get_following_by_id">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sparta.twitterapi.users.follower.</span></span><span class="sig-name descname"><span class="pre">get_following_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_exception_on_http_503</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_exception_on_model_validation_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sleep_time_on_not_ok</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_tries_on_not_ok</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">AsyncGenerator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="models.twitter_v2_spec.html#sparta.twitterapi.models.twitter_v2_spec.User" title="sparta.twitterapi.models.twitter_v2_spec.User"><span class="pre">User</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#sparta.twitterapi.users.follower.get_following_by_id" title="Link to this definition"></a></dt>
+<dd><p>Returns Users that are being followed by the provided User ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>str</em>) – The ID of the User to lookup.</p></li>
+<li><p><strong>max_results</strong> (<em>int</em><em>, </em><em>optional</em>) – The maximum number of results. Defaults to 1000.</p></li>
+<li><p><strong>raise_exception_on_http_503</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to raise an exception on HTTP 503 errors.
+If False, then wait until HTTP 503 resolves, which is better suitable in case of live streaming.
+True, is more suitable for batch processing. Defaults to False.
+NOTE: In some cases, the Twitter API returns HTTP 503 errors during pagination, which may be transient, but still block live streaming.</p></li>
+<li><p><strong>raise_exception_on_model_validation_error</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to raise an exception on model validation errors.
+If False, then only logs warnings, which is better suitable in case of live streaming.
+True, is more suitable for batch processing. Defaults to False.</p></li>
+<li><p><strong>sleep_time_on_not_ok</strong> (<em>int</em><em>, </em><em>optional</em>) – The sleep time in seconds to wait before retrying after an HTTP error. Defaults to 10.</p></li>
+<li><p><strong>num_tries_on_not_ok</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of tries to attempt after an HTTP error.
+If -1, then unlimited. Defaults to -1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>Exception</strong> – Cannot get the search result due to an http error.</p></li>
+<li><p><strong>Exception</strong> – User not found error.</p></li>
+<li><p><strong>Exception</strong> – HTTP 503 error.</p></li>
+<li><p><strong>Exception</strong> – Model validation error.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>AsyncGenerator that yields Twitter User objects.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>AsyncGenerator[<a class="reference internal" href="models.twitter_v2_spec.html#sparta.twitterapi.models.twitter_v2_spec.User" title="sparta.twitterapi.models.twitter_v2_spec.User">User</a>, None]</p>
+</dd>
+<dt class="field-odd">Yields<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>Iterator[AsyncGenerator[User, None]]</em> – A Twitter User object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="users.html" class="btn btn-neutral float-left" title="twitterapi.users" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="users.timeline.html" class="btn btn-neutral float-right" title="twitterapi.users.timeline module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Neumeier, Riedl, Metzner, Radtke.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

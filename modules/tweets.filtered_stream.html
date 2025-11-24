@@ -1,0 +1,271 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>twitterapi.tweets.filtered_stream module &mdash; Sparta Twitterapi</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="twitterapi.tweets.full_search module" href="tweets.full_search.html" />
+    <link rel="prev" title="twitterapi.tweets.constants module" href="tweets.constants.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            sparta.twitterapi
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">SPARTA Twitter API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="compliance.html">twitterapi.compliance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">twitterapi.models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users.html">twitterapi.users</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trends.html">twitterapi.trends</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tweets.html">twitterapi.tweets</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tweets.constants.html">twitterapi.tweets.constants module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">twitterapi.tweets.filtered_stream module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sparta.twitterapi.tweets.filtered_stream.add_or_delete_rules"><code class="docutils literal notranslate"><span class="pre">add_or_delete_rules()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sparta.twitterapi.tweets.filtered_stream.get_rules"><code class="docutils literal notranslate"><span class="pre">get_rules()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sparta.twitterapi.tweets.filtered_stream.get_stream"><code class="docutils literal notranslate"><span class="pre">get_stream()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tweets.full_search.html">twitterapi.tweets.full_search module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tweets.quote_tweets.html">twitterapi.tweets.quote_tweets module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tweets.recent_search.html">twitterapi.tweets.recent_search module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tweets.retweets.html">twitterapi.tweets.retweets module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tweets.tweets.html">twitterapi.tweets.tweets module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">twitterapi.usage module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">sparta.twitterapi</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="tweets.html">twitterapi.tweets</a></li>
+      <li class="breadcrumb-item active">twitterapi.tweets.filtered_stream module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/modules/tweets.filtered_stream.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-sparta.twitterapi.tweets.filtered_stream">
+<span id="twitterapi-tweets-filtered-stream-module"></span><h1>twitterapi.tweets.filtered_stream module<a class="headerlink" href="#module-sparta.twitterapi.tweets.filtered_stream" title="Link to this heading"></a></h1>
+<p>filtered_stream.py: Implementation of Twitter filtered stream endpoint.</p>
+<p>“The filtered stream endpoint group enables developers to filter the real-time stream of public Tweets. This endpoint group’s functionality includes
+multiple endpoints that enable you to create and manage rules, and apply those rules to filter a stream of real-time Tweets that will return matching public
+Tweets. This endpoint group allows users to listen for specific topics and events in real-time, monitor the conversation around competitions, understand how
+trends develop in real-time, and much more.” (Source: <a class="reference external" href="https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/introduction">https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/introduction</a>)</p>
+<p>Find the Open API Spec under: <a class="reference external" href="https://api.twitter.com/2/openapi.json">https://api.twitter.com/2/openapi.json</a></p>
+<p class="rubric">Examples</p>
+<p>Get all rules:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;BEARER_TOKEN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;xxxxxxxxxxx&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sparta.twitterapi.tweets.filtered_stream</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_rules</span>
+
+<span class="n">rules</span> <span class="o">=</span> <span class="p">[</span><span class="n">rule</span> <span class="k">async</span> <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">get_rules</span><span class="p">()]</span>
+</pre></div>
+</div>
+<p>Add a rule:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;BEARER_TOKEN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;xxxxxxxxxxx&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sparta.twitterapi.tweets.filtered_stream</span><span class="w"> </span><span class="kn">import</span> <span class="n">add_or_delete_rules</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sparta.twitterapi.models.twitter_v2_spec</span><span class="w"> </span><span class="kn">import</span> <span class="n">AddOrDeleteRulesRequest</span><span class="p">,</span> <span class="n">AddRulesRequest</span><span class="p">,</span> <span class="n">RuleNoId</span>
+
+<span class="n">rule</span> <span class="o">=</span> <span class="s1">&#39;(#test OR @projekt_sparta) -is:retweet&#39;</span>
+<span class="n">rule_tag</span> <span class="o">=</span> <span class="s2">&quot;Testrule&quot;</span>
+<span class="n">addrulesreq</span> <span class="o">=</span> <span class="n">AddOrDeleteRulesRequest</span><span class="p">(</span><span class="n">AddRulesRequest</span><span class="p">(</span><span class="n">add</span><span class="o">=</span><span class="p">[</span><span class="n">RuleNoId</span><span class="p">(</span><span class="n">tag</span><span class="o">=</span><span class="n">rule_tag</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">rule</span><span class="p">)]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="k">await</span> <span class="n">add_or_delete_rules</span><span class="p">(</span><span class="n">addrulesreq</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Delete a rule:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;BEARER_TOKEN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;xxxxxxxxxxx&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sparta.twitterapi.tweets.filtered_stream</span><span class="w"> </span><span class="kn">import</span> <span class="n">add_or_delete_rules</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sparta.twitterapi.models.twitter_v2_spec</span><span class="w"> </span><span class="kn">import</span> <span class="n">AddOrDeleteRulesRequest</span><span class="p">,</span> <span class="n">DeleteRulesRequest</span><span class="p">,</span> <span class="n">Delete</span>
+
+<span class="n">ruleid</span> <span class="o">=</span> <span class="s1">&#39;123456789&#39;</span>
+<span class="n">delrulesreq</span> <span class="o">=</span> <span class="n">AddOrDeleteRulesRequest</span><span class="p">(</span><span class="n">DeleteRulesRequest</span><span class="p">(</span><span class="n">delete</span><span class="o">=</span><span class="n">Delete</span><span class="p">(</span><span class="n">ids</span><span class="o">=</span><span class="p">[</span><span class="n">ruleid</span><span class="p">])))</span>
+<span class="k">await</span> <span class="n">add_or_delete_rules</span><span class="p">(</span><span class="n">delrulesreq</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Delete all rules:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;BEARER_TOKEN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;xxxxxxxxxxx&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sparta.twitterapi.tweets.filtered_stream</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_rules</span><span class="p">,</span> <span class="n">add_or_delete_rules</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sparta.twitterapi.models.twitter_v2_spec</span><span class="w"> </span><span class="kn">import</span> <span class="n">AddOrDeleteRulesRequest</span><span class="p">,</span> <span class="n">DeleteRulesRequest</span><span class="p">,</span> <span class="n">Delete</span>
+
+<span class="n">ruleids</span> <span class="o">=</span> <span class="p">[</span><span class="n">rule</span><span class="o">.</span><span class="n">id</span> <span class="k">async</span> <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">get_rules</span><span class="p">()]</span>
+<span class="n">delrulesreq</span> <span class="o">=</span> <span class="n">AddOrDeleteRulesRequest</span><span class="p">(</span><span class="n">DeleteRulesRequest</span><span class="p">(</span><span class="n">delete</span><span class="o">=</span><span class="n">Delete</span><span class="p">(</span><span class="n">ids</span><span class="o">=</span><span class="n">ruleids</span><span class="p">)))</span>
+<span class="k">await</span> <span class="n">add_or_delete_rules</span><span class="p">(</span><span class="n">delrulesreq</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Connect to stream:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;BEARER_TOKEN&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;xxxxxxxxxxx&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sparta.twitterapi.tweets.filtered_stream</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_stream</span>
+
+<span class="k">async</span> <span class="k">for</span> <span class="n">tweet_response</span> <span class="ow">in</span> <span class="n">get_stream</span><span class="p">(</span><span class="n">backfill_minutes</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">tweet_response</span><span class="o">.</span><span class="n">tweet</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">tweet_response</span><span class="o">.</span><span class="n">includes</span><span class="p">))</span>
+</pre></div>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="sparta.twitterapi.tweets.filtered_stream.add_or_delete_rules">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sparta.twitterapi.tweets.filtered_stream.</span></span><span class="sig-name descname"><span class="pre">add_or_delete_rules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rules</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="models.twitter_v2_spec.html#sparta.twitterapi.models.twitter_v2_spec.AddOrDeleteRulesRequest" title="sparta.twitterapi.models.twitter_v2_spec.AddOrDeleteRulesRequest"><span class="pre">AddOrDeleteRulesRequest</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dry_run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="models.twitter_v2_spec.html#sparta.twitterapi.models.twitter_v2_spec.AddOrDeleteRulesResponse" title="sparta.twitterapi.models.twitter_v2_spec.AddOrDeleteRulesResponse"><span class="pre">AddOrDeleteRulesResponse</span></a></span></span><a class="headerlink" href="#sparta.twitterapi.tweets.filtered_stream.add_or_delete_rules" title="Link to this definition"></a></dt>
+<dd><p>Add or delete rules from a User’s active rule set. Users can provide unique, optionally tagged rules to add. Users can delete their entire rule set or a
+subset specified by rule ids or values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rules</strong> (<a class="reference internal" href="models.twitter_v2_spec.html#sparta.twitterapi.models.twitter_v2_spec.AddOrDeleteRulesRequest" title="sparta.twitterapi.models.twitter_v2_spec.AddOrDeleteRulesRequest"><em>AddOrDeleteRulesRequest</em></a>) – A Twitter AddOrDeleteRulesObject object.</p></li>
+<li><p><strong>dry_run</strong> (<em>bool</em><em>, </em><em>optional</em>) – Dry Run can be used with both the add and delete action, with the expected result given, but without actually taking any
+action in the system (meaning the end state will always be as it was when the request was submitted). This is particularly useful to validate rule
+changes. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – Rules cannot be added/deleted due to an http error.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Returns an Twitter AddOrDeleteRulesResponse object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="models.twitter_v2_spec.html#sparta.twitterapi.models.twitter_v2_spec.AddOrDeleteRulesResponse" title="sparta.twitterapi.models.twitter_v2_spec.AddOrDeleteRulesResponse">AddOrDeleteRulesResponse</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sparta.twitterapi.tweets.filtered_stream.get_rules">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sparta.twitterapi.tweets.filtered_stream.</span></span><span class="sig-name descname"><span class="pre">get_rules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">AsyncGenerator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="models.twitter_v2_spec.html#sparta.twitterapi.models.twitter_v2_spec.Rule" title="sparta.twitterapi.models.twitter_v2_spec.Rule"><span class="pre">Rule</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#sparta.twitterapi.tweets.filtered_stream.get_rules" title="Link to this definition"></a></dt>
+<dd><p>Returns rules from a User’s active rule set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ids</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – A list of Rule IDs.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – Cannot get the rules due to an http error.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>AsyncGenerator that yields Twitter Rule objects.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>AsyncGenerator[<a class="reference internal" href="models.twitter_v2_spec.html#sparta.twitterapi.models.twitter_v2_spec.Rule" title="sparta.twitterapi.models.twitter_v2_spec.Rule">Rule</a>, None]</p>
+</dd>
+<dt class="field-odd">Yields<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>Iterator[AsyncGenerator[Rule, None]]</em> – A Twitter Rule object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sparta.twitterapi.tweets.filtered_stream.get_stream">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sparta.twitterapi.tweets.filtered_stream.</span></span><span class="sig-name descname"><span class="pre">get_stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backfill_minutes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">AsyncGenerator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="models.tweet_response.html#sparta.twitterapi.models.tweet_response.TweetResponse" title="sparta.twitterapi.models.tweet_response.TweetResponse"><span class="pre">TweetResponse</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#sparta.twitterapi.tweets.filtered_stream.get_stream" title="Link to this definition"></a></dt>
+<dd><p>Streams Tweets matching the stream’s active rule set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>backfill_minutes</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of minutes of backfill requested. Defaults to 5.</p></li>
+<li><p><strong>start_time</strong> (<em>datetime</em>) – The oldest UTC timestamp from which the Tweets will be provided. Timestamp is in second granularity and is inclusive
+(i.e. 12:00:01 includes the first second of the minute). Defaults to None.</p></li>
+<li><p><strong>end_time</strong> (<em>datetime</em>) – The newest, most recent UTC timestamp to which the Tweets will be provided. Timestamp is in second granularity and is exclusive
+(i.e. 12:00:01 excludes the first second of the minute). Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – Cannot open the stream due to an http error.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>AsyncGenerator that yields TweetResponses.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>AsyncGenerator[<a class="reference internal" href="models.tweet_response.html#sparta.twitterapi.models.tweet_response.TweetResponse" title="sparta.twitterapi.models.tweet_response.TweetResponse">TweetResponse</a>, None]</p>
+</dd>
+<dt class="field-odd">Yields<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>Iterator[AsyncGenerator[TweetResponse, None]]</em> – A TweetResponse Object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tweets.constants.html" class="btn btn-neutral float-left" title="twitterapi.tweets.constants module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tweets.full_search.html" class="btn btn-neutral float-right" title="twitterapi.tweets.full_search module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Neumeier, Riedl, Metzner, Radtke.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
