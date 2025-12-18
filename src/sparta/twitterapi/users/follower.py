@@ -139,6 +139,7 @@ async def get_followers_by_id(
                     if not raise_exception_on_model_validation_error:
                         logger.warning(f"Inconsistent twitter OpenAPI documentation {e}")
                         logger.warning(response_json)
+                        users = Get2UsersIdFollowersResponse()
                     else:
                         # Concatenate all lines of e_str into one line
                         e_str = str(e)
@@ -248,6 +249,7 @@ async def get_following_by_id(
                     if not raise_exception_on_model_validation_error:
                         logger.warning(f"Inconsistent twitter OpenAPI documentation {e}")
                         logger.warning(response_json)
+                        users = Get2UsersIdFollowingResponse()
                     else:
                         # Concatenate all lines of e_str into one line
                         e_str = str(e)
