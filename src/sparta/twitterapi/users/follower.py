@@ -146,7 +146,8 @@ async def get_followers_by_id(
                         e_str = " | ".join(e_str.splitlines())
                         raise Exception(f"Inconsistent twitter OpenAPI documentation {e_str} for response: {response_json}")
 
-                if not users.data:
+                # Raise an exception if not a list, empty list is fine, in case that a user has no followers 
+                if not users.data and not isinstance(users.data, list):
                     raise Exception(users)
 
                 for user in users.data:
@@ -256,7 +257,8 @@ async def get_following_by_id(
                         e_str = " | ".join(e_str.splitlines())
                         raise Exception(f"Inconsistent twitter OpenAPI documentation {e_str} for response: {response_json}")
 
-                if not users.data:
+                # Raise an exception if not a list, empty list is fine, in case that a user has no followings 
+                if not users.data and not isinstance(users.data, list):
                     raise Exception(users)
 
                 for user in users.data:
