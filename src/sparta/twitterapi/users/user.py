@@ -97,7 +97,10 @@ async def get_users_by_username(usernames: List[str]) -> AsyncGenerator[User, No
             break
 
 
-async def get_users_by_ids(ids: List[str]) -> AsyncGenerator[User, None]:
+async def get_users_by_ids(
+    ids: List[str],
+    raise_exception_on_model_validation_error: bool = False,
+) -> AsyncGenerator[User, None]:
     """Asynchronously retrieves information about users specified by their usernames.
 
     This function queries the Twitter API to get information about users based on a list of Twitter user ids. It handles rate limiting using an internal
@@ -137,8 +140,16 @@ async def get_users_by_ids(ids: List[str]) -> AsyncGenerator[User, None]:
                 try:
                     users = Get2UsersResponse.model_validate(response_json)
                 except Exception as e:
-                    logger.warning(f"Inconsistent twitter OpenAPI documentation {e}")
-                    logger.warning(response_json)
+                    if not raise_exception_on_model_validation_error:
+                        logger.warning(f"Inconsistent twitter OpenAPI documentation {e}")
+                        logger.warning(response_json)
+                        users = Get2UsersResponse()
+                    else:
+                        # Concatenate all lines of e_str into one line
+                        e_str = str(e)
+                        e_str = " | ".join(e_str.splitlines())
+                        raise Exception(f"Inconsistent twitter OpenAPI documentation {e_str} for response: {response_json}")
+                    
                 if not users.data:
                     raise Exception(users)
                 for user in users.data:
