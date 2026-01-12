@@ -143,13 +143,13 @@ async def get_users_by_ids(
                     if not raise_exception_on_model_validation_error:
                         logger.warning(f"Inconsistent twitter OpenAPI documentation {e}")
                         logger.warning(response_json)
-                        users = Get2UsersResponse()
+                        users = Get2UsersResponse(data=None, errors=None)
                     else:
                         # Concatenate all lines of e_str into one line
                         e_str = str(e)
                         e_str = " | ".join(e_str.splitlines())
                         raise Exception(f"Inconsistent twitter OpenAPI documentation {e_str} for response: {response_json}")
-                    
+
                 if not users.data:
                     raise Exception(users)
                 for user in users.data:
