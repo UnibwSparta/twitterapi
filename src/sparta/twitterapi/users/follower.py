@@ -139,13 +139,15 @@ async def get_followers_by_id(
                     if not raise_exception_on_model_validation_error:
                         logger.warning(f"Inconsistent twitter OpenAPI documentation {e}")
                         logger.warning(response_json)
+                        users = Get2UsersIdFollowersResponse(data=None, errors=None)
                     else:
                         # Concatenate all lines of e_str into one line
                         e_str = str(e)
                         e_str = " | ".join(e_str.splitlines())
                         raise Exception(f"Inconsistent twitter OpenAPI documentation {e_str} for response: {response_json}")
 
-                if not users.data:
+                # Raise an exception if not a list, empty list is fine, in case that a user has no followers
+                if not users.data and not isinstance(users.data, list):
                     raise Exception(users)
 
                 for user in users.data:
@@ -248,13 +250,15 @@ async def get_following_by_id(
                     if not raise_exception_on_model_validation_error:
                         logger.warning(f"Inconsistent twitter OpenAPI documentation {e}")
                         logger.warning(response_json)
+                        users = Get2UsersIdFollowingResponse(data=None, errors=None)
                     else:
                         # Concatenate all lines of e_str into one line
                         e_str = str(e)
                         e_str = " | ".join(e_str.splitlines())
                         raise Exception(f"Inconsistent twitter OpenAPI documentation {e_str} for response: {response_json}")
 
-                if not users.data:
+                # Raise an exception if not a list, empty list is fine, in case that a user has no followings
+                if not users.data and not isinstance(users.data, list):
                     raise Exception(users)
 
                 for user in users.data:
