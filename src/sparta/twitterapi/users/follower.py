@@ -36,7 +36,7 @@ from typing import AsyncGenerator, Dict
 
 import aiohttp
 
-from sparta.twitterapi.models.twitter_v2_spec import Get2UsersIdFollowersResponse, Get2UsersIdFollowingResponse, User
+from sparta.twitterapi.models.twitter_v2_spec import Get2UsersIdFollowersResponse, Get2UsersIdFollowingResponse, Problem, User
 from sparta.twitterapi.rate_limiter import RateLimiter
 from sparta.twitterapi.tweets.constants import USER_FIELDS
 
@@ -53,6 +53,7 @@ async def get_followers_by_id(
     max_results: int = 1000,
     raise_exception_on_http_503: bool = False,
     raise_exception_on_model_validation_error: bool = False,
+    suppress_warnings_on_model_validation_error: bool = False,
     sleep_time_on_not_ok: int = 10,
     num_tries_on_not_ok: int = -1,
 ) -> AsyncGenerator[User, None]:
@@ -68,6 +69,7 @@ async def get_followers_by_id(
         raise_exception_on_model_validation_error (bool, optional): Whether to raise an exception on model validation errors.
             If False, then only logs warnings, which is better suitable in case of live streaming.
             True, is more suitable for batch processing. Defaults to False.
+        suppress_warnings_on_model_validation_error (bool, optional): Whether to suppress warnings on model validation errors.
         sleep_time_on_not_ok (int, optional): The sleep time in seconds to wait before retrying after an HTTP error. Defaults to 10.
         num_tries_on_not_ok (int, optional): The number of tries to attempt after an HTTP error.
             If -1, then unlimited. Defaults to -1.
@@ -109,6 +111,7 @@ async def get_followers_by_id(
 
                 response_text = await response.text()
                 response_json = await response.json()
+                inconsistency_api_error = False
                 if not response.ok:
                     logger.error(
                         f"Cannot get followers for user {id} with params: {params} (HTTP {response.status}): {response_text}. Response JSON: {response_json}"
@@ -136,22 +139,26 @@ async def get_followers_by_id(
                 try:
                     users = Get2UsersIdFollowersResponse.model_validate(response_json)
                 except Exception as e:
+                    inconsistency_api_error = True
                     if not raise_exception_on_model_validation_error:
-                        logger.warning(f"Inconsistent twitter OpenAPI documentation {e}")
-                        logger.warning(response_json)
-                        users = Get2UsersIdFollowersResponse(data=None, errors=None)
+                        if not suppress_warnings_on_model_validation_error:
+                            logger.warning(f"Inconsistent twitter OpenAPI documentation {e}")
+                            logger.warning(response_json)
+                        users = Get2UsersIdFollowersResponse(
+                            data=[], errors=[Problem(type="model_validation_error", title="Model validation error", detail=str(e), status=response.status)]
+                        )
                     else:
                         # Concatenate all lines of e_str into one line
                         e_str = str(e)
                         e_str = " | ".join(e_str.splitlines())
                         raise Exception(f"Inconsistent twitter OpenAPI documentation {e_str} for response: {response_json}")
 
-                # Raise an exception if not a list, empty list is fine, in case that a user has no followers
-                if not users.data and not isinstance(users.data, list):
+                if not users.data and not inconsistency_api_error:
                     raise Exception(users)
 
-                for user in users.data:
-                    yield user
+                if users.data:
+                    for user in users.data:
+                        yield user
 
                 if "next_token" in response_json.get("meta"):
                     params["pagination_token"] = response_json.get("meta").get("next_token")
@@ -164,6 +171,7 @@ async def get_following_by_id(
     max_results: int = 1000,
     raise_exception_on_http_503: bool = False,
     raise_exception_on_model_validation_error: bool = False,
+    suppress_warnings_on_model_validation_error: bool = False,
     sleep_time_on_not_ok: int = 10,
     num_tries_on_not_ok: int = -1,
 ) -> AsyncGenerator[User, None]:
@@ -179,6 +187,7 @@ async def get_following_by_id(
         raise_exception_on_model_validation_error (bool, optional): Whether to raise an exception on model validation errors.
             If False, then only logs warnings, which is better suitable in case of live streaming.
             True, is more suitable for batch processing. Defaults to False.
+            suppress_warnings_on_model_validation_error (bool, optional): Whether to suppress warnings on model validation errors.
         sleep_time_on_not_ok (int, optional): The sleep time in seconds to wait before retrying after an HTTP error. Defaults to 10.
         num_tries_on_not_ok (int, optional): The number of tries to attempt after an HTTP error.
             If -1, then unlimited. Defaults to -1.
@@ -220,6 +229,7 @@ async def get_following_by_id(
 
                 response_text = await response.text()
                 response_json = await response.json()
+                inconsistency_api_error = False
                 if not response.ok:
                     logger.error(
                         f"Cannot get followings for user {id} with params: {params} (HTTP {response.status}): {response_text}. Response JSON: {response_json}"
@@ -247,22 +257,26 @@ async def get_following_by_id(
                 try:
                     users = Get2UsersIdFollowingResponse.model_validate(response_json)
                 except Exception as e:
+                    inconsistency_api_error = True
                     if not raise_exception_on_model_validation_error:
-                        logger.warning(f"Inconsistent twitter OpenAPI documentation {e}")
-                        logger.warning(response_json)
-                        users = Get2UsersIdFollowingResponse(data=None, errors=None)
+                        if not suppress_warnings_on_model_validation_error:
+                            logger.warning(f"Inconsistent twitter OpenAPI documentation {e}")
+                            logger.warning(response_json)
+                        users = Get2UsersIdFollowingResponse(
+                            data=[], errors=[Problem(type="model_validation_error", title="Model validation error", detail=str(e), status=response.status)]
+                        )
                     else:
                         # Concatenate all lines of e_str into one line
                         e_str = str(e)
                         e_str = " | ".join(e_str.splitlines())
                         raise Exception(f"Inconsistent twitter OpenAPI documentation {e_str} for response: {response_json}")
 
-                # Raise an exception if not a list, empty list is fine, in case that a user has no followings
-                if not users.data and not isinstance(users.data, list):
+                if not users.data and not inconsistency_api_error:
                     raise Exception(users)
 
-                for user in users.data:
-                    yield user
+                if users.data:
+                    for user in users.data:
+                        yield user
 
                 if "next_token" in response_json.get("meta"):
                     params["pagination_token"] = response_json.get("meta").get("next_token")
